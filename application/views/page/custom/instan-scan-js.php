@@ -38,10 +38,10 @@
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <!-- <script src="<?= base_url('assets/plugin') ?>/instanscan-js/js/instanscan.js"></script> -->
     <script>
-        // if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-        //     console.log("Let's get this party started")
-        // }
-
+        // sourcode
+        let scanner = new Instascan.Scanner({
+            video: document.getElementById('preview')
+        });
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras[1]) {
                 scanner.start(cameras[1]);
@@ -52,10 +52,6 @@
             }
         }).catch(function(e) {
             console.error(e);
-        });
-        // sourcode
-        let scanner = new Instascan.Scanner({
-            video: document.getElementById('preview')
         });
 
         scanner.addListener('scan', function(content) {
