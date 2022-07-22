@@ -45,8 +45,10 @@
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras[1]) {
                 scanner.start(cameras[1]);
+                console.log("Front Camera Succsess");
             } else {
                 scanner.start(cameras[0]);
+                console.log("Rear Camera Succsess");
             }
         }).catch(function(e) {
             console.error(e);
