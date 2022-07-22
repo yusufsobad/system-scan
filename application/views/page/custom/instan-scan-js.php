@@ -43,13 +43,18 @@
             video: document.getElementById('preview')
         });
         Instascan.Camera.getCameras().then(function(cameras) {
-            if (cameras[1]) {
-                scanner.start(cameras[1]);
-                console.log("Front Camera Succsess");
+            if (cameras.length > 0) {
+                if (cameras[1]) {
+                    scanner.start(cameras[1]);
+                    console.log("Front Camera Succsess");
+                } else {
+                    scanner.start(cameras[0]);
+                    console.log("Rear Camera Succsess");
+                }
             } else {
-                scanner.start(cameras[0]);
-                console.log("Rear Camera Succsess");
+                console.error('camera tidak di temukan');
             }
+
         }).catch(function(e) {
             console.error(e);
         });
