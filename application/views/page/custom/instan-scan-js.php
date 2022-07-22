@@ -42,6 +42,17 @@
         $(document).ready(function() {
             $("#form").hide();
         });
+        if (cameras.length > 0) {
+            var selectedCam = cameras[0];
+            $.each(cameras, (i, c) => {
+                if (c.name.indexOf('back') !== -1) {
+                    selectedCam = c;
+                    return false;
+                }
+            });
+
+            scanner.start(selectedCam);
+        }
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
         });
