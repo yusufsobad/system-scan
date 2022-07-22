@@ -98,6 +98,9 @@
                             $("#title-form").fadeIn(700);
                             $("#form_scan").fadeIn(700);
                             $('#qrcode').val(content);
+                            $('html, body').animate({
+                                scrollTop: $("##title-form").offset().down
+                            }, 2000);
                         },
                     })
                     // $('#show-barcode').text(content);
