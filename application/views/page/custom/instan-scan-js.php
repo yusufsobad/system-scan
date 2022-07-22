@@ -38,6 +38,12 @@
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <!-- <script src="<?= base_url('assets/plugin') ?>/instanscan-js/js/instanscan.js"></script> -->
     <script>
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+            console.log("Let's get this party started")
+        }
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        })
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras[1]) {
                 scanner.start(cameras[1]);
