@@ -38,19 +38,22 @@
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <!-- <script src="<?= base_url('assets/plugin') ?>/instanscan-js/js/instanscan.js"></script> -->
     <script>
-        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-            console.log("Let's get this party started")
-        }
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        })
+        // if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+        //     console.log("Let's get this party started")
+        // }
+
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras[1]) {
                 scanner.start(cameras[1]);
             } else {
                 scanner.start(cameras[0]);
             }
+        }).catch(function(e) {
+            console.error(e);
         });
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        })
         // sourcode
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
@@ -104,15 +107,16 @@
                 }
             });
         });
-        Instascan.Camera.getCameras().then(function(cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                console.error('camera tidak di temukan');
-            }
-        }).catch(function(e) {
-            console.error(e);
-        });
+
+        // Instascan.Camera.getCameras().then(function(cameras) {
+        //     if (cameras.length > 0) {
+        //         scanner.start(cameras[0]);
+        //     } else {
+        //         console.error('camera tidak di temukan');
+        //     }
+        // }).catch(function(e) {
+        //     console.error(e);
+        // });
     </script>
 
     <!-- Bootstrap - Js -->
