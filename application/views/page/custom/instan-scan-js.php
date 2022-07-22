@@ -51,9 +51,6 @@
         }).catch(function(e) {
             console.error(e);
         });
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        })
         // sourcode
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
