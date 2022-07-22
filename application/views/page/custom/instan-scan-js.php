@@ -46,10 +46,10 @@
             if (cameras.length > 0) {
                 if (cameras[1]) {
                     scanner.start(cameras[1]);
-                    console.log("Front Camera Succsess");
+                    console.log("Rear Camera Succsess");
                 } else {
                     scanner.start(cameras[0]);
-                    console.log("Rear Camera Succsess");
+                    console.log("Front Camera Succsess");
                 }
             } else {
                 console.error('camera tidak di temukan');
