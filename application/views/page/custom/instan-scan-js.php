@@ -99,7 +99,7 @@
                             $("#form_scan").fadeIn(700);
                             $('#qrcode').val(content);
                             $('html, body').animate({
-                                scrollTop: $("##title-form").offset().down
+                                scrollTop: $("#title-form").offset().down
                             }, 2000);
                         },
                     })
