@@ -20,6 +20,7 @@
         <div class="col text-center p-5">
             <h1 class="bold mb-5">Scan Barcode Disini</h1>
             <video autoplay style="width:100%" class="rounded" id="preview"></video>
+            <input type="file" accept="image/*" id="preview" capture="camera">
         </div>
         <div class="col p-5 bg-light-primary">
             <div id="title-form" class="text-center pb-4">
