@@ -19,8 +19,7 @@
     <div class="row align-items-center">
         <div class="col text-center p-5">
             <h1 class="bold mb-5">Scan Barcode Disini</h1>
-            <!-- <video autoplay style="width:100%" class="rounded" id="preview"></video> -->
-            <input type="file" accept="image/*" id="preview" capture="camera">
+            <video autoplay style="width:100%" class="rounded" id="preview"></video>
         </div>
         <div class="col p-5 bg-light-primary">
             <div id="title-form" class="text-center pb-4">
@@ -45,6 +44,9 @@
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
         });
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        })
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras.length > 0) {
                 if (cameras[1]) {
