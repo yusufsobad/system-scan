@@ -44,9 +44,6 @@
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
         });
-        navigator.mediaDevices.getUserMedia({
-            video: true
-        })
         Instascan.Camera.getCameras().then(function(cameras) {
             if (cameras.length > 0) {
                 if (cameras[1]) {
