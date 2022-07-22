@@ -30,6 +30,7 @@
             </div>
         </div>
     </div>
+    <div id="destinate"></div>
 
 
     <!-- Optional JavaScript; choose one of the two! -->
@@ -99,7 +100,7 @@
                             $("#form_scan").fadeIn(700);
                             $('#qrcode').val(content);
                             $('html, body').animate({
-                                scrollTop: $("#title-form").offset().down
+                                scrollTop: $("#destinate").offset().top
                             }, 2000);
                         },
                     })
