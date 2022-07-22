@@ -62,7 +62,7 @@
                 console.log(data);
 
                 if (data == 'true') {
-                    window.alert("ID Product already found");
+                    window.alert("Qrcode already found");
                     $.ajax({
                         type: "POST",
                         url: "<?= base_url('Scan/form_ajax') ?>",
@@ -75,7 +75,7 @@
                         },
                     })
                 } else {
-                    // window.alert("Name NOT found");
+                    window.alert("Success");
                     $.ajax({
                         type: "POST",
                         url: "<?= base_url('Scan/form_ajax') ?>",
