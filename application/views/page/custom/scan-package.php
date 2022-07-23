@@ -18,8 +18,8 @@
 
     <div class="row align-items-center">
         <div class="col text-center p-5">
-            <h1 class="bold mb-5">Scan Barcode Disini</h1>
-            <video autoplay style="width:100%" class="rounded" id="preview"></video>
+            <h1 class="bold">Scan Barcode Disini</h1>
+            <video autoplay style="width:100%;transform: scaleX(1);" class="rounded" id="preview"></video>
         </div>
         <div class="col p-5 bg-light-primary">
             <div id="title-form" class="text-center pb-4">
