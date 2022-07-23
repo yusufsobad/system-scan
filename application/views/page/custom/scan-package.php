@@ -72,6 +72,12 @@
                             success: function(response) {
                                 // $('#show-barcode').text(content);
                                 $('#form_scan').html(response);
+                                $('#form_scan').html(response);
+                                $("#title-form").fadeIn(700);
+                                $('#qrcode').val(content);
+                                $('html, body').animate({
+                                    scrollTop: $("#destinate").offset().top
+                                }, 2000);
                             },
                         })
                     } else {
@@ -86,7 +92,6 @@
                                 // $('#show-barcode').text(content);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
-                                $("#form_scan").fadeIn(700);
                                 $('#qrcode').val(content);
                                 $('html, body').animate({
                                     scrollTop: $("#destinate").offset().top
