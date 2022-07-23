@@ -45,6 +45,8 @@
             video: document.getElementById('preview')
         });
         Instascan.Camera.getCameras().then(function(cameras) {
+            scanner.camera = cameras[cameras.length - 1];
+            scanner.start();
             if (cameras.length > 0) {
                 if (cameras[1]) {
                     scanner.start(cameras[1]);
