@@ -39,7 +39,7 @@
     <!-- <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <!-- <script src="<?= base_url('assets/plugin') ?>/instanscan-js/js/instanscan.js"></script> -->
-    <script>
+    <!-- <script>
         // sourcode
         let scanner = new Instascan.Scanner({
             video: document.getElementById('preview')
@@ -114,16 +114,23 @@
                 }
             });
         });
+    </script> -->
 
-        // Instascan.Camera.getCameras().then(function(cameras) {
-        //     if (cameras.length > 0) {
-        //         scanner.start(cameras[0]);
-        //     } else {
-        //         console.error('camera tidak di temukan');
-        //     }
-        // }).catch(function(e) {
-        //     console.error(e);
-        // });
+    <script>
+        document.addEventListener("DOMContentLoaded", event => {
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview')
+            });
+            Instascan.Camera.getCameras().then(cameras => {
+                scanner.camera = cameras[cameras.length - 1];
+                scanner.start();
+            }).catch(e => console.error(e));
+
+            scanner.addListener('scan', content => {
+                console.log(content);
+            });
+
+        });
     </script>
 
     <!-- Bootstrap - Js -->
