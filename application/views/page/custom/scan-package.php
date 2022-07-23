@@ -70,7 +70,6 @@
                                 value: content
                             },
                             success: function(response) {
-                                // $('#show-barcode').text(content);
                                 $('#form_scan').html(response);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
@@ -89,7 +88,6 @@
                                 value: content
                             },
                             success: function(response) {
-                                // $('#show-barcode').text(content);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
                                 $('#qrcode').val(content);
