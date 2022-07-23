@@ -98,10 +98,6 @@
                                 }, 2000);
                             },
                         })
-                        // $('#show-barcode').text(content);
-                        // $('#form_scan').show();
-
-                        // $("#form").fadeIn()
                     }
                 });
             });
