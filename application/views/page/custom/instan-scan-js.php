@@ -35,10 +35,11 @@
 
     <!-- Optional JavaScript; choose one of the two! -->
     <!-- Instan-Scan -->
-    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
     <!-- <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+    <script src="<?= base_url('assets/JQuery') ?>/jquey.min.js"></script>
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <!-- <script src="<?= base_url('assets/plugin') ?>/instanscan-js/js/instanscan.js"></script> -->
+
     <!-- <script>
         // sourcode
         let scanner = new Instascan.Scanner({
