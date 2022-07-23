@@ -25,7 +25,7 @@ class Scan extends CI_Controller
 
     public function index()
     {
-        $this->load->view('page/custom/scan-package.php');
+        $this->load->view('page/custom/test.php');
     }
 
     public function form_ajax()
