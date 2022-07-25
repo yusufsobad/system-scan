@@ -26,7 +26,5 @@ function data_session()
     $ci = get_instance();
     $data = $ci->session->userdata();
 
-    $data = isset($data['data_session']) ? $data['session'] : '';
-
-    return $data;
+    return $data['data_session'];
 }
