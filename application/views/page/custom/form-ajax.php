@@ -1,5 +1,4 @@
 <form method="post" action="<?= base_url($post_action)  ?>">
-
     <?php foreach ($data_scan as $key) { ?>
         <div class="form-group">
             <label>Qr Code</label>

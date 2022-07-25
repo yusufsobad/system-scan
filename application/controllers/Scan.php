@@ -64,6 +64,9 @@ class Scan extends CI_Controller
         $qrcode = $this->input->post('qrcode');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
+        $uri = $this->uri->segment(1);
+        var_dump($uri);
+        die();
 
         $data = array(
             'qrcode'    => $qrcode,
@@ -89,6 +92,9 @@ class Scan extends CI_Controller
         $qrcode = $this->input->post('qrcode');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
+        $uri = $this->uri->segment(1);
+        var_dump($uri);
+        die();
 
 
         $data = array(

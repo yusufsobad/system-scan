@@ -189,6 +189,14 @@ function scan()
             </div>
         </div>
     </div>
+
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function instascan()
+{
+    ob_start(); ?>
     <!-- Instan-Scan -->
     <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
@@ -208,7 +216,7 @@ function scan()
 
                 $.ajax({
                     type: "POST",
-                    url: "<?= base_url('Scan/check_data') ?>",
+                    url: "<?= base_url('Scan_admin/check_data') ?>",
                     data: {
                         value: content
                     },
@@ -220,12 +228,11 @@ function scan()
                         window.alert("Qrcode already found");
                         $.ajax({
                             type: "POST",
-                            url: "<?= base_url('Scan/form_ajax') ?>",
+                            url: "<?= base_url('Scan_admin/form_ajax') ?>",
                             data: {
                                 value: content
                             },
                             success: function(response) {
-                                $('#form_scan').html(response);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
                                 $('#qrcode').val(content);
@@ -238,7 +245,7 @@ function scan()
                         window.alert("Success");
                         $.ajax({
                             type: "POST",
-                            url: "<?= base_url('Scan/form_ajax') ?>",
+                            url: "<?= base_url('Scan_admin/form_ajax') ?>",
                             data: {
                                 value: content
                             },
