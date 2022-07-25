@@ -6,6 +6,8 @@ class Scan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        $acces_page = $this->acces_this_page();
+        acces_page($acces_page);
         $this->load->model('M_blueprint');
         $this->load->library('form_validation');
     }
@@ -18,6 +20,16 @@ class Scan extends CI_Controller
                 'qrcode'    =>  '',
                 'jumlah'    =>  '',
                 'receiver'    =>  '',
+            ),
+        );
+        return $data;
+    }
+
+    public function acces_this_page()
+    {
+        $data = array(
+            'key_id'   => array(
+                '10',
             ),
         );
         return $data;

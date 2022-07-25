@@ -28,7 +28,6 @@ class Login extends CI_Controller
         $password = $this->input->post('password');
 
         $cek_data = $this->m_auth->curl_login($username, $password);
-        $all_data = $this->m_auth->data_employe();
 
         if (isset($cek_data['msg'][0]['ID'])) {
             $data_user = $this->m_auth->cek_data($cek_data['msg'][0]['ID']);
@@ -36,7 +35,7 @@ class Login extends CI_Controller
             $data_user = null;
         }
 
-        if (isset($data_user) && $data_user['ID'] == '15') {
+        if (isset($data_user) && $data_user['ID'] == '15' || $data_user['ID'] == '10') {
             $data = [
                 'data_session' => $data_user,
             ];

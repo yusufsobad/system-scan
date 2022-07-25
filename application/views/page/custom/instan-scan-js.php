@@ -33,7 +33,7 @@
     <div id="destinate"></div>
 
 
-    <!-- Optional JavaScript; choose one of the two! -->
+
     <!-- Instan-Scan -->
     <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script src="<?= base_url('assets/vendor/') ?>JQuery/jquery.min.js"></script> -->

@@ -7,9 +7,22 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         //Helper
+        $acces_page = $this->acces_this_page();
+        acces_page($acces_page);
         is_logged_in();
         $this->load->model('M_blueprint');
         $this->load->library('form_validation');
+    }
+
+    public function acces_this_page()
+    {
+        $data = array(
+            'key_id'   => array(
+                '10',
+                '15'
+            ),
+        );
+        return $data;
     }
 
     public function default_data()
@@ -84,6 +97,7 @@ class Admin extends CI_Controller
 
     public function config_table()
     {
+        $data_session = data_session();
         $this->load->library('pagination');
         $start = $this->uri->segment(3);
         $perpage  = 10;
@@ -103,7 +117,7 @@ class Admin extends CI_Controller
                 'Qrcode',
                 'Quantity',
                 'Penerima',
-                'Action',
+                'Action'
             )
         );
         if ($data_search == '') {
@@ -134,7 +148,11 @@ class Admin extends CI_Controller
                 );
             }
         }
-
+        if ($data_session['ID'] == '10') {
+            unset($data['t_head'][0][5]);
+            unset($data['t_body'][0][5]);
+        } else {
+        }
 
         return $data;
     }

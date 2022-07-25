@@ -1,5 +1,4 @@
 <?php
-
 function config_sidebar()
 {
     $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -16,13 +15,20 @@ function config_sidebar()
         ),
         array(
             'title-group' => '',
-            'title' => 'Scan',
+            'title' => 'Scan Admin',
             'icon' => 'fas fa-desktop',
-            'link' => 'Scan', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'link' => 'Scan_admin', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
             'id_collapse' => '',
-            'condition' =>  $uri_segments[2] == "Sobad_scan"  ? 'true' : 'false'
+            'condition' =>  $uri_segments[2] == "Scan_admin"  ? 'true' : 'false'
         ),
     );
+
+
+    $data_session = data_session();
+    if ($data_session['ID'] == 15) {
+        unset($data[1]);
+    } else {
+    }
     return $data;
 }
