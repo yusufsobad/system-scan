@@ -21,7 +21,7 @@ function nav($data)
 function data_table($table)
 {
     ob_start(); ?>
-    <div class="card  shadow-md p-5">
+    <div class="card  shadow-md">
         <div class="table-responsive ">
             <table class="table table-hover">
                 <thead class="bg-gray-light">
