@@ -168,27 +168,22 @@ function scan()
 {
     ob_start(); ?>
     <div class="row">
-        <div class="col-xl-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title mb-4">Latest Trasaction</h4>
-                    <video autoplay style="width:100%" class="rounded" id="preview"></video>
-                </div>
-            </div>
+        <div class="col-xl-4 text-center">
+
+            <h4 class="card-title mb-4">Scan Qrcode</h4>
+            <video autoplay style="width:100%" class="rounded" id="preview" height="200"></video>
+
         </div>
         <div class="col-xl-8">
-            <div class="card">
-                <div class="card-body">
-                    <div id="title-form" class="text-center pb-4">
-                        <h1>Input Data Qrcode</h1>
-                    </div>
-                    <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
+            <div id="title-form" class="text-center pb-4">
+                <h3>Input Data Qrcode</h3>
+            </div>
+            <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
 
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+    <div id="destinate"></div>
 
 <?php $contents = ob_get_clean();
     return $contents;
