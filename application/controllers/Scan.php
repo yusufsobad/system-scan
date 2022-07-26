@@ -58,7 +58,7 @@ class Scan extends CI_Controller
     public function check_data()
     {
         $delivery_code = $this->input->post('value');
-        $this->M_blueprint->check_db($delivery_code);
+        $this->M_blueprint->check_db($delivery_code, 'scan-user');
     }
 
 
