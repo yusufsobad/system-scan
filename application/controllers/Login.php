@@ -40,7 +40,11 @@ class Login extends CI_Controller
                 'data_session' => $data_user,
             ];
             $this->session->set_userdata($data);
-            redirect('Admin');
+            if ($data_user['ID'] == '10') {
+                redirect('Admin_input');
+            } elseif ($data_user['ID'] == '15') {
+                redirect('Admin');
+            }
         } else if (isset($data_user)) {
             $this->session->set_flashdata('message', '<div class="d-flex flex-row-reverse"><div class="alert alert-danger animated fadeInDown mr-5 position-absolute">
                 Anda tidak memiliki akses!

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Admin extends CI_Controller
+class Admin_input extends CI_Controller
 {
     public function __construct()
     {
@@ -18,7 +18,7 @@ class Admin extends CI_Controller
     {
         $data = array(
             'key_id'   => array(
-                '15'
+                '10',
             ),
         );
         return $data;
@@ -31,7 +31,7 @@ class Admin extends CI_Controller
                 'ID'        =>  '',
                 'qrcode'    =>  '',
                 'jumlah'    =>  '',
-                'receiver'    =>  '',
+                'receiver'  =>  '',
             ),
         );
         return $data;
@@ -73,11 +73,11 @@ class Admin extends CI_Controller
                 'title'    => 'Data Scaner',
                 'action'    => 'Admin',
                 // Optional Button
-                // 'button' => array(
-                //     'button_link'      => 'Activity/form',
-                //     'button_title'    => 'Tambah Data',
-                //     'button_color'     => 'primary'
-                // ),
+                'button' => array(
+                    'button_link'      => 'Admin_input/form',
+                    'button_title'    => 'Tambah Data',
+                    'button_color'     => 'primary'
+                ),
             )
         );
         return $data;
@@ -147,11 +147,6 @@ class Admin extends CI_Controller
                 );
             }
         }
-        // if ($data_session['ID'] == '10') {
-        //     unset($data['t_head'][0][5]);
-        //     unset($data['t_body'][0][5]);
-        // } else {
-        // }
 
         return $data;
     }
@@ -194,7 +189,7 @@ class Admin extends CI_Controller
         $data = array(
             array(
                 'title'    => 'Form Admin',
-                'action'    =>  $id == '' ? 'Admin/add_data' : 'Admin/update_data',
+                'action'    =>  $id == '' ? 'Admin_input/add_data' : 'Admin_input/update_data',
                 'button_save' => array(
                     'button_title'    => 'Save',
                     'button_color'     => 'success',
@@ -203,7 +198,7 @@ class Admin extends CI_Controller
                 'button_cancel' => array(
                     'button_title'    => 'Cancel',
                     'button_color'     => 'danger',
-                    'button_action'      => 'Admin',
+                    'button_action'      => 'Admin_input',
                 ),
             )
         );
