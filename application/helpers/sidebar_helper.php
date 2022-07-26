@@ -15,12 +15,12 @@ function config_sidebar()
         ),
         array(
             'title-group' => '',
-            'title' => 'Admin Input',
+            'title' => 'Admin Ppic',
             'icon' => 'fas fa-desktop',
-            'link' => 'Admin_input', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'link' => 'Admin_ppic', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
             'id_collapse' => '',
-            'condition' =>  $uri_segments[2] == "Admin_input"  ? 'true' : 'false'
+            'condition' =>  $uri_segments[2] == "Admin_ppic"  ? 'true' : 'false'
         ),
         array(
             'title-group' => '',

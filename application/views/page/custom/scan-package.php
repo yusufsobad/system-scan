@@ -23,7 +23,7 @@
         </div>
         <div class="col p-5 bg-light-primary">
             <div id="title-form" class="text-center pb-4">
-                <h1>Input Data Qrcode</h1>
+                <h1>Input Data Delivery code</h1>
             </div>
             <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
 
@@ -62,7 +62,7 @@
                     console.log(data);
 
                     if (data == 'true') {
-                        window.alert("Qrcode already found");
+                        window.alert("delivery_code already found");
                         $.ajax({
                             type: "POST",
                             url: "<?= base_url('Scan/form_ajax') ?>",
@@ -73,7 +73,7 @@
                                 $('#form_scan').html(response);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
-                                $('#qrcode').val(content);
+                                $('#delivery_code').val(content);
                                 $('html, body').animate({
                                     scrollTop: $("#destinate").offset().top
                                 }, 2000);
@@ -90,7 +90,7 @@
                             success: function(response) {
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
-                                $('#qrcode').val(content);
+                                $('#delivery_code').val(content);
                                 $('html, body').animate({
                                     scrollTop: $("#destinate").offset().top
                                 }, 2000);

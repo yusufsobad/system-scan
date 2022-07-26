@@ -28,10 +28,8 @@ class Scan_admin extends CI_Controller
     {
         $data = array(
             array(
-                'ID'        =>  '',
-                'qrcode'    =>  '',
-                'jumlah'    =>  '',
-                'receiver'    =>  '',
+                'ID'             =>  '',
+                'qrcode'         =>  '',
             ),
         );
         return $data;
@@ -40,7 +38,11 @@ class Scan_admin extends CI_Controller
     public function check_data()
     {
         $qrcode = $this->input->post('value');
-        $this->M_blueprint->check_db($qrcode);
+
+        $where = array(
+            'qrcode'    => $qrcode
+        );
+        $this->M_blueprint->check_db($where, 'scan-admin');
     }
 
     public function form_ajax()
@@ -54,14 +56,14 @@ class Scan_admin extends CI_Controller
         $where = array(
             'qrcode' => $data['qrcode']
         );
-        $data['data_scan'] = $this->M_blueprint->get_data($where, 'sbd-item');
+        $data['data_scan'] = $this->M_blueprint->get_data($where, 'scan-admin');
         $data['post_action'] = 'Scan_admin/update_data';
 
         if (!empty($data['data_scan'])) {
-            $this->load->view('page/custom/form-ajax.php', $data);
+            $this->load->view('page/custom/form-scan-admin.php', $data);
             // echo "data ada";
         } else {
-            $this->load->view('page/custom/form-ajax.php', $default_data);
+            $this->load->view('page/custom/form-scan-admin.php', $default_data);
             // echo "data tidak ada";
         }
     }
@@ -107,17 +109,14 @@ class Scan_admin extends CI_Controller
     public function insert_data()
     {
         $qrcode = $this->input->post('qrcode');
-        $qty = $this->input->post('qty');
-        $penerima = $this->input->post('penerima');
+
 
         $data = array(
             'qrcode'    => $qrcode,
-            'jumlah'    => $qty,
-            'receiver'  => $penerima
         );
 
 
-        $this->M_blueprint->insert_data($data);
+        $this->M_blueprint->insert_data($data, 'scan-admin');
         $config_alert_success = array(
             array(
                 'title'     => 'Data Berhasil Di Validasi',
@@ -126,31 +125,24 @@ class Scan_admin extends CI_Controller
         );
         $allert_success = allert($config_alert_success);
         $this->session->set_flashdata('msg', $allert_success);
-        redirect('Scan_admin/index');
+        redirect('Admin_ppic/index');
     }
 
     public function update_data()
     {
         $qrcode = $this->input->post('qrcode');
-        $qty = $this->input->post('qty');
-        $penerima = $this->input->post('penerima');
-        $no_telp = $this->input->post('no_telp');
-        $note = $this->input->post('note');
 
 
 
         $data = array(
-            'jumlah'    => $qty,
-            'receiver'  => $penerima,
-            'no_telp'   => $no_telp,
-            'note'      => $note
+            'qrcode'    => $qrcode,
         );
 
         $where = array(
             'qrcode' => $qrcode
         );
 
-        $this->M_blueprint->update_data($where, $data, 'sbd-item');
+        $this->M_blueprint->update_data($where, $data, 'scan-admin');
         $config_alert_success = array(
             array(
                 'title'     => 'Data Berhasil Di Edit',
@@ -159,6 +151,6 @@ class Scan_admin extends CI_Controller
         );
         $allert_success = allert($config_alert_success);
         $this->session->set_flashdata('msg', $allert_success);
-        redirect('Scan_admin/index');
+        redirect('Admin_ppic/index');
     }
 }

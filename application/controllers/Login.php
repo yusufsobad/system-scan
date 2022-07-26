@@ -41,7 +41,7 @@ class Login extends CI_Controller
             ];
             $this->session->set_userdata($data);
             if ($data_user['ID'] == '10') {
-                redirect('Admin_input');
+                redirect('Admin_ppic');
             } elseif ($data_user['ID'] == '15') {
                 redirect('Admin');
             }

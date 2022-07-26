@@ -2,7 +2,7 @@
     <div class="col-xl-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-4">Latest Trasaction</h4>
+                <h4 class="card-title mb-4">Qrcode</h4>
                 <video autoplay style="width:100%" class="rounded" id="preview"></video>
             </div>
         </div>
@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-body">
                 <div id="title-form" class="text-center pb-4">
-                    <h1>Input Data Qrcode</h1>
+                    <h1>Input Data Delivery code</h1>
                 </div>
                 <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
 
@@ -39,7 +39,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "<?= base_url('Scan/check_data') ?>",
+                url: "<?= base_url('Scan_admin/check_data') ?>",
                 data: {
                     value: content
                 },
@@ -48,7 +48,7 @@
                 console.log(data);
 
                 if (data == 'true') {
-                    window.alert("Qrcode already found");
+                    window.alert("Delivery code already found");
                     $.ajax({
                         type: "POST",
                         url: "<?= base_url('Scan/form_ajax') ?>",
@@ -59,7 +59,7 @@
                             $('#form_scan').html(response);
                             $('#form_scan').html(response);
                             $("#title-form").fadeIn(700);
-                            $('#qrcode').val(content);
+                            $('#delivery_code').val(content);
                             $('html, body').animate({
                                 scrollTop: $("#destinate").offset().top
                             }, 2000);
@@ -76,7 +76,7 @@
                         success: function(response) {
                             $('#form_scan').html(response);
                             $("#title-form").fadeIn(700);
-                            $('#qrcode').val(content);
+                            $('#delivery_code').val(content);
                             $('html, body').animate({
                                 scrollTop: $("#destinate").offset().top
                             }, 2000);

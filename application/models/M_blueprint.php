@@ -7,37 +7,55 @@ class M_blueprint extends CI_Model
     {
         $this->db->select('*');
         $this->db->limit($perpage, $start);
-        $this->db->from('sbd-item');
+        $this->db->from('scan-user');
         $query = $this->db->get();
         return $query;
     }
 
-    public function get_keyword($keyword = '', $perpage, $start)
+    public function data_table($perpage, $start, $table)
     {
         $this->db->select('*');
-        $this->db->from('sbd-item');
         $this->db->limit($perpage, $start);
-        $this->db->like('qrcode', $keyword);
-        $this->db->or_like('receiver', $keyword);
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function get_keyword($keyword = '', $perpage, $start, $table)
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->limit($perpage, $start);
+        $this->db->like('delivery_code', $keyword);
+        $this->db->or_like('penerima', $keyword);
         return $this->db->get();
     }
 
-    public function insert_data($data)
+    public function get_keyword_admin($keyword = '', $perpage, $start, $table)
     {
-        $this->db->insert('sbd-item', $data);
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->limit($perpage, $start);
+        $this->db->like('qrcode', $keyword);
+        return $this->db->get();
+    }
+
+    public function insert_data($data, $table)
+    {
+        $this->db->insert($table, $data);
     }
 
     public function count_data()
     {
-        $this->db->from('sbd-item');
+        $this->db->from('scan-user');
         $query = $this->db->get();
         return $query->num_rows();
     }
 
-    function check_db($key)
+    function check_db($key, $table)
     {
-        $this->db->where('qrcode', $key);
-        $query = $this->db->get('sbd-item');
+        $this->db->where($key);
+        $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
             echo 'true';
         } else {
@@ -52,6 +70,13 @@ class M_blueprint extends CI_Model
         $this->db->from($table);
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function get_all($table)
+    {
+
+        return $this->db->get($table)->result(); // Tampilkan semua data yang ada di tabel siswa
+
     }
 
     public function update_data($where, $data, $table)

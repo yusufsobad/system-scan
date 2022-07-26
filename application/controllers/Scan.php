@@ -14,10 +14,13 @@ class Scan extends CI_Controller
     {
         $data = array(
             array(
-                'ID'        =>  '',
-                'qrcode'    =>  '',
-                'jumlah'    =>  '',
-                'receiver'    =>  '',
+                'ID'                =>  '',
+                'id_paket'          =>  '',
+                'delivery_code'     =>  '',
+                'qty'               =>  '',
+                'no_telp'           =>  '',
+                'penerima'          =>  '',
+                'note'              =>  '',
             ),
         );
         return $data;
@@ -31,15 +34,15 @@ class Scan extends CI_Controller
     public function form_ajax()
     {
         $default_data['data_scan'] = $this->default_data();
-        $default_data['qrcode'] = $this->input->post('value');
+        $default_data['delivery_code'] = $this->input->post('value');
         $default_data['post_action'] = 'Scan/insert_data';
 
-        $data['qrcode'] = $this->input->post('value');
+        $data['delivery_code'] = $this->input->post('value');
 
         $where = array(
-            'qrcode' => $data['qrcode']
+            'delivery_code' => $data['delivery_code']
         );
-        $data['data_scan'] = $this->M_blueprint->get_data($where, 'sbd-item');
+        $data['data_scan'] = $this->M_blueprint->get_data($where, 'scan-user');
         $data['post_action'] = 'Scan/update_data';
 
         if (!empty($data['data_scan'])) {
@@ -54,14 +57,14 @@ class Scan extends CI_Controller
 
     public function check_data()
     {
-        $qrcode = $this->input->post('value');
-        $this->M_blueprint->check_db($qrcode);
+        $delivery_code = $this->input->post('value');
+        $this->M_blueprint->check_db($delivery_code);
     }
 
 
     public function insert_data()
     {
-        $qrcode = $this->input->post('qrcode');
+        $delivery_code = $this->input->post('delivery_code');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
         $no_telp = $this->input->post('no_telp');
@@ -69,15 +72,15 @@ class Scan extends CI_Controller
 
 
         $data = array(
-            'qrcode'    => $qrcode,
-            'jumlah'    => $qty,
-            'receiver'  => $penerima,
+            'delivery_code'    => $delivery_code,
+            'qty'    => $qty,
+            'penerima'  => $penerima,
             'no_telp'   => $no_telp,
             'note'      => $note
         );
 
 
-        $this->M_blueprint->insert_data($data);
+        $this->M_blueprint->insert_data($data, 'scan-user');
         $config_alert_success = array(
             array(
                 'title'     => 'Data Berhasil Di Validasi',
@@ -91,7 +94,7 @@ class Scan extends CI_Controller
 
     public function update_data()
     {
-        $qrcode = $this->input->post('qrcode');
+        $delivery_code = $this->input->post('delivery_code');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
         $no_telp = $this->input->post('no_telp');
@@ -99,18 +102,18 @@ class Scan extends CI_Controller
 
 
         $data = array(
-            'qrcode'    => $qrcode,
-            'jumlah'    => $qty,
-            'receiver'  => $penerima,
-            'no_telp'   => $no_telp,
-            'note'      => $note
+            'delivery_code'   => $delivery_code,
+            'qty'             => $qty,
+            'penerima'        => $penerima,
+            'no_telp'         => $no_telp,
+            'note'            => $note
         );
 
         $where = array(
-            'qrcode' => $qrcode
+            'delivery_code' => $delivery_code
         );
 
-        $this->M_blueprint->update_data($where, $data, 'sbd-item');
+        $this->M_blueprint->update_data($where, $data, 'scan-user');
         $config_alert_success = array(
             array(
                 'title'     => 'Data Berhasil Di Edit',
