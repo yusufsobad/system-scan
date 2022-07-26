@@ -64,14 +64,16 @@ class Scan extends CI_Controller
         $qrcode = $this->input->post('qrcode');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
-        $uri = $this->uri->segment(1);
-        var_dump($uri);
-        die();
+        $no_telp = $this->input->post('no_telp');
+        $note = $this->input->post('note');
+
 
         $data = array(
             'qrcode'    => $qrcode,
             'jumlah'    => $qty,
-            'receiver'  => $penerima
+            'receiver'  => $penerima,
+            'no_telp'   => $no_telp,
+            'note'      => $note
         );
 
 
@@ -92,14 +94,16 @@ class Scan extends CI_Controller
         $qrcode = $this->input->post('qrcode');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
-        $uri = $this->uri->segment(1);
-        var_dump($uri);
-        die();
+        $no_telp = $this->input->post('no_telp');
+        $note = $this->input->post('note');
 
 
         $data = array(
+            'qrcode'    => $qrcode,
             'jumlah'    => $qty,
-            'receiver'  => $penerima
+            'receiver'  => $penerima,
+            'no_telp'   => $no_telp,
+            'note'      => $note
         );
 
         $where = array(

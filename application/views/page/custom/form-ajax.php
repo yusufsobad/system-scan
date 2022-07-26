@@ -12,6 +12,14 @@
             <label>Penerima</label>
             <input type="text" value="<?= $key['receiver'] ?>" class="form-control" id="penerima" name="penerima" placeholder="Input Nama Penerima">
         </div>
+        <div class="form-group">
+            <label>No Telp</label>
+            <input type="text" value="<?= $key['no_telp'] ?>" class="form-control" id="penerima" name="penerima" placeholder="Input Nama Penerima">
+        </div>
+        <div class="form-group">
+            <label>Note</label>
+            <input type="text" value="<?= $key['note'] ?>" class="form-control" id="penerima" name="penerima" placeholder="Input Nama Penerima">
+        </div>
     <?php } ?>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

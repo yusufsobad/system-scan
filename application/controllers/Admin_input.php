@@ -32,6 +32,8 @@ class Admin_input extends CI_Controller
                 'qrcode'    =>  '',
                 'jumlah'    =>  '',
                 'receiver'  =>  '',
+                'no_telp'   =>  '',
+                'note'      =>  '',
             ),
         );
         return $data;
@@ -116,6 +118,8 @@ class Admin_input extends CI_Controller
                 'Qrcode',
                 'Quantity',
                 'Penerima',
+                'No Telp',
+                'Note',
                 'Action'
             )
         );
@@ -143,6 +147,8 @@ class Admin_input extends CI_Controller
                     $key['qrcode'],
                     $key['jumlah'],
                     $key['receiver'],
+                    $key['no_telp'],
+                    $key['note'],
                     $button_edit
                 );
             }

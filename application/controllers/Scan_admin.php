@@ -134,12 +134,16 @@ class Scan_admin extends CI_Controller
         $qrcode = $this->input->post('qrcode');
         $qty = $this->input->post('qty');
         $penerima = $this->input->post('penerima');
+        $no_telp = $this->input->post('no_telp');
+        $note = $this->input->post('note');
 
 
 
         $data = array(
             'jumlah'    => $qty,
-            'receiver'  => $penerima
+            'receiver'  => $penerima,
+            'no_telp'   => $no_telp,
+            'note'      => $note
         );
 
         $where = array(
