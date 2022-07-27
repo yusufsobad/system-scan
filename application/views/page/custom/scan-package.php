@@ -23,7 +23,7 @@
         </div>
         <div class="col p-5 bg-light-primary">
             <div id="title-form" class="text-center pb-4">
-                <h1>Input Data Delivery code</h1>
+                <h1>Input data Barang Diterima</h1>
             </div>
             <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
 
