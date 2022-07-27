@@ -169,11 +169,7 @@ function scan()
     ob_start(); ?>
     <style>
         #preview {
-            transform: rotateY(180deg);
-            -webkit-transform: rotateY(180deg);
-            /* Safari and Chrome */
-            -moz-transform: rotateY(180deg);
-            /* Firefox */
+            transform: scaleX(1) !important;
         }
     </style>
     <div class="col text-center">
