@@ -167,7 +167,15 @@ function mpdf_setting($data = array())
 function scan()
 {
     ob_start(); ?>
-
+    <style>
+        #preview {
+            transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
+            /* Safari and Chrome */
+            -moz-transform: rotateY(180deg);
+            /* Firefox */
+        }
+    </style>
     <div class="col text-center">
         <h4 class="card-title mb-4">Scan Qrcode</h4>
         <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
