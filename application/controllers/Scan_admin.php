@@ -61,10 +61,12 @@ class Scan_admin extends CI_Controller
 
 
         if (!empty($data['data_scan'])) {
-            $this->load->view('page/custom/form-scan-admin.php', $data);
+            // $this->load->view('page/custom/form-scan-admin.php', $data);
+            $this->update_data($data['qrcode']);
             // echo "data ada";
         } else {
-            $this->load->view('page/custom/form-scan-admin.php', $default_data);
+            // $this->load->view('page/custom/form-scan-admin.php', $default_data);
+            $this->insert_data($data['qrcode']);
             // echo "data tidak ada";
         }
     }
@@ -107,13 +109,13 @@ class Scan_admin extends CI_Controller
         return $data;
     }
 
-    public function insert_data()
+    public function insert_data($data)
     {
         $qrcode = $this->input->post('qrcode');
 
 
         $data = array(
-            'qrcode'    => $qrcode,
+            'qrcode'    => $data,
         );
 
 
@@ -129,18 +131,15 @@ class Scan_admin extends CI_Controller
         redirect('Admin_ppic/index');
     }
 
-    public function update_data()
+    public function update_data($data)
     {
         $qrcode = $this->input->post('qrcode');
-
-
-
         $data = array(
-            'qrcode'    => $qrcode,
+            'qrcode'    => $data,
         );
 
         $where = array(
-            'qrcode' => $qrcode
+            'qrcode' => $data
         );
 
         $this->M_blueprint->update_data($where, $data, 'scan-admin');

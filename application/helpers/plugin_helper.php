@@ -167,23 +167,12 @@ function mpdf_setting($data = array())
 function scan()
 {
     ob_start(); ?>
-    <div class="row">
-        <div class="col-xl-4 text-center">
 
-            <h4 class="card-title mb-4">Scan Qrcode</h4>
-            <video autoplay style="width:100%" class="rounded" id="preview" height="200"></video>
-
-        </div>
-        <div class="col-xl-8">
-            <div id="title-form" class="text-center pb-4">
-                <h3>Input Data Qrcode</h3>
-            </div>
-            <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
-
-            </div>
-        </div>
+    <div class="col text-center">
+        <h4 class="card-title mb-4">Scan Qrcode</h4>
+        <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
     </div>
-    <div id="destinate"></div>
+
 
 <?php $contents = ob_get_clean();
     return $contents;
@@ -220,7 +209,7 @@ function instascan()
                     console.log(data);
 
                     if (data == 'true') {
-                        window.alert("Qrcode already found");
+                        // window.alert("Qrcode already found");
                         $.ajax({
                             type: "POST",
                             url: "<?= base_url('Scan_admin/form_ajax') ?>",
@@ -228,16 +217,18 @@ function instascan()
                                 value: content
                             },
                             success: function(response) {
-                                $('#form_scan').html(response);
-                                $("#title-form").fadeIn(700);
-                                $('#qrcode').val(content);
-                                $('html, body').animate({
-                                    scrollTop: $("#destinate").offset().top
-                                }, 2000);
+                                var e = $('#allert-warning');
+                                e.fadeIn();
+                                e.queue(function() {
+                                    setTimeout(function() {
+                                        e.dequeue();
+                                    }, 2000);
+                                });
+                                e.fadeOut('fast');
                             },
                         })
                     } else {
-                        window.alert("Success");
+                        // window.alert("Success");
                         $.ajax({
                             type: "POST",
                             url: "<?= base_url('Scan_admin/form_ajax') ?>",
@@ -245,12 +236,14 @@ function instascan()
                                 value: content
                             },
                             success: function(response) {
-                                $('#form_scan').html(response);
-                                $("#title-form").fadeIn(700);
-                                $('#qrcode').val(content);
-                                $('html, body').animate({
-                                    scrollTop: $("#destinate").offset().top
-                                }, 2000);
+                                var e = $('#allert-success');
+                                e.fadeIn();
+                                e.queue(function() {
+                                    setTimeout(function() {
+                                        e.dequeue();
+                                    }, 2000);
+                                });
+                                e.fadeOut('fast');
                             },
                         })
                     }

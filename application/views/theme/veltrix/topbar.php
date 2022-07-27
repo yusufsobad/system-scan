@@ -1,6 +1,13 @@
 <?php $data_session = data_session(); ?>
 <?php $data_company = profile_company(); ?>
+
 <header id="page-topbar">
+    <div id="allert-success" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-success bg-success text-white border-0" role="alert">
+        <strong>Data Berhasil Disimpan!</strong>
+    </div>
+    <div id="allert-warning" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-warning bg-warning text-white border-0" role="alert">
+        <strong>Data Sudah Ada!</strong>
+    </div>
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
@@ -19,7 +26,6 @@
             </button>
         </div>
         <div class="d-flex">
-
             <div class="dropdown d-none d-lg-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                     <i class="mdi mdi-fullscreen"></i>
