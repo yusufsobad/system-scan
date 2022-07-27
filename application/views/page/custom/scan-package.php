@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/bootstrap-4/css/bootstrap-grid.min.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/bootstrap-4/css/bootstrap-reboot.min.css">
     <link rel="stylesheet" href="<?= base_url('assets/') ?>vendor/bootstrap-4/css/bootstrap.min.css">
-
+    <style>
+        #preview {
+            transform: scaleX(1) !important;
+        }
+    </style>
     <title>Solo Abadi</title>
 </head>
 
@@ -62,7 +66,7 @@
                     console.log(data);
 
                     if (data == 'true') {
-                        window.alert("delivery_code already found");
+                        // window.alert("delivery_code already found");
                         $.ajax({
                             type: "POST",
                             url: "<?= base_url('Scan/form_ajax') ?>",
@@ -70,6 +74,14 @@
                                 value: content
                             },
                             success: function(response) {
+                                var e = $('#allert-warning');
+                                e.fadeIn();
+                                e.queue(function() {
+                                    setTimeout(function() {
+                                        e.dequeue();
+                                    }, 2000);
+                                });
+                                e.fadeOut('fast');
                                 $('#form_scan').html(response);
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
@@ -80,7 +92,7 @@
                             },
                         })
                     } else {
-                        window.alert("Success");
+                        // window.alert("Success");
                         $.ajax({
                             type: "POST",
                             url: "<?= base_url('Scan/form_ajax') ?>",
@@ -88,6 +100,14 @@
                                 value: content
                             },
                             success: function(response) {
+                                var e = $('#allert-success');
+                                e.fadeIn();
+                                e.queue(function() {
+                                    setTimeout(function() {
+                                        e.dequeue();
+                                    }, 2000);
+                                });
+                                e.fadeOut('fast');
                                 $('#form_scan').html(response);
                                 $("#title-form").fadeIn(700);
                                 $('#delivery_code').val(content);

@@ -3,7 +3,7 @@
 
 <header id="page-topbar">
     <div id="allert-success" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-success bg-success text-white border-0" role="alert">
-        <strong>Data Berhasil Disimpan!</strong>
+        <strong>Data Berhasil Discan!</strong>
     </div>
     <div id="allert-warning" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-warning bg-warning text-white border-0" role="alert">
         <strong>Data Sudah Ada!</strong>
