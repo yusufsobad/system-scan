@@ -136,7 +136,7 @@ class Admin_ppic extends CI_Controller
         $total_row = $this->M_blueprint->count_data('scan-admin');
         $data = array(
             array(
-                'base_url'   => base_url('Admin/index'),
+                'base_url'   => base_url('Admin_ppic/index'),
                 'total_rows' => $total_row,
                 'per_page'  => 5,
             ),
