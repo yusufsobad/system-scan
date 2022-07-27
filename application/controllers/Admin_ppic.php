@@ -131,7 +131,7 @@ class Admin_ppic extends CI_Controller
                         ),
                     )
                 );
-                $button_hapus = button_edit($config_button_hapus);
+                $button_hapus = button_delete($config_button_hapus);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['qrcode'],
