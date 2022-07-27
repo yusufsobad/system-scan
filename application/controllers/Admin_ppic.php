@@ -111,6 +111,7 @@ class Admin_ppic extends CI_Controller
             array(
                 'NO',
                 'Qrcode',
+                'Action',
             )
         );
         if ($data_search == '') {
@@ -120,10 +121,21 @@ class Admin_ppic extends CI_Controller
         }
         if (isset($data)) {
             foreach ($data_table as $index => $key) {
-                // Config button Edit
+                // Config button Hapus
+                $config_button_hapus = array(
+                    array(
+                        'button' => array(
+                            'button_link'      => 'Admin/form/' . $key['ID'],
+                            'button_title'    => 'Hapus',
+                            'button_color'     => 'danger'
+                        ),
+                    )
+                );
+                $button_hapus = button_edit($config_button_hapus);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['qrcode'],
+                    $button_hapus,
                 );
             }
         }
@@ -142,6 +154,20 @@ class Admin_ppic extends CI_Controller
             ),
         );
         return $data;
+    }
+
+    public function delete_data($id)
+    {
+        $where = array('ID' => $id);
+        $this->M_blueprint->delete_data($where, 'scan-admin');
+        $config_alert_danger = array(
+            array(
+                'title'     => 'Data Berhasil di Hapus ',
+                'alert_type' => 'alert-success'
+            ),
+        );
+        $allert_danger = allert($config_alert_danger);
+        redirect('Product/index');
     }
 
     public function export()

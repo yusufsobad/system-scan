@@ -87,4 +87,10 @@ class M_blueprint extends CI_Model
         $this->db->where($where);
         $this->db->update($table, $data);
     }
+
+    public function delete_data($where, $table)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
 }
