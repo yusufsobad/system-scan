@@ -167,7 +167,7 @@ class Admin_ppic extends CI_Controller
             ),
         );
         $allert_danger = allert($config_alert_danger);
-        redirect('Product/index');
+        redirect('Admin_ppic/index');
     }
 
     public function export()

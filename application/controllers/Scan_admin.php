@@ -59,6 +59,7 @@ class Scan_admin extends CI_Controller
         $data['data_scan'] = $this->M_blueprint->get_data($where, 'scan-admin');
         $data['post_action'] = 'Scan_admin/update_data';
 
+
         if (!empty($data['data_scan'])) {
             $this->load->view('page/custom/form-scan-admin.php', $data);
             // echo "data ada";
