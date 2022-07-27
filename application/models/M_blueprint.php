@@ -45,9 +45,9 @@ class M_blueprint extends CI_Model
         $this->db->insert($table, $data);
     }
 
-    public function count_data()
+    public function count_data($table)
     {
-        $this->db->from('scan-user');
+        $this->db->from($table);
         $query = $this->db->get();
         return $query->num_rows();
     }

@@ -165,7 +165,7 @@ class Admin extends CI_Controller
 
     public function config_pagination()
     {
-        $total_row = $this->M_blueprint->count_data();
+        $total_row = $this->M_blueprint->count_data('scan-user');
         $data = array(
             array(
                 'base_url'   => base_url('Admin/index'),

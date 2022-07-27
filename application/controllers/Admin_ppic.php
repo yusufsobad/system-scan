@@ -97,7 +97,7 @@ class Admin_ppic extends CI_Controller
         $data_session = data_session();
         $this->load->library('pagination');
         $start = $this->uri->segment(3);
-        $perpage  = 10;
+        $perpage  = 5;
         $keyword = $this->input->post('search');
         $data_search = $this->M_blueprint->get_keyword_admin($keyword, $perpage, $start, 'scan-admin')->result_array();
         $data_args = $this->M_blueprint->data_table($perpage, $start, 'scan-admin')->result_array();
@@ -133,12 +133,12 @@ class Admin_ppic extends CI_Controller
 
     public function config_pagination()
     {
-        $total_row = $this->M_blueprint->count_data();
+        $total_row = $this->M_blueprint->count_data('scan-admin');
         $data = array(
             array(
                 'base_url'   => base_url('Admin/index'),
                 'total_rows' => $total_row,
-                'per_page'  => 10,
+                'per_page'  => 5,
             ),
         );
         return $data;
