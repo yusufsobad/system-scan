@@ -125,7 +125,7 @@ class Admin_ppic extends CI_Controller
                 $config_button_hapus = array(
                     array(
                         'button' => array(
-                            'button_link'      => 'Admin/form/' . $key['ID'],
+                            'button_link'      => 'Admin_ppic/delete_data/' . $key['ID'],
                             'button_title'    => 'Hapus',
                             'button_color'     => 'danger'
                         ),
