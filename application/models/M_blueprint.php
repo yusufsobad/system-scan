@@ -17,6 +17,7 @@ class M_blueprint extends CI_Model
         $this->db->select('*');
         $this->db->limit($perpage, $start);
         $this->db->from($table);
+        $this->db->order_by('ID', 'ASC');
         $query = $this->db->get();
         return $query;
     }
