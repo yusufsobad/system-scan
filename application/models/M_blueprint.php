@@ -17,7 +17,7 @@ class M_blueprint extends CI_Model
         $this->db->select('*');
         $this->db->limit($perpage, $start);
         $this->db->from($table);
-        $this->db->order_by('ID', 'Asc');
+        $this->db->order_by('ID', 'DESC');
         $query = $this->db->get();
         return $query;
     }
@@ -28,7 +28,7 @@ class M_blueprint extends CI_Model
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->like('delivery_code', $keyword);
-        $this->db->order_by('ID', 'ASC');
+        $this->db->order_by('ID', 'DESC');
         $this->db->or_like('penerima', $keyword);
         return $this->db->get();
     }
@@ -39,7 +39,7 @@ class M_blueprint extends CI_Model
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->like('qrcode', $keyword);
-        $this->db->order_by('ID', 'ASC');
+        $this->db->order_by('ID', 'DESC');
         return $this->db->get();
     }
 
