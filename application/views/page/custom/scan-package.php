@@ -19,21 +19,29 @@
 </head>
 
 <body>
-
-    <div class="row align-items-center">
-        <div class="col text-center p-5">
-            <h1 class="bold">Scan Barcode Disini</h1>
-            <video autoplay style="width:100%;transform: scaleX(-1);" class="rounded" id="preview"></video>
-        </div>
-        <div class="col p-5 bg-light-primary">
-            <div id="title-form" class="text-center pb-4">
-                <h1>Input data Barang Diterima</h1>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col text-center p-5">
+                <h1 class="bold">Scan Barcode Disini</h1>
+                <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
             </div>
-            <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
+            <div class="col  bg-light-primary">
+                <div id="title-form" class="text-center pb-4">
+                    <h1>Input data Barang Diterima</h1>
+                </div>
+                <div class="card rounded shadow p-3 mb-5 bg-white rounded" id="form_scan" style="min-height: 326px;">
 
+                </div>
             </div>
         </div>
     </div>
+    <div id="allert-warning" style="position: fixed; left:25px;top:15px;display:none" class="alert alert-warning bg-warning text-white border-0" role="alert">
+        <strong>Data Sudah Ada!</strong>
+    </div>
+    <div id="allert-success" style="position: fixed; left:25px;top:15px;display:none" class="alert alert-success bg-success text-white border-0" role="alert">
+        <strong>Data Berhasil Discan!</strong>
+    </div>
+
     <div id="destinate"></div>
 
 
