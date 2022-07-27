@@ -64,7 +64,7 @@ function pagination($data)
         $config['per_page'] =  $val['per_page'];
         $config['num_links'] = 3;
 
-        $config['first_link']       = 'li class<i class="fas fa-angle-double-left icon-sm"></i>';
+        $config['first_link']       = '<i class="fas fa-angle-double-left icon-sm"></i>';
         $config['last_link']        = '<i class="fas fa-angle-double-right icon-sm"></i>';
         $config['next_link']        = '<i class="fas fa-angle-right icon-sm"></i>';
         $config['prev_link']        = '<i class="fas fa-angle-left icon-sm"></i>';
