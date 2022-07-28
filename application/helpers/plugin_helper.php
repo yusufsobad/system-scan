@@ -199,9 +199,29 @@ function instascan()
                 scanner.start();
             }).catch(e => console.error(e));
 
-            scanner.addListener('scan', content => {
-                console.log(content);
+            var timerHandle = setTimeout(Myfunction, 120000);
 
+            function resetTimer() {
+                window.clearTimeout(timerHandle);
+            }
+
+            function Myfunction(data) {
+                var data = data;
+                if (data == null) {
+                    // Instascan.Camera.getCameras().then(cameras => {
+                    //     scanner.camera = cameras[cameras.length - 1];
+                    //     scanner.stop();
+                    // }).catch(e => console.error(e));
+
+                    console.log("Data Kosong");
+                } else {
+                    resetTimer();
+                }
+            }
+
+            scanner.addListener('scan', content => {
+                setTimeout(Myfunction, 120000);
+                Myfunction(content);
                 $.ajax({
                     type: "POST",
                     url: "<?= base_url('Scan_admin/check_data') ?>",
