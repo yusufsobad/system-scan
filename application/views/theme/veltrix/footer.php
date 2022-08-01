@@ -83,7 +83,6 @@
 
 <script src="<?= base_url('assets/veltrix/') ?>js/app.js"></script>
 
-<?= instascan(); ?>
 
 </body>
 
