@@ -93,4 +93,12 @@ class M_blueprint extends CI_Model
         $this->db->where($where);
         $this->db->delete($table);
     }
+
+    public function test_get($table)
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
