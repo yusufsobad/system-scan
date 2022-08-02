@@ -14,7 +14,7 @@ class Curl_api extends RestController
 
     public function index_post()
     {
-        $id = $this->get('ID');
+        $id = $this->post('ID');
 
         $data = $this->Api_blueprint->get_scan_user($id);
 
