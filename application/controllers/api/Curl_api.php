@@ -12,7 +12,7 @@ class Curl_api extends RestController
         $this->load->model('Api_blueprint');
     }
 
-    public function index_get()
+    public function index_post()
     {
         $id = $this->get('ID');
 
@@ -22,12 +22,12 @@ class Curl_api extends RestController
             $this->response([
                 'status' => 'Success',
                 'message' => $data
-            ], 200);
+            ], RestController::HTTP_OK);
         } else {
             $this->response([
                 'status' => 'Failed',
                 'message' => 'ID Kosong'
-            ], 404);
+            ], RestController::HTTP_NOT_FOUND);
         }
     }
 }
