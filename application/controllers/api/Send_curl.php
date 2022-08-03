@@ -14,13 +14,14 @@ class Send_curl extends RestController
 
     public function index_post()
     {
-        $data = $this->post('data');
-        $data = json_decode($data, true);
+        $data = $this->post();
         $data['scan_user'] = array(
             'id_temporary'  => $data['ID'],
             'delivery_code' => $data['DO_number'],
             'id_paket'      => $data['id_package']
         );
+
+        var_dump($data);
 
         if ($this->Api_blueprint->insert_data($data['scan_user'], $data['detail']) > 0) {
             $this->response([
