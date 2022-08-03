@@ -21,8 +21,6 @@ class Send_curl extends RestController
             'id_paket'      => $data['id_package']
         );
 
-        var_dump($data);
-
         if ($this->Api_blueprint->insert_data($data['scan_user'], $data['detail']) > 0) {
             $this->response([
                 'status' => 'Success',
