@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Curl_api extends RestController
+class Get_curl extends RestController
 {
     function __construct()
     {
@@ -14,19 +14,18 @@ class Curl_api extends RestController
 
     public function index_post()
     {
-        $id = $this->post('ID');
+        $data = $this->post('data');
 
-        $data = $this->Api_blueprint->get_scan_user($id);
-
-        if ($id !== null) {
+        $data_args = $this->Api_blueprint->get_scan_user($data);
+        if ($data !== null) {
             $this->response([
                 'status' => 'Success',
-                'message' => $data
+                'message' => $data_args
             ], RestController::HTTP_OK);
         } else {
             $this->response([
                 'status' => 'Failed',
-                'message' => 'ID Kosong'
+                'message' => 'Data Not Found'
             ], RestController::HTTP_NOT_FOUND);
         }
     }

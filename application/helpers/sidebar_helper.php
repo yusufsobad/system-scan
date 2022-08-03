@@ -31,6 +31,15 @@ function config_sidebar()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Scan_admin"  ? 'true' : 'false'
         ),
+        array(
+            'title-group' => '',
+            'title' => 'Scan Packing',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Scan_packing', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Scan_packing"  ? 'true' : 'false'
+        ),
     );
 
 
