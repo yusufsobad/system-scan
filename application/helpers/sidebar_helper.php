@@ -40,6 +40,15 @@ function config_sidebar()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Scan_packing"  ? 'true' : 'false'
         ),
+        array(
+            'title-group' => '',
+            'title' => 'Scan Pengiriman',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Scan_pengiriman', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Scan_pengiriman"  ? 'true' : 'false'
+        ),
     );
 
 
@@ -49,7 +58,7 @@ function config_sidebar()
         unset($data[2]);
     } else if ($data_session['ID'] == 10) {
         unset($data[0]);
-        unset($data[3]);
+        // unset($data[3]);
     }
     return $data;
 }

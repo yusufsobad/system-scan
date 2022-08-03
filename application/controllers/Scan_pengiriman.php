@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Scan_packing extends CI_Controller
+class Scan_pengiriman extends CI_Controller
 {
     public function __construct()
     {
@@ -42,7 +42,7 @@ class Scan_packing extends CI_Controller
         $data_session = data_session();
 
         $config_card = $this->config_card();
-        $view_scan = scan_packing();
+        $view_scan = Scan_do();
         $content = array($view_scan);
         $data['title'] = 'Data Scaner';
         // Get Sidebar
@@ -75,110 +75,106 @@ class Scan_packing extends CI_Controller
         $qr = explode(".", $qrcode);
         $qr = $qr[0];
         if ($qr == 'PACK') {
-            $where = array(
-                'no_pack'    => $qrcode
+            $data = array(
+                'allert' => '#allert-do',
+                'id'    => '0',
+                'url'   => base_url('Scan_pengiriman/check_data'),
+                'status' => 'false',
+                'data'  => ''
             );
-            $data = $this->M_blueprint->check_db($where, 'packing');
+            echo json_encode($data);
+        } else {
+            $where = array(
+                'delivery_code'    => $qrcode
+            );
+            $data = $this->M_blueprint->check_db($where, 'scan-user');
             if ($data) {
                 $data = array(
                     'allert' => '#allert-warning',
                     'id'    => '0',
-                    'url'   => base_url('Scan_packing/check_data'),
+                    'url'   => base_url('Scan_pengiriman/check_data'),
                     'status' => 'false',
                     'data'  => ''
                 );
                 echo json_encode($data);
             } else {
                 $data = array(
-                    'no_pack'   => $qrcode,
+                    'delivery_code'   => $qrcode,
                     'status'    => 0, // status 1 jika sudah terlock dengan do
-                    'reff'      => ''
                 );
-                $last_id = $this->M_blueprint->insert_lastId($data, 'packing');
+                $last_id = $this->M_blueprint->insert_lastId($data, 'scan-user');
                 $data = array(
                     'allert' => '#allert-success',
                     'id'    =>  $last_id,
-                    'url'   => base_url('Scan_packing/check_data_sn'),
+                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
                     'status' => 'true',
                     'data'  => ''
+                );
+                echo json_encode($data);
+            }
+        }
+    }
+
+    public function check_data_pack()
+    {
+        $qrcode = $this->input->post('value');
+        $last_id = $this->input->post('lastid');
+        $qr = explode(".", $qrcode);
+        if ($qr[0] == 'PACK') {
+            $where = array(
+                'no_pack'    => $qrcode
+            );
+            $data = $this->M_blueprint->check_db($where, 'packing');
+            $where_tbl = array(
+                'no_pack'  => $qrcode
+            );
+            $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
+
+            if ($data) {
+                $check_pack = $this->M_blueprint->check_packing($where, 'packing');
+                if ($check_pack) {
+                    $data = array(
+                        'allert' => '#allert-lock',
+                        'id'    =>  '',
+                        'url'   => base_url('Scan_pengiriman/check_data_pack'),
+                        'status' => 'true',
+                        'data'  => ''
+                    );
+                    echo json_encode($data);
+                } else {
+                    $data_update = array(
+                        'status'    => 1,
+                        'reff'      => $last_id,
+                    );
+                    $this->M_blueprint->update_data($where_tbl, $data_update, 'packing');
+                    $data = array(
+                        'allert' => '#allert-warning',
+                        'id'    => '0',
+                        'url'   => base_url('Scan_pengiriman/check_data'),
+                        'status' => 'true',
+                        'data'  => $data_table,
+                    );
+                    echo json_encode($data);
+                }
+            } else {
+                $data = array(
+                    'allert' => '#allert-packing',
+                    'id'    =>  $last_id,
+                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
+                    'status' => 'true',
+                    'data'  => $data_table
                 );
                 echo json_encode($data);
             }
         } else {
             $data = array(
                 'allert' => '#allert-qrpack',
-                'id'    => '0',
-                'url'   => base_url('Scan_packing/check_data'),
-                'status' => 'false',
-                'data'  => ''
-            );
-            echo json_encode($data);
-        }
-    }
-
-    public function check_data_sn()
-    {
-        $qrcode = $this->input->post('value');
-        $last_id = $this->input->post('lastid');
-
-        $qr = explode("-", $qrcode);
-        if ($qr[0] == 'PACK') {
-            $data = array(
-                'allert' => '#allert-warning',
                 'id'    =>  $last_id,
-                'url'   => base_url('Scan_packing/check_data_sn'),
+                'url'   => base_url('Scan_pengiriman/check_data_pack'),
                 'status' => 'true',
                 'data'  => ''
             );
             echo json_encode($data);
-        } else {
-            $lib_qrcode = $this->M_blueprint->get_qrcode('code-setting', $qr[0]);
-            if ($lib_qrcode) {
-                $where = array(
-                    'sn'    => $qrcode
-                );
-
-                $data = $this->M_blueprint->check_db($where, 'serial-number');
-                if ($data) {
-                    $data = array(
-                        'allert' => '#allert-warning',
-                        'id'    => $last_id,
-                        'url'   => base_url('Scan_packing/check_data_sn'),
-                        'status' => 'true',
-                        'data'  => ''
-                    );
-                    echo json_encode($data);
-                } else {
-                    $data = array(
-                        'sn'    => $qrcode,
-                        'reff'  => $last_id,
-                        'no_sn' => $qr[1],
-                        'sku'   => $qr[0]
-                    );
-                    $this->M_blueprint->insert_data($data, 'serial-number');
-                    $where_tbl = array(
-                        'reff'  => $last_id
-                    );
-                    $data_table = $this->M_blueprint->get_data($where_tbl, 'serial-number');
-                    $data = array(
-                        'allert' => '#allert-success',
-                        'id'    =>  $last_id,
-                        'url'   => base_url('Scan_packing/check_data_sn'),
-                        'status' => 'true',
-                        'data'  => $data_table
-                    );
-                    echo json_encode($data);
-                }
-            } else {
-                $data = array(
-                    'allert' => '#allert-qrsn',
-                    'id'    => $last_id,
-                    'url'   => base_url('Scan_packing/check_data_sn'),
-                    'status' => 'true',
-                    'data'  => ''
-                );
-                echo json_encode($data);
-            }
         }
     }
 
@@ -188,7 +184,10 @@ class Scan_packing extends CI_Controller
         $where = array(
             'ID' =>  $id
         );
-        $this->M_blueprint->delete_data($where, 'serial-number');
+        $data = array(
+            'reff' => ''
+        );
+        $this->M_blueprint->update_data($where, $data, 'packing');
 
         $data = array(
             'allert' => '#allert-delete',

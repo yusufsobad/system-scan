@@ -227,7 +227,7 @@ function instascan()
 
                 function IsActive() {
                     timesRun++;
-                    console.log(timesRun);
+                    // console.log(timesRun);
                     Timer();
 
                 }
@@ -305,15 +305,33 @@ function scan_packing()
             transform: scaleX(1) !important;
         }
     </style>
-    <div class="col text-center">
+    <div id="content" class="col text-center">
         <h4 class="card-title mb-4">Scan Qrcode</h4>
         <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
+        <h3 id="qr_pack"></h3>
+        <div style="display: none;" id="table_sn" class="table-responsive mt-3">
+            <table class="table table-bordered mb-0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Serial Number</th>
+                        <th>No Serial Number</th>
+                        <th>SKU</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="show_data">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-5"><a href="<?= base_url('Scan_packing/index/') ?>" style="display: none;" id="save" type="button" class="btn btn-primary waves-effect waves-light">Save Data</a></div>
+
     </div>
     <?= scanner_packing(); ?>
 
 
 <?php $contents = ob_get_clean();
-
     return $contents;
 }
 
@@ -348,7 +366,7 @@ function scanner_packing()
                 }
 
                 function Timer() {
-                    if (timesRun === 60) {
+                    if (timesRun === 660) {
                         Stopinterval();
                         CameraOff();
                         timesRun = 0;
@@ -357,9 +375,11 @@ function scanner_packing()
 
                 function IsActive() {
                     timesRun++;
-                    console.log(timesRun);
+                    // console.log(timesRun);
                     Timer();
                 }
+                var urlPack = "<?= base_url('Scan_packing/check_data') ?>";
+                var lastID = 0;
 
                 scanner.addListener('scan', content => {
                     if (content !== null) {
@@ -371,63 +391,221 @@ function scanner_packing()
                     console.log(content);
                     $.ajax({
                         type: "POST",
-                        url: "<?= base_url('Scan_packing/check_data') ?>",
+                        url: urlPack,
                         data: {
-                            value: content
+                            value: content,
+                            lastid: lastID
                         },
                     }).done(function(data) {
-                        // you may safely use results here
-                        console.log(data);
-                        if (data == 'not_pack') {
-                            var allert_pack = $('#allert-qrpack');
-                            allert_pack.fadeIn();
-                            allert_pack.queue(function() {
-                                setTimeout(function() {
-                                    allert_pack.dequeue();
-                                }, 2000);
+                        var dataArgs = JSON.parse(data);
+                        var allert_pack = $(dataArgs['allert']);
+                        allert_pack.fadeIn();
+                        allert_pack.queue(function() {
+                            setTimeout(function() {
+                                allert_pack.dequeue();
+                            }, 2000);
+                        });
+                        allert_pack.fadeOut('fast');
+                        urlPack = dataArgs['url'];
+                        lastID = dataArgs['id'];
+                        status = dataArgs['status'];
+                        data = dataArgs['data'];
+                        if (status == 'true') {
+                            $('#table_sn').fadeIn();
+                            var trHTML = '';
+                            var no = 0
+                            $.each(data, function(key, value) {
+                                trHTML +=
+                                    '<tr id="sn_' + value.ID + '"><td>' + ++no +
+                                    '</td><td>' + value.sn +
+                                    '</td><td>' + value.no_sn +
+                                    '</td><td>' + value.sku +
+                                    '</td><td>' + '<a hreff="" onclick="deleteAjax(' + value.ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                                    '</td></tr>';
                             });
-                            allert_pack.fadeOut('fast');
+                            // $('#records_table').append(trHTML);
+                            $('#show_data').append(trHTML);
+                            $('#save').fadeIn();
+
+                            window.deleteAjax = function(id) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '<?= base_url('Scan_packing/delete_sn') ?>',
+                                    data: {
+                                        id: id,
+                                    },
+                                }).done(function(data) {
+                                    var dataArgs = JSON.parse(data);
+                                    var allert_pack = $(dataArgs['allert']);
+                                    allert_pack.fadeIn();
+                                    allert_pack.queue(function() {
+                                        setTimeout(function() {
+                                            allert_pack.dequeue();
+                                        }, 2000);
+                                    });
+                                    $('#sn_' + id + '').remove();
+                                    allert_pack.fadeOut('fast');
+                                });
+                            }
                         }
 
-                        // if (data == 'true') {
-                        //     // window.alert("Qrcode already found");
-                        //     $.ajax({
-                        //         type: "POST",
-                        //         url: "<?= base_url('Scan_admin/form_ajax') ?>",
-                        //         data: {
-                        //             value: content
-                        //         },
-                        //         success: function(response) {
-                        //             var e = $('#allert-warning');
-                        //             e.fadeIn();
-                        //             e.queue(function() {
-                        //                 setTimeout(function() {
-                        //                     e.dequeue();
-                        //                 }, 2000);
-                        //             });
-                        //             e.fadeOut('fast');
-                        //         },
-                        //     })
-                        // } else {
-                        //     // window.alert("Success");
-                        //     $.ajax({
-                        //         type: "POST",
-                        //         url: "<?= base_url('Scan_admin/form_ajax') ?>",
-                        //         data: {
-                        //             value: content
-                        //         },
-                        //         success: function(response) {
-                        //             var e = $('#allert-success');
-                        //             e.fadeIn();
-                        //             e.queue(function() {
-                        //                 setTimeout(function() {
-                        //                     e.dequeue();
-                        //                 }, 2000);
-                        //             });
-                        //             e.fadeOut('fast');
-                        //         },
-                        //     })
-                        // }
+                    });
+                });
+            });
+        });
+    </script>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function scan_do()
+{
+    ob_start(); ?>
+    <style>
+        #preview {
+            transform: scaleX(1) !important;
+        }
+    </style>
+    <div id="content" class="col text-center">
+        <h4 class="card-title mb-4">Scan Qrcode</h4>
+        <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
+        <h3 id="qr_pack"></h3>
+        <div style="display: none;" id="table_sn" class="table-responsive mt-3">
+            <table class="table table-bordered mb-0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No Packing</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="show_data">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-5"><a href="<?= base_url('Scan_pengiriman/index/') ?>" style="display: none;" id="save" type="button" class="btn btn-primary waves-effect waves-light">Save Data</a></div>
+
+    </div>
+    <?= scanner_do(); ?>
+
+
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function scanner_do()
+{
+    ob_start(); ?>
+    <!-- Instan-Scan -->
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", event => {
+            var detik = 0;
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview')
+            });
+            Instascan.Camera.getCameras().then(cameras => {
+                scanner.camera = cameras[cameras.length - 1];
+                scanner.start();
+            }).catch(e => console.error(e));
+
+            function CameraOff() {
+                scanner.stop();
+            }
+
+            scanner.addListener('active', function() {
+                var timesRun = 0;
+                var interval = setInterval(IsActive, 1000);
+
+                function Stopinterval() {
+                    clearInterval(interval);
+                }
+
+                function Timer() {
+                    if (timesRun === 660) {
+                        Stopinterval();
+                        CameraOff();
+                        timesRun = 0;
+                    }
+                }
+
+                function IsActive() {
+                    timesRun++;
+                    // console.log(timesRun);
+                    Timer();
+                }
+                var urlPack = "<?= base_url('Scan_pengiriman/check_data') ?>";
+                var lastID = 0;
+
+                scanner.addListener('scan', content => {
+                    if (content !== null) {
+                        Stopinterval();
+                        setInterval(IsActive, 1000);
+                        timesRun = 0;
+                        Timer();
+                    }
+                    console.log(content);
+                    $.ajax({
+                        type: "POST",
+                        url: urlPack,
+                        data: {
+                            value: content,
+                            lastid: lastID
+                        },
+                    }).done(function(data) {
+                        var dataArgs = JSON.parse(data);
+                        var allert_pack = $(dataArgs['allert']);
+                        allert_pack.fadeIn();
+                        allert_pack.queue(function() {
+                            setTimeout(function() {
+                                allert_pack.dequeue();
+                            }, 2000);
+                        });
+                        allert_pack.fadeOut('fast');
+                        urlPack = dataArgs['url'];
+                        lastID = dataArgs['id'];
+                        status = dataArgs['status'];
+                        data = dataArgs['data'];
+                        if (status == 'true') {
+                            $('#table_sn').fadeIn();
+                            var trHTML = '';
+                            var no = 0
+                            $.each(data, function(key, value) {
+                                trHTML +=
+                                    '<tr id="sn_' + value.ID + '"><td>' + ++no +
+                                    '</td><td>' + value.no_pack +
+                                    '</td><td>' + '<a hreff="" onclick="deleteAjax(' + value.ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                                    '</td></tr>';
+                            });
+                            // $('#records_table').append(trHTML);
+                            $('#show_data').append(trHTML);
+                            $('#save').fadeIn();
+
+                            window.deleteAjax = function(id) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '<?= base_url('Scan_pengiriman/delete_sn') ?>',
+                                    data: {
+                                        id: id,
+                                    },
+                                }).done(function(data) {
+                                    var dataArgs = JSON.parse(data);
+                                    var allert_pack = $(dataArgs['allert']);
+                                    allert_pack.fadeIn();
+                                    allert_pack.queue(function() {
+                                        setTimeout(function() {
+                                            allert_pack.dequeue();
+                                        }, 2000);
+                                    });
+                                    $('#sn_' + id + '').remove();
+                                    allert_pack.fadeOut('fast');
+                                });
+                            }
+                        }
+
                     });
                 });
             });

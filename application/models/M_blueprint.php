@@ -48,6 +48,13 @@ class M_blueprint extends CI_Model
         $this->db->insert($table, $data);
     }
 
+    public function insert_lastId($data, $table)
+    {
+        $this->db->insert($table, $data);
+        $insert_id = $this->db->insert_id();
+        return $insert_id;
+    }
+
     public function count_data($table)
     {
         $this->db->from($table);
@@ -60,9 +67,21 @@ class M_blueprint extends CI_Model
         $this->db->where($key);
         $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
-            echo 'true';
+            return true;
         } else {
-            echo 'false';
+            return false;
+        }
+    }
+
+    function check_packing($key, $table)
+    {
+        $this->db->where($key);
+        $this->db->where('status', 1);
+        $query = $this->db->get($table);
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -100,5 +119,15 @@ class M_blueprint extends CI_Model
         $this->db->from($table);
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function get_qrcode($table, $where)
+    {
+        $this->db->where('code', $where);
+        $query = $this->db->get($table);
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
     }
 }

@@ -11,6 +11,21 @@
     <div id="allert-qrpack" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
         <strong>Data Bukan Qrpacking!</strong>
     </div>
+    <div id="allert-do" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
+        <strong>Data Bukan Delivery Order!</strong>
+    </div>
+    <div id="allert-qrsn" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
+        <strong>Silahkan simpan dulu</strong>
+    </div>
+    <div id="allert-delete" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-success bg-success text-white border-0" role="alert">
+        <strong>Data Berhasil Di Hapus</strong>
+    </div>
+    <div id="allert-packing" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
+        <strong>Harus Scan Packing dahulu</strong>
+    </div>
+    <div id="allert-lock" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
+        <strong>Packing sudah berada di do lain</strong>
+    </div>
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->
