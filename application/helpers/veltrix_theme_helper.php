@@ -54,8 +54,6 @@ function card($data, $content)
             <?php foreach ($data as $key) {
             ?>
                 <?php if (isset($key)) { ?>
-
-
                     <div class="card">
                         <div class="card-header">
                             <div class="row mt-3">

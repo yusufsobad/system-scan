@@ -291,10 +291,136 @@ function instascan()
                     });
                 });
             });
+        });
+    </script>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function scan_packing()
+{
+    ob_start(); ?>
+    <style>
+        #preview {
+            transform: scaleX(1) !important;
+        }
+    </style>
+    <div class="col text-center">
+        <h4 class="card-title mb-4">Scan Qrcode</h4>
+        <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
+    </div>
+    <?= scanner_packing(); ?>
 
 
+<?php $contents = ob_get_clean();
 
+    return $contents;
+}
 
+function scanner_packing()
+{
+    ob_start(); ?>
+    <!-- Instan-Scan -->
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", event => {
+            var detik = 0;
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview')
+            });
+            Instascan.Camera.getCameras().then(cameras => {
+                scanner.camera = cameras[cameras.length - 1];
+                scanner.start();
+            }).catch(e => console.error(e));
+
+            function CameraOff() {
+                scanner.stop();
+            }
+
+            scanner.addListener('active', function() {
+                var timesRun = 0;
+                var interval = setInterval(IsActive, 1000);
+
+                function Stopinterval() {
+                    clearInterval(interval);
+                }
+
+                function Timer() {
+                    if (timesRun === 60) {
+                        Stopinterval();
+                        CameraOff();
+                        timesRun = 0;
+                    }
+                }
+
+                function IsActive() {
+                    timesRun++;
+                    console.log(timesRun);
+                    Timer();
+                }
+
+                scanner.addListener('scan', content => {
+                    if (content !== null) {
+                        Stopinterval();
+                        setInterval(IsActive, 1000);
+                        timesRun = 0;
+                        Timer();
+                    }
+                    console.log(content);
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= base_url('Scan_packing/check_data') ?>",
+                        data: {
+                            value: content
+                        },
+                    }).done(function(data) {
+                        // you may safely use results here
+                        console.log(data);
+
+                        // if (data == 'true') {
+                        //     // window.alert("Qrcode already found");
+                        //     $.ajax({
+                        //         type: "POST",
+                        //         url: "<?= base_url('Scan_admin/form_ajax') ?>",
+                        //         data: {
+                        //             value: content
+                        //         },
+                        //         success: function(response) {
+                        //             var e = $('#allert-warning');
+                        //             e.fadeIn();
+                        //             e.queue(function() {
+                        //                 setTimeout(function() {
+                        //                     e.dequeue();
+                        //                 }, 2000);
+                        //             });
+                        //             e.fadeOut('fast');
+                        //         },
+                        //     })
+                        // } else {
+                        //     // window.alert("Success");
+                        //     $.ajax({
+                        //         type: "POST",
+                        //         url: "<?= base_url('Scan_admin/form_ajax') ?>",
+                        //         data: {
+                        //             value: content
+                        //         },
+                        //         success: function(response) {
+                        //             var e = $('#allert-success');
+                        //             e.fadeIn();
+                        //             e.queue(function() {
+                        //                 setTimeout(function() {
+                        //                     e.dequeue();
+                        //                 }, 2000);
+                        //             });
+                        //             e.fadeOut('fast');
+                        //         },
+                        //     })
+                        // }
+                    });
+                });
+            });
         });
     </script>
 <?php $contents = ob_get_clean();

@@ -42,7 +42,7 @@ class Scan_packing extends CI_Controller
         $qrcode = $this->input->post('value');
 
         $where = array(
-            'qrcode'    => $qrcode
+            'no_pack'    => $qrcode
         );
         $this->M_blueprint->check_db($where, 'packing');
     }
@@ -54,7 +54,7 @@ class Scan_packing extends CI_Controller
         $data_session = data_session();
 
         $config_card = $this->config_card();
-        $view_scan = scan();
+        $view_scan = scan_packing();
         $content = array($view_scan);
         $data['title'] = 'Data Scaner';
         // Get Sidebar
