@@ -41,13 +41,18 @@ class Scan_packing extends CI_Controller
     {
         $qrcode = $this->input->post('value');
 
-        $where = array(
-            'no_pack'    => $qrcode
-        );
-        $this->M_blueprint->check_db($where, 'packing');
+
+        $qr = explode(".", $qrcode);
+        $qr = $qr[0];
+        if ($qr == 'PACK') {
+            $where = array(
+                'no_pack'    => $qrcode
+            );
+            $this->M_blueprint->check_db($where, 'packing');
+        } else {
+            echo 'not_pack';
+        }
     }
-
-
 
     public function index()
     {

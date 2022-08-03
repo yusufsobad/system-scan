@@ -49,7 +49,7 @@ function config_sidebar()
         unset($data[2]);
     } else if ($data_session['ID'] == 10) {
         unset($data[0]);
-        unset($data[2]);
+        unset($data[3]);
     }
     return $data;
 }

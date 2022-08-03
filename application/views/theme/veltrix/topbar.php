@@ -8,6 +8,9 @@
     <div id="allert-warning" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-warning bg-warning text-white border-0" role="alert">
         <strong>Data Sudah Ada!</strong>
     </div>
+    <div id="allert-qrpack" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
+        <strong>Data Bukan Qrpacking!</strong>
+    </div>
     <div class="navbar-header">
         <div class="d-flex">
             <!-- LOGO -->

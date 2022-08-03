@@ -378,6 +378,16 @@ function scanner_packing()
                     }).done(function(data) {
                         // you may safely use results here
                         console.log(data);
+                        if (data == 'not_pack') {
+                            var allert_pack = $('#allert-qrpack');
+                            allert_pack.fadeIn();
+                            allert_pack.queue(function() {
+                                setTimeout(function() {
+                                    allert_pack.dequeue();
+                                }, 2000);
+                            });
+                            allert_pack.fadeOut('fast');
+                        }
 
                         // if (data == 'true') {
                         //     // window.alert("Qrcode already found");
