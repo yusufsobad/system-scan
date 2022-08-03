@@ -20,4 +20,23 @@ class Api_blueprint extends CI_Model
         }
         return $this->db->affected_rows();
     }
+
+    public function update_data($data, $id)
+    {
+        $this->db->update('scan-user', $data, ['id_temporary' => $id]);
+        return $this->db->affected_rows();
+    }
+
+    function check_db($key)
+    {
+        $this->db->where('id_temporary', $key);
+        $query = $this->db->get('scan-user');
+        if ($query->num_rows() > 0) {
+            $data = 'true';
+            return $data;
+        } else {
+            $data = 'false';
+            return $data;
+        }
+    }
 }
