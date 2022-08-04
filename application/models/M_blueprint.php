@@ -73,10 +73,33 @@ class M_blueprint extends CI_Model
         }
     }
 
+    function check_do($key, $table)
+    {
+        $this->db->where($key);
+        $this->db->where('status', 0);
+        $query = $this->db->get($table);
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     function check_packing($key, $table)
     {
         $this->db->where($key);
         $this->db->where('status', 1);
+        $query = $this->db->get($table);
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function check_packing_lock($key, $table)
+    {
+        $this->db->where($key);
+        $this->db->where('status', 1);
+        $this->db->where('reff', '');
         $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
             return true;

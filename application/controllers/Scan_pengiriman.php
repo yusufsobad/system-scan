@@ -72,18 +72,9 @@ class Scan_pengiriman extends CI_Controller
     public function check_data()
     {
         $qrcode = $this->input->post('value');
-        $qr = explode(".", $qrcode);
-        $qr = $qr[0];
-        if ($qr == 'PACK') {
-            $data = array(
-                'allert' => '#allert-do',
-                'id'    => '0',
-                'url'   => base_url('Scan_pengiriman/check_data'),
-                'status' => 'false',
-                'data'  => ''
-            );
-            echo json_encode($data);
-        } else {
+        $qr = explode("/", $qrcode);
+        $qr = $qr[1];
+        if ($qr == 'DO') {
             $where = array(
                 'delivery_code'    => $qrcode
             );
@@ -112,6 +103,15 @@ class Scan_pengiriman extends CI_Controller
                 );
                 echo json_encode($data);
             }
+        } else {
+            $data = array(
+                'allert' => '#allert-do',
+                'id'    => '0',
+                'url'   => base_url('Scan_pengiriman/check_data'),
+                'status' => 'false',
+                'data'  => ''
+            );
+            echo json_encode($data);
         }
     }
 
@@ -147,10 +147,18 @@ class Scan_pengiriman extends CI_Controller
                         'reff'      => $last_id,
                     );
                     $this->M_blueprint->update_data($where_tbl, $data_update, 'packing');
+
+                    $data_update_do = array(
+                        'status'    => 1,
+                    );
+                    $where_do = array(
+                        'ID'    => $last_id
+                    );
+                    $this->M_blueprint->update_data($where_do, $data_update_do, 'scan-user');
                     $data = array(
-                        'allert' => '#allert-warning',
+                        'allert' => '#allert-success',
                         'id'    => '0',
-                        'url'   => base_url('Scan_pengiriman/check_data'),
+                        'url'   => base_url('Scan_pengiriman/check_data_pack'),
                         'status' => 'true',
                         'data'  => $data_table,
                     );
