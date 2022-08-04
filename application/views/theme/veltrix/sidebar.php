@@ -21,7 +21,7 @@
                         <li <?= $value['condition'] == "true" ? 'class="mm-active"' : '' ?>>
                             <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="<?= $value['condition'] == "true" ? 'true' : 'false' ?>">
                                 <i class="<?= $value['icon'] ?>"></i>
-                                <span>Email</span>
+                                <span><?= $value['title'] ?></span>
                             </a>
                             <ul <?= $value['condition'] == "true" ? 'class="sub-menu mm-collapse mm-show"' : 'class="sub-menu mm-collapse"' ?> aria-expanded="false">
                                 <?php foreach ($value['sub_menu'] as $val) { ?>

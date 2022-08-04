@@ -173,6 +173,17 @@ function form($data)
     return $contents;
 }
 
+
+function button_small($data)
+{
+    ob_start();
+?>
+    <?php foreach ($data as $val) { ?>
+        <a class="btn btn-<?= $val['button']['button_color'] ?> btn-sm" href="<?= site_url($val['button']['button_link']) ?>"><?= $val['button']['button_title'] ?></a>
+    <?php } ?>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
 function button_edit($data)
 {
     ob_start();
@@ -226,6 +237,48 @@ function image($data)
     <?php } ?>
 <?php
 
+    $contents = ob_get_clean();
+    return $contents;
+}
+
+function modal($data = array())
+{
+    ob_start();
+?>
+    <?php foreach ($data as $value) { ?>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-<?= $value['button']['button_color'] ?> btn-sm" data-toggle="modal" data-target="#exampleModal">
+            <?= $value['button']['button_title'] ?>
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><?= $value['modal']['modal_title'] ?></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <?php if (is_array($value['modal']['content'])) { ?>
+                            <?php foreach ($value['modal']['content'] as $val) { ?>
+                                <?= $val ?>
+                            <?php } ?>
+                        <?php } else { ?>
+                            <?= $value['modal']['content'] ?>
+                        <?php  } ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+<?php
     $contents = ob_get_clean();
     return $contents;
 }

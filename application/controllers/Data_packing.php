@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Admin_ppic extends CI_Controller
+class Data_packing extends CI_Controller
 {
     public function __construct()
     {
@@ -29,7 +29,7 @@ class Admin_ppic extends CI_Controller
         $data = array(
             array(
                 'ID'        =>  '',
-                'qrcode'    =>  '',
+                'no_pack'    =>  '',
             ),
         );
         return $data;
@@ -49,7 +49,7 @@ class Admin_ppic extends CI_Controller
             $table,
             $pagination
         );
-        $data['title'] = 'Data Scaner';
+        $data['title'] = 'Data Packing';
         // Get Sidebar
         $data['sidebar'] = config_sidebar();
 
@@ -63,16 +63,15 @@ class Admin_ppic extends CI_Controller
         $this->load->view('theme/veltrix/footer');
     }
 
-
     public function config_card()
     {
         $data = array(
             array(
                 'title'    => 'Data Scaner',
-                'action'    => 'Admin_ppic',
+                'action'    => 'Data_packing',
                 // Optional Button
                 'button' => array(
-                    'button_link'      => 'Admin_ppic/export',
+                    'button_link'      => 'Data_packing/export',
                     'button_title'    => 'Export Excel',
                     'button_color'     => 'success'
                 ),
@@ -99,19 +98,22 @@ class Admin_ppic extends CI_Controller
         $start = $this->uri->segment(3);
         $perpage  = 5;
         $keyword = $this->input->post('search');
-        $data_search = $this->M_blueprint->get_keyword_admin($keyword, $perpage, $start, 'scan-admin')->result_array();
-        $data_args = $this->M_blueprint->data_table($perpage, $start, 'scan-admin')->result_array();
+        $data_keyword = array(
+            'no_pack'   => $keyword
+        );
+        $data_search = $this->M_blueprint->keyword($data_keyword, $perpage, $start, 'packing')->result_array();
+        $data_args = $this->M_blueprint->data_table($perpage, $start, 'packing')->result_array();
         $config_pagination = $this->config_pagination();
         $config = pagination($config_pagination);
         $this->pagination->initialize($config);
-
 
         $no = 0;
         $data['t_head'] = array(
             array(
                 'NO',
-                'Qrcode',
-                'Action',
+                'Nomor Packing',
+                'Detail',
+                'Delete',
             )
         );
         if ($data_search == '') {
@@ -125,21 +127,35 @@ class Admin_ppic extends CI_Controller
                 $config_button_hapus = array(
                     array(
                         'button' => array(
-                            'button_link'      => 'Admin_ppic/delete_data/' . $key['ID'],
+                            'button_link'     => 'Data_packing/delete_data/' . $key['ID'],
                             'button_title'    => 'Hapus',
-                            'button_color'     => 'danger'
+                            'button_color'    => 'danger'
+                        ),
+                    )
+                );
+                $config_button_detail = array(
+                    array(
+                        'button' => array(
+                            'button_link'   => '',
+                            'button_title'  => 'Detail',
+                            'button_color'  => 'primary'
+                        ),
+                        'modal' => array(
+                            'modal_title'   => 'Data Serial Number',
+                            'content'       => $this->table_detail($key['ID']),
                         ),
                     )
                 );
                 $button_hapus = button_delete($config_button_hapus);
+                $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
-                    $key['qrcode'],
+                    $key['no_pack'],
+                    $button_detail,
                     $button_hapus,
                 );
             }
         }
-
         return $data;
     }
 
@@ -148,7 +164,7 @@ class Admin_ppic extends CI_Controller
         $total_row = $this->M_blueprint->count_data('scan-admin');
         $data = array(
             array(
-                'base_url'   => base_url('Admin_ppic/index'),
+                'base_url'   => base_url('Data_packing/index'),
                 'total_rows' => $total_row,
                 'per_page'  => 5,
             ),
@@ -167,14 +183,40 @@ class Admin_ppic extends CI_Controller
             ),
         );
         $allert_danger = allert($config_alert_danger);
-        redirect('Admin_ppic/index');
+        redirect('Data_packing/index');
+    }
+
+    public function table_detail($id)
+    {
+        $no = 0;
+        $where = array(
+            'reff'  => $id
+        );
+        $data_table = $this->M_blueprint->get_where($where, 'serial-number');
+        $data['t_head'] = array(
+            array(
+                'NO',
+                'Serial Number',
+                'No Serial Number',
+                'SKU',
+            )
+        );
+        foreach ($data_table as $key => $val) {
+            $data['t_body'][$key] = array(
+                ++$no,
+                $val['sn'],
+                $val['no_sn'],
+                $val['sku'],
+            );
+        }
+
+        return data_table($data);
     }
 
     public function export()
     {
         // Load plugin PHPExcel nya
         include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
-
         // Panggil class PHPExcel nya
         $excel = new PHPExcel();
         // Settingan awal fil excel

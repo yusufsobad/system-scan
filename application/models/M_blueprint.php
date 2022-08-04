@@ -12,6 +12,15 @@ class M_blueprint extends CI_Model
         return $query;
     }
 
+    public function get_where($where, $table)
+    {
+        $this->db->select('*');
+        $this->db->where($where);
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function data_table($perpage, $start, $table)
     {
         $this->db->select('*');
@@ -39,6 +48,16 @@ class M_blueprint extends CI_Model
         $this->db->from($table);
         $this->db->limit($perpage, $start);
         $this->db->like('qrcode', $keyword);
+        $this->db->order_by('ID', 'DESC');
+        return $this->db->get();
+    }
+
+    public function keyword($keyword = '', $perpage, $start, $table)
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $this->db->limit($perpage, $start);
+        $this->db->like($keyword);
         $this->db->order_by('ID', 'DESC');
         return $this->db->get();
     }
