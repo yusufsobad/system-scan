@@ -412,19 +412,19 @@ function scanner_packing()
                         data = dataArgs['data'];
                         if (status == 'true') {
                             $('#table_sn').fadeIn();
-                            var trHTML = '';
+                            var html = '';
                             var no = 0
-                            $.each(data, function(key, value) {
-                                trHTML +=
-                                    '<tr id="sn_' + value.ID + '"><td>' + ++no +
-                                    '</td><td>' + value.sn +
-                                    '</td><td>' + value.no_sn +
-                                    '</td><td>' + value.sku +
-                                    '</td><td>' + '<a hreff="" onclick="deleteAjax(' + value.ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
-                                    '</td></tr>';
-                            });
-                            // $('#records_table').append(trHTML);
-                            $('#show_data').append(trHTML);
+                            var i;
+                            for (i = 0; i < data.length; i++) {
+                                html += '<tr id="sn_' + data[i].ID + '">' +
+                                    '<td>' + ++no + '</td>' +
+                                    '<td>' + data[i].sn + '</td>' +
+                                    '<td>' + data[i].no_sn + '</td>' +
+                                    '<td>' + data[i].sku + '</td>' +
+                                    '<td>' + '<a hreff="" onclick="deleteAjax(' + data[i].ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                                    '</tr>';
+                            }
+                            $('#show_data').html(html);
                             $('#save').fadeIn();
 
                             window.deleteAjax = function(id) {
@@ -571,19 +571,18 @@ function scanner_do()
                         data = dataArgs['data'];
                         if (status == 'true') {
                             $('#table_sn').fadeIn();
-                            var trHTML = '';
+                            var html = '';
                             var no = 0
-                            $.each(data, function(key, value) {
-                                trHTML +=
-                                    '<tr id="sn_' + value.ID + '"><td>' + ++no +
-                                    '</td><td>' + value.no_pack +
-                                    '</td><td>' + '<a hreff="" onclick="deleteAjax(' + value.ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
-                                    '</td></tr>';
-                            });
-                            // $('#records_table').append(trHTML);
-                            $('#show_data').append(trHTML);
+                            var i;
+                            for (i = 0; i < data.length; i++) {
+                                html += '<tr id="sn_' + data[i].ID + '">' +
+                                    '<td>' + ++no + '</td>' +
+                                    '<td>' + data[i].no_pack + '</td>' +
+                                    '<td>' + '<a hreff="" onclick="deleteAjax(' + data[i].ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                                    '</tr>';
+                            }
+                            $('#show_data').html(html);
                             $('#save').fadeIn();
-
                             window.deleteAjax = function(id) {
                                 $.ajax({
                                     type: "POST",
