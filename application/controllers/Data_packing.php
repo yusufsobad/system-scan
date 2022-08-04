@@ -113,7 +113,6 @@ class Data_packing extends CI_Controller
                 'NO',
                 'Nomor Packing',
                 'Detail',
-                'Delete',
             )
         );
         if ($data_search == '') {
@@ -152,7 +151,6 @@ class Data_packing extends CI_Controller
                     ++$start,
                     $key['no_pack'],
                     $button_detail,
-                    $button_hapus,
                 );
             }
         }
