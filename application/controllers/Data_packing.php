@@ -99,10 +99,10 @@ class Data_packing extends CI_Controller
         $perpage  = 5;
         $keyword = $this->input->post('search');
         $data_keyword = array(
-            'no_pack'   => $keyword
+            'note'   => $keyword
         );
-        $data_search = $this->M_blueprint->keyword($data_keyword, $perpage, $start, 'packing')->result_array();
-        $data_args = $this->M_blueprint->data_table($perpage, $start, 'packing')->result_array();
+        $data_search = $this->M_blueprint->keyword($data_keyword, $perpage, $start, 'note_deliv')->result_array();
+        $data_args = $this->M_blueprint->data_table($perpage, $start, 'note_deliv')->result_array();
         $config_pagination = $this->config_pagination();
         $config = pagination($config_pagination);
         $this->pagination->initialize($config);
@@ -111,8 +111,8 @@ class Data_packing extends CI_Controller
         $data['t_head'] = array(
             array(
                 'NO',
-                'Nomor Packing',
-                'Detail',
+                'Catatan',
+                'Detail Packing',
             )
         );
         if ($data_search == '') {
@@ -149,7 +149,7 @@ class Data_packing extends CI_Controller
                 $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
-                    $key['no_pack'],
+                    $key['note'],
                     $button_detail,
                 );
             }
@@ -188,23 +188,35 @@ class Data_packing extends CI_Controller
     {
         $no = 0;
         $where = array(
-            'reff'  => $id
+            'reff_note'  => $id
         );
-        $data_table = $this->M_blueprint->get_where($where, 'serial-number');
+        $data_table = $this->M_blueprint->get_where($where, 'packing');
         $data['t_head'] = array(
             array(
                 'NO',
-                'Serial Number',
-                'No Serial Number',
-                'SKU',
+                'Nomor Packing',
+
             )
         );
+
         foreach ($data_table as $key => $val) {
+            $config_button_detail = array(
+                array(
+                    'button' => array(
+                        'button_link'   => '',
+                        'button_title'  => 'Detail',
+                        'button_color'  => 'primary'
+                    ),
+                    'modal' => array(
+                        'modal_title'   => 'Data Serial Number',
+                        'content'       => $this->table_detail($key['ID']),
+                    ),
+                )
+            );
+            $button_detail = modal($config_button_detail);
             $data['t_body'][$key] = array(
                 ++$no,
-                $val['sn'],
-                $val['no_sn'],
-                $val['sku'],
+                $val['no_pack'],
             );
         }
 

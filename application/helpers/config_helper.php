@@ -16,8 +16,6 @@ function nav($data)
     return $contents;
 }
 
-
-
 function data_table($table)
 {
     ob_start(); ?>
@@ -271,8 +269,8 @@ function modal($data = array())
                         <?php  } ?>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Done</button>
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
                     </div>
                 </div>
             </div>

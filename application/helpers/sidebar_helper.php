@@ -85,15 +85,15 @@ function menu_packing()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Scan_packing"  ? 'true' : 'false'
         ),
-        // array(
-        //     'title-group' => '',
-        //     'title' => 'Pland Delivery',
-        //     'icon' => 'fas fa-qrcode',
-        //     'link' => 'Pland_delivery', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
-        //     'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
-        //     'id_collapse' => '',
-        //     'condition' =>  $uri_segments[2] == "Pland_delivery"  ? 'true' : 'false'
-        // ),
+        array(
+            'title-group' => '',
+            'title' => 'Pland Delivery',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Pland_delivery', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Pland_delivery"  ? 'true' : 'false'
+        ),
     );
     return $data;
 }

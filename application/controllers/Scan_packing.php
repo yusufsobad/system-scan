@@ -195,4 +195,20 @@ class Scan_packing extends CI_Controller
         );
         echo json_encode($data);
     }
+
+    public function save_all_pack()
+    {
+        $data = $this->input->post('form');
+        $id = $this->input->post('lastId');
+        $where = array(
+            'ID'   => $id
+        );
+        $update = array(
+            'note'  => $data
+        );
+
+        $this->M_blueprint->update_data($where, $update, 'packing');
+
+        echo $data;
+    }
 }

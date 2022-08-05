@@ -28,8 +28,10 @@ class Pland_delivery extends CI_Controller
     {
         $data = array(
             array(
-                'ID'        =>  '',
-                'no_pack'    =>  '',
+                'ID'           =>  '',
+                'no_pack'      =>  '',
+                'status'       =>  '',
+                'reff'         =>  '',
             ),
         );
         return $data;
@@ -38,23 +40,16 @@ class Pland_delivery extends CI_Controller
     public function index()
     {
         $data_session = data_session();
-        $config_search = $this->config_search();
+
         $config_card = $this->config_card();
-        $config_table = $this->config_table();
-        $table = data_table($config_table);
-        $search = search($config_search);
-        $pagination =  $this->pagination->create_links();
-        $content = array(
-            $search,
-            $table,
-            $pagination
-        );
-        $data['title'] = 'Data Packing';
+        $view_scan = delivery_pland_view();
+        $content = array($view_scan);
+        $data['title'] = 'Data Scaner';
         // Get Sidebar
         $data['sidebar'] = config_sidebar();
 
         // All Config
-        $data['card'] = card($config_card, $content);
+        $data['card'] = card_2($config_card, $content);
 
         $this->load->view('theme/veltrix/header');
         $this->load->view('theme/veltrix/topbar');
@@ -67,236 +62,105 @@ class Pland_delivery extends CI_Controller
     {
         $data = array(
             array(
-                'title'    => 'Data Scaner',
-                'action'    => 'Data_packing',
-                // Optional Button
-                'button' => array(
-                    'button_link'      => 'Data_packing/export',
-                    'button_title'    => 'Export Excel',
-                    'button_color'     => 'success'
-                ),
+                'title'    => 'Scan Admin',
+
             )
         );
         return $data;
     }
 
-    public function config_search()
+    public function check_data()
     {
-        $data = array(
-            array(
-                'id'    => 'search',
-                'name'  => 'search'
-            ),
-        );
-        return $data;
-    }
-
-    public function config_table()
-    {
-        $data_session = data_session();
-        $this->load->library('pagination');
-        $start = $this->uri->segment(3);
-        $perpage  = 5;
-        $keyword = $this->input->post('search');
-        $data_keyword = array(
-            'no_pack'   => $keyword
-        );
-        $data_search = $this->M_blueprint->keyword($data_keyword, $perpage, $start, 'packing')->result_array();
-        $data_args = $this->M_blueprint->data_table($perpage, $start, 'packing')->result_array();
-        $config_pagination = $this->config_pagination();
-        $config = pagination($config_pagination);
-        $this->pagination->initialize($config);
-
-        $no = 0;
-        $data['t_head'] = array(
-            array(
-                'NO',
-                'Nomor Packing',
-                'Detail',
-                'Delete',
-            )
-        );
-        if ($data_search == '') {
-            $data_table = $data_args;
-        } elseif ($data_search !== '') {
-            $data_table = $data_search;
-        }
-        if (isset($data)) {
-            foreach ($data_table as $index => $key) {
-                // Config button Hapus
-                $config_button_hapus = array(
-                    array(
-                        'button' => array(
-                            'button_link'     => 'Data_packing/delete_data/' . $key['ID'],
-                            'button_title'    => 'Hapus',
-                            'button_color'    => 'danger'
-                        ),
-                    )
-                );
-                $config_button_detail = array(
-                    array(
-                        'button' => array(
-                            'button_link'   => '',
-                            'button_title'  => 'Detail',
-                            'button_color'  => 'primary'
-                        ),
-                        'modal' => array(
-                            'modal_title'   => 'Data Serial Number',
-                            'content'       => $this->table_detail($key['ID']),
-                        ),
-                    )
-                );
-                $button_hapus = button_delete($config_button_hapus);
-                $button_detail = modal($config_button_detail);
-                $data['t_body'][$index] = array(
-                    ++$start,
-                    $key['no_pack'],
-                    $button_detail,
-                    $button_hapus,
-                );
-            }
-        }
-        return $data;
-    }
-
-    public function config_pagination()
-    {
-        $total_row = $this->M_blueprint->count_data('scan-admin');
-        $data = array(
-            array(
-                'base_url'   => base_url('Data_packing/index'),
-                'total_rows' => $total_row,
-                'per_page'  => 5,
-            ),
-        );
-        return $data;
-    }
-
-    public function delete_data($id)
-    {
-        $where = array('ID' => $id);
-        $this->M_blueprint->delete_data($where, 'scan-admin');
-        $config_alert_danger = array(
-            array(
-                'title'     => 'Data Berhasil di Hapus ',
-                'alert_type' => 'alert-success'
-            ),
-        );
-        $allert_danger = allert($config_alert_danger);
-        redirect('Data_packing/index');
-    }
-
-    public function table_detail($id)
-    {
-        $no = 0;
-        $where = array(
-            'reff'  => $id
-        );
-        $data_table = $this->M_blueprint->get_where($where, 'serial-number');
-        $data['t_head'] = array(
-            array(
-                'NO',
-                'Serial Number',
-                'No Serial Number',
-                'SKU',
-            )
-        );
-        foreach ($data_table as $key => $val) {
-            $data['t_body'][$key] = array(
-                ++$no,
-                $val['sn'],
-                $val['no_sn'],
-                $val['sku'],
+        $qrcode = $this->input->post('value');
+        $note_id = $this->input->post('lastid');
+        $qr = explode(".", $qrcode);
+        $qr = $qr[0];
+        if ($qr == 'PACK') {
+            $where = array(
+                'no_pack'    => $qrcode
             );
-        }
+            $data = $this->M_blueprint->check_db($where, 'packing');
+            if ($data) {
+                $data = array(
+                    'reff_note'      => $note_id
+                );
+                $where = array(
+                    'no_pack' => $qrcode
+                );
+                $this->M_blueprint->update_data($where, $data, 'packing');
 
-        return data_table($data);
+                $data_table = $this->M_blueprint->get_where($data, 'packing');
+                $data = array(
+                    'allert' => '#allert-success',
+                    'id'    =>  '',
+                    'url'   => base_url('Pland_delivery/check_data'),
+                    'status' => 'true',
+                    'data'  => $data_table
+                );
+                echo json_encode($data);
+            } else {
+                $data = array(
+                    'allert' => '#allert-packing',
+                    'id'    => '0',
+                    'url'   => base_url('Pland_delivery/check_data'),
+                    'status' => 'false',
+                    'data'  => ''
+                );
+                echo json_encode($data);
+            }
+        } else {
+            $data = array(
+                'allert' => '#allert-qrpack',
+                'id'    => '0',
+                'url'   => base_url('Pland_delivery/check_data'),
+                'status' => 'false',
+                'data'  => ''
+            );
+            echo json_encode($data);
+        }
     }
 
-    public function export()
+    public function delete_data()
     {
-        // Load plugin PHPExcel nya
-        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
-        // Panggil class PHPExcel nya
-        $excel = new PHPExcel();
-        // Settingan awal fil excel
-        $excel->getProperties()->setCreator('My Notes Code')
-            ->setLastModifiedBy('My Notes Code')
-            ->setTitle("Data Scan Package")
-            ->setSubject("Scan")
-            ->setDescription("Laporan Scan Package")
-            ->setKeywords("Data Scan");
-        // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
-        $style_col = array(
-            'font' => array('bold' => true), // Set font nya jadi bold
-            'alignment' => array(
-                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-            'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
+        $id = $this->input->post('id');
+        $data = array(
+            'reff_note'      => ''
         );
-        // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
-        $style_row = array(
-            'alignment' => array(
-                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-            ),
-            'borders' => array(
-                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
-                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
-                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
-                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
-            )
+        $where = array(
+            'ID' => $id
         );
-        $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA SCAN PACKAGE"); // Set kolom A1 dengan tulisan "DATA SISWA"
-        $excel->getActiveSheet()->mergeCells('A1:E1'); // Set Merge Cell pada kolom A1 sampai E1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
-        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
-        // Buat header tabel nya pada baris ke 3
-        $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"
-        $excel->setActiveSheetIndex(0)->setCellValue('B3', "QrCode"); // Set kolom B3 dengan tulisan "NIS"
+        $this->M_blueprint->update_data($where, $data, 'packing');
 
-        // Apply style header yang telah kita buat tadi ke masing-masing kolom header
-        $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
-        $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
-        // Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
-        $all_data = $this->M_blueprint->get_all('scan-admin');
-        $no = 1; // Untuk penomoran tabel, di awal set dengan 1
-        $numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
-        foreach ($all_data as $data) { // Lakukan looping pada variabel siswa
-            $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $no);
-            $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $data->qrcode);
+        $data = array(
+            'allert' => '#allert-delete',
+        );
+        echo json_encode($data);
+    }
 
+    public function save_all_pack()
+    {
+        $data = $this->input->post('form');
+        $id = $this->input->post('lastId');
+        $where = array(
+            'ID'   => $id
+        );
+        $update = array(
+            'note'  => $data
+        );
 
-            // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
-            $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_row);
-            $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_row);
+        $this->M_blueprint->update_data($where, $update, 'packing');
 
+        echo $data;
+    }
 
-            $no++; // Tambah 1 setiap kali looping
-            $numrow++; // Tambah 1 setiap kali looping
-        }
-        // Set width kolom
-        $excel->getActiveSheet()->getColumnDimension('A')->setWidth(5); // Set width kolom A
-        $excel->getActiveSheet()->getColumnDimension('B')->setWidth(10); // Set width kolom B
+    public function save_note()
+    {
+        $note = $this->input->post('note');
+        $data = array(
+            'note'  => $note
+        );
 
-        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
-        $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
-        // Set orientasi kertas jadi LANDSCAPE
-        $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
-        // Set judul file excel nya
-        $excel->getActiveSheet(0)->setTitle("Laporan Data Scan Package");
-        $excel->setActiveSheetIndex(0);
-        // Proses file excel
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Scan Package.xlsx"'); // Set nama file excel nya
-        header('Cache-Control: max-age=0');
-        $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-        $write->save('php://output');
+        $data = $this->M_blueprint->insert_lastId($data, 'note_deliv');
+        echo json_encode($data);
     }
 }

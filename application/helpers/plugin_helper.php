@@ -325,8 +325,9 @@ function scan_packing()
                 </tbody>
             </table>
         </div>
-        <div class="mt-5"><a href="<?= base_url('Scan_packing/index/') ?>" style="display: none;" id="save" type="button" class="btn btn-primary waves-effect waves-light">Save Data</a></div>
-
+        <div class="mt-3">
+            <a href="<?= base_url('Scan_packing/index/') ?>" style="display: none;" id="save" type="submit" class="btn btn-primary waves-effect waves-light">Save Data</a>
+        </div>
     </div>
     <?= scanner_packing(); ?>
 
@@ -447,8 +448,21 @@ function scanner_packing()
                                     allert_pack.fadeOut('fast');
                                 });
                             }
-                        }
 
+                            $(function() {
+                                $('form').on('submit', function(e) {
+                                    e.preventDefault();
+                                    $.ajax({
+                                        type: 'post',
+                                        url: '<?= base_url('Scan_packing/save_all_pack') ?>',
+                                        data: {
+                                            form: $('form').serialize(),
+                                            lastId: lastID
+                                        },
+                                    });
+                                });
+                            });
+                        }
                     });
                 });
             });
@@ -607,6 +621,183 @@ function scanner_do()
 
                     });
                 });
+            });
+        });
+    </script>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function delivery_pland_view()
+{
+    ob_start(); ?>
+    <style>
+        #preview {
+            transform: scaleX(1) !important;
+        }
+    </style>
+    <div id="content" class="col text-center">
+        <div id="item">
+            <form id="form_note" method="POST">
+                <label class="mt-2" for="comment">Catatan</label>
+                <textarea class="form-control" id="note" name="note" value="" rows="5" placeholder=""></textarea>
+                <button type="submit" class="btn btn-primary waves-effect waves-light">Save Data</button>
+            </form>
+        </div>
+        <div id="scan_proccess" style="display: none;">
+            <h4 class="card-title mb-4">Scan Qrcode</h4>
+            <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
+            <h3 id="qr_pack"></h3>
+            <div style="display: none;" id="table_sn" class="table-responsive mt-3">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>No Packing</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="show_data">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <?= delivery_pland_scan(); ?>
+
+
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function delivery_pland_scan()
+{
+    ob_start(); ?>
+    <!-- Instan-Scan -->
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", event => {
+            var detik = 0;
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview')
+            });
+            Instascan.Camera.getCameras().then(cameras => {
+                scanner.camera = cameras[cameras.length - 1];
+                scanner.start();
+            }).catch(e => console.error(e));
+
+            function CameraOff() {
+                scanner.stop();
+            }
+            scanner.addListener('active', function() {
+                var timesRun = 0;
+                var interval = setInterval(IsActive, 1000);
+
+                function Stopinterval() {
+                    clearInterval(interval);
+                }
+
+                function Timer() {
+                    if (timesRun === 660) {
+                        Stopinterval();
+                        CameraOff();
+                        timesRun = 0;
+                    }
+                }
+
+                function IsActive() {
+                    timesRun++;
+                    // console.log(timesRun);
+                    Timer();
+                }
+                var urlPack = "<?= base_url('Pland_delivery/check_data/') ?>";
+                var lastID = 0;
+
+                $("#form_note").submit(function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: 'Pland_delivery/save_note',
+                        type: 'post',
+                        data: $(this).serialize(),
+                        success: function(note_id) {
+                            $('#scan_proccess').fadeIn();
+                            scanAction(note_id);
+                        }
+                    });
+                });
+
+                function scanAction(noteId) {
+                    scanner.addListener('scan', content => {
+                        if (content !== null) {
+                            Stopinterval();
+                            setInterval(IsActive, 1000);
+                            timesRun = 0;
+                            Timer();
+                        }
+                        console.log(content);
+                        $.ajax({
+                            type: "POST",
+                            url: urlPack,
+                            data: {
+                                value: content,
+                                lastid: noteId
+                            },
+                        }).done(function(data) {
+                            var dataArgs = JSON.parse(data);
+                            var allert_pack = $(dataArgs['allert']);
+                            allert_pack.fadeIn();
+                            allert_pack.queue(function() {
+                                setTimeout(function() {
+                                    allert_pack.dequeue();
+                                }, 2000);
+                            });
+                            allert_pack.fadeOut('fast');
+                            urlPack = dataArgs['url'];
+                            lastID = dataArgs['id'];
+                            status = dataArgs['status'];
+                            data = dataArgs['data'];
+                            if (status == 'true') {
+                                $('#table_sn').fadeIn();
+                                var html = '';
+                                var no = 0
+                                var i;
+                                for (i = 0; i < data.length; i++) {
+                                    html += '<tr id="sn_' + data[i].ID + '">' +
+                                        '<td>' + ++no + '</td>' +
+                                        '<td>' + data[i].no_pack + '</td>' +
+                                        '<td>' + '<a hreff="" onclick="deleteAjax(' + data[i].ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                                        '</tr>';
+                                }
+                                $('#show_data').html(html);
+                                $('#save').fadeIn();
+
+                                window.deleteAjax = function(id) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '<?= base_url('Pland_delivery/delete_data') ?>',
+                                        data: {
+                                            id: id,
+                                        },
+                                    }).done(function(data) {
+                                        var dataArgs = JSON.parse(data);
+                                        var allert_pack = $(dataArgs['allert']);
+                                        allert_pack.fadeIn();
+                                        allert_pack.queue(function() {
+                                            setTimeout(function() {
+                                                allert_pack.dequeue();
+                                            }, 2000);
+                                        });
+                                        $('#sn_' + id + '').remove();
+                                        allert_pack.fadeOut('fast');
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }
             });
         });
     </script>
