@@ -88,7 +88,7 @@ function menu_marketing()
     $data = array(
         array(
             'title-group' => '',
-            'title' => 'Scan Pengiriman',
+            'title' => 'Data Pengiriman',
             'icon' => 'fas fa-qrcode',
             'link' => 'Admin', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 

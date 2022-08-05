@@ -73,10 +73,10 @@ class Scan_pengiriman extends CI_Controller
     {
         $qrcode = $this->input->post('value');
         $qr = explode("/", $qrcode);
-        $qr_order = explode("#", $qrcode);
+        $qr_order = explode("ORDER#", $qrcode);
         $qr_order = $qr_order[0];
         $qr = $qr[1];
-        if ($qr == 'DO' || $qr_order == 'ORDER') {
+        if ($qr == 'DO' || isset($qr_order)) {
             $where = array(
                 'delivery_code'    => $qrcode
             );
