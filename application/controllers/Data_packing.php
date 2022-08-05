@@ -75,6 +75,11 @@ class Data_packing extends CI_Controller
                     'button_title'    => 'Export Excel',
                     'button_color'     => 'success'
                 ),
+                'button_secondary' => array(
+                    'button_link'      => 'Pland_delivery/index',
+                    'button_title'    => 'Tambah Data',
+                    'button_color'     => 'primary'
+                ),
             )
         );
         return $data;
@@ -107,12 +112,12 @@ class Data_packing extends CI_Controller
         $config = pagination($config_pagination);
         $this->pagination->initialize($config);
 
-        $no = 0;
         $data['t_head'] = array(
             array(
                 'NO',
                 'Catatan',
                 'Detail Packing',
+                'Edit',
             )
         );
         if ($data_search == '') {
@@ -123,12 +128,12 @@ class Data_packing extends CI_Controller
         if (isset($data)) {
             foreach ($data_table as $index => $key) {
                 // Config button Hapus
-                $config_button_hapus = array(
+                $config_button_edit = array(
                     array(
                         'button' => array(
-                            'button_link'     => 'Data_packing/delete_data/' . $key['ID'],
-                            'button_title'    => 'Hapus',
-                            'button_color'    => 'danger'
+                            'button_link'     => 'Data_packing/form/' . $key['ID'],
+                            'button_title'    => 'Edit',
+                            'button_color'    => 'warning'
                         ),
                     )
                 );
@@ -145,12 +150,13 @@ class Data_packing extends CI_Controller
                         ),
                     )
                 );
-                $button_hapus = button_delete($config_button_hapus);
+                $button_edit = button_edit($config_button_edit);
                 $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['note'],
                     $button_detail,
+                    $button_edit,
                 );
             }
         }
@@ -195,7 +201,6 @@ class Data_packing extends CI_Controller
             array(
                 'NO',
                 'Nomor Packing',
-
             )
         );
 
@@ -221,6 +226,104 @@ class Data_packing extends CI_Controller
         }
 
         return data_table($data);
+    }
+
+    public function form($id = '')
+    {
+        $data_session = data_session();
+        $config_card = $this->card_form($id);
+        $form = $this->form_input();
+
+
+        $content = array(
+            $form,
+
+        );
+        $data['title'] = 'Data Packing';
+        // Get Sidebar
+        $data['sidebar'] = config_sidebar();
+
+        // All Config
+        $data['card'] = card($config_card, $content);
+
+        $this->load->view('theme/veltrix/header');
+        $this->load->view('theme/veltrix/topbar');
+        $this->load->view('theme/veltrix/sidebar', $data);
+        $this->load->view('theme/veltrix/content');
+        $this->load->view('theme/veltrix/footer');
+    }
+
+    public function card_form($id)
+    {
+        $data = array(
+            array(
+                'title'    => 'Data Scaner',
+                'action'    => $id == '' ? 'Data_packing/add_data' : 'Data_packing/update_data',
+                'button_save' => array(
+                    'button_title'    => 'Save',
+                    'button_color'     => 'success',
+                    'button_action'      => '#',
+                ),
+                'button_cancel' => array(
+                    'button_title'    => 'Cancel',
+                    'button_color'     => 'danger',
+                    'button_action'      => 'Penjualan',
+                ),
+            )
+        );
+        return $data;
+    }
+
+    public function form_input()
+    {
+        $where_pack = array(
+            'reff_note' => ''
+        );
+        $get_packing = $this->M_blueprint->get_where($where_pack, 'packing');
+        $data = array(
+            array(
+                'column'    => 'col-lg-6',
+                'form' => array(
+                    array(
+                        'form_title'    => '', // Judul Form
+                        'place_holder'  => '', // Isi PlaceHolder
+                        'note'          => '', // Note form
+                        'type'          => 'hidden',
+                        'id'            => 'id',
+                        'name'          => 'id',
+                        'validation'    =>  'false',
+                        'value'         =>  '',
+                        'input-type'    => 'form'
+                    ),
+                    array(
+                        'form_title'    => 'Note', // Judul Form
+                        'place_holder'  => '', // Isi PlaceHolder
+                        'note'          => '', // Note form
+                        'type'          => '',
+                        'id'            => 'id',
+                        'name'          => 'id',
+                        'validation'    =>  'false',
+                        'value'         =>  '',
+                        'input-type'    => 'text-area'
+                    ),
+                    array(
+                        'form_title'   => 'Select Packing',
+                        'place_holder'  => '',
+                        'note'          => '',
+                        'type'          => 'multiple-select',
+                        'id'            => 'employe_id',
+                        'name'          => 'employe_id',
+                        'validation'    =>  'false',
+                        'value'         =>  '',
+                        'content_id'    => 'ID',
+                        'content'       => 'no_pack',
+                        'data'          => $get_packing,
+                        'input-type'    => 'select'
+                    ),
+                ),
+            ),
+        );
+        return form($data);
     }
 
     public function export()

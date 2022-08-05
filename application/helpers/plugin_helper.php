@@ -628,7 +628,7 @@ function scanner_do()
     return $contents;
 }
 
-function delivery_pland_view()
+function delivery_pland_view($id)
 {
     ob_start(); ?>
     <style>
@@ -637,18 +637,18 @@ function delivery_pland_view()
         }
     </style>
     <div id="content" class="col text-center">
-        <div id="item">
+        <div id="item" <?= $id !== '' ? 'style="display: none;"' : '' ?>>
             <form id="form_note" method="POST">
                 <label class="mt-2" for="comment">Catatan</label>
                 <textarea class="form-control" id="note" name="note" value="" rows="5" placeholder=""></textarea>
                 <button type="submit" class="btn btn-primary waves-effect waves-light">Save Data</button>
             </form>
         </div>
-        <div id="scan_proccess" style="display: none;">
+        <div id="scan_proccess" <?= $id !== '' ? '' : 'style="display: none;"' ?>>
             <h4 class="card-title mb-4">Scan Qrcode</h4>
             <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
             <h3 id="qr_pack"></h3>
-            <div style="display: none;" id="table_sn" class="table-responsive mt-3">
+            <div <?= $id !== '' ? '' : 'style="display: none;"' ?> id="table_sn" class="table-responsive mt-3">
                 <table class="table table-bordered mb-0">
                     <thead>
                         <tr>
@@ -664,14 +664,14 @@ function delivery_pland_view()
             </div>
         </div>
     </div>
-    <?= delivery_pland_scan(); ?>
+    <?= delivery_pland_scan($id); ?>
 
 
 <?php $contents = ob_get_clean();
     return $contents;
 }
 
-function delivery_pland_scan()
+function delivery_pland_scan($data)
 {
     ob_start(); ?>
     <!-- Instan-Scan -->

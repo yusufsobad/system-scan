@@ -19,6 +19,8 @@
     <link href="<?= base_url('assets/veltrix/') ?>css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="<?= base_url('assets/veltrix/') ?>css/app.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom -->
+    <link href="<?= base_url('assets/plugin/') ?>multiple-select/css/multiple-select.min.css" rel="stylesheet" type="text/css" />
 
 </head>
 

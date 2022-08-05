@@ -14,7 +14,14 @@ function card($data, $content)
                                     <h4 class="card-title"><?= @$key['title'] ?></h4>
                                 </div>
                                 <div class="col text-right">
-                                    <a class="btn btn-<?= $key['button']['button_color'] ?>" href="<?= base_url($key['button']['button_link']) ?>" role="button"><?= $key['button']['button_title'] ?></a>
+                                    <?php if (isset($key['button'])) { ?>
+                                        <a class="btn btn-<?= $key['button']['button_color'] ?>" href="<?= base_url($key['button']['button_link']) ?>" role="button"><?= $key['button']['button_title'] ?></a>
+                                    <?php } else {
+                                    } ?>
+                                    <?php if (isset($key['button_secondary'])) { ?>
+                                        <a class="btn btn-<?= $key['button_secondary']['button_color'] ?>" href="<?= base_url($key['button_secondary']['button_link']) ?>" role="button"><?= $key['button_secondary']['button_title'] ?></a>
+                                    <?php } else {
+                                    } ?>
                                 </div>
                             </div>
                         </div>

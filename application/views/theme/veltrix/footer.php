@@ -83,6 +83,10 @@
 
 <script src="<?= base_url('assets/veltrix/') ?>js/app.js"></script>
 
+<!-- Custom -->
+<script src="<?= base_url('assets/plugin/') ?>multiple-select/js/multiple-select.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
 
 </body>
 

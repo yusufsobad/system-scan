@@ -18,7 +18,7 @@ class Scan_pengiriman extends CI_Controller
     {
         $data = array(
             'key_id'   => array(
-                '10',
+                '15',
             ),
         );
         return $data;
@@ -73,8 +73,10 @@ class Scan_pengiriman extends CI_Controller
     {
         $qrcode = $this->input->post('value');
         $qr = explode("/", $qrcode);
+        $qr_order = explode("#", $qrcode);
+        $qr_order = $qr_order[0];
         $qr = $qr[1];
-        if ($qr == 'DO') {
+        if ($qr == 'DO' || $qr_order == 'ORDER') {
             $where = array(
                 'delivery_code'    => $qrcode
             );
@@ -169,8 +171,8 @@ class Scan_pengiriman extends CI_Controller
                     'allert' => '#allert-packing',
                     'id'    =>  $last_id,
                     'url'   => base_url('Scan_pengiriman/check_data_pack'),
-                    'status' => 'true',
-                    'data'  => $data_table
+                    'status' => '',
+                    'data'  => ''
                 );
                 echo json_encode($data);
             }

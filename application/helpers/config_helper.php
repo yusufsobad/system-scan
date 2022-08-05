@@ -162,6 +162,19 @@ function form($data)
                             <small class="text-danger"><?= $value['validation'] == 'true' ?   form_error($value['nama']) : '' ?></small>
                             <small id="emailHelp2" class="form-text text-muted"><?= $value['note'] ?></small>
                         <?php } ?>
+                        <?php if (isset($value) && $value['input-type'] == 'multiple-select') { ?>
+                            <select id="choices-multiple-remove-button" placeholder="Select upto 5 tags" multiple>
+                                <?php foreach ($value['data'] as $val) { ?>
+                                    <?php if (@$val[$value['content_id']] == @$value['value']) { ?>
+                                        <option value="<?= @$val[$value['content_id']] ?>" selected><?= @$val[$value['content']]  ?></option>
+                                    <?php }  ?>
+                                    <option value="<?= @$val[$value['content_id']] ?>"><?= @$val[$value['content']]   ?></option>
+                                <?php } ?>
+                            </select>
+                            <small class="text-danger"><?= $value['validation'] == 'true' ?   form_error('nama') : '' ?></small>
+                            <small id="emailHelp2" class="form-text text-muted"><?= $value['note'] ?></small>
+                        <?php } else { ?>
+                        <?php } ?>
                     <?php } ?>
                 </div>
             </div>
