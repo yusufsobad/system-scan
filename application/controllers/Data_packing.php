@@ -28,8 +28,8 @@ class Data_packing extends CI_Controller
     {
         $data = array(
             array(
-                'ID'        =>  '',
-                'no_pack'    =>  '',
+                'ID'       =>  '',
+                'note'    =>  '',
             ),
         );
         return $data;
@@ -118,6 +118,7 @@ class Data_packing extends CI_Controller
                 'Catatan',
                 'Detail Packing',
                 'Edit',
+                'Hapus',
             )
         );
         if ($data_search == '') {
@@ -125,38 +126,50 @@ class Data_packing extends CI_Controller
         } elseif ($data_search !== '') {
             $data_table = $data_search;
         }
-        if (isset($data)) {
+        if (isset($data_table)) {
             foreach ($data_table as $index => $key) {
                 // Config button Hapus
                 $config_button_edit = array(
                     array(
                         'button' => array(
-                            'button_link'     => 'Data_packing/form/' . $key['ID'],
+                            'button_link'     => 'Pland_delivery/index/' . $key['ID'],
                             'button_title'    => 'Edit',
-                            'button_color'    => 'warning'
+                            'button_color'    => 'warning',
+                        ),
+                    )
+                );
+                $config_button_delete = array(
+                    array(
+                        'button' => array(
+                            'button_link'     => 'Data_packing/delete_data/' . $key['ID'],
+                            'button_title'    => 'Hapus',
+                            'button_color'    => 'danger',
                         ),
                     )
                 );
                 $config_button_detail = array(
                     array(
+                        'id'   => 'detail_pack' . $key['ID'],
                         'button' => array(
                             'button_link'   => '',
                             'button_title'  => 'Detail',
-                            'button_color'  => 'primary'
+                            'button_color'  => 'primary',
                         ),
                         'modal' => array(
-                            'modal_title'   => 'Data Serial Number',
+                            'modal_title'   => 'Data Packing',
                             'content'       => $this->table_detail($key['ID']),
                         ),
                     )
                 );
                 $button_edit = button_edit($config_button_edit);
+                $button_delete = button_delete($config_button_delete);
                 $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['note'],
                     $button_detail,
                     $button_edit,
+                    $button_delete,
                 );
             }
         }
@@ -176,45 +189,51 @@ class Data_packing extends CI_Controller
         return $data;
     }
 
-    public function delete_data($id)
-    {
-        $where = array('ID' => $id);
-        $this->M_blueprint->delete_data($where, 'scan-admin');
-        $config_alert_danger = array(
-            array(
-                'title'     => 'Data Berhasil di Hapus ',
-                'alert_type' => 'alert-success'
-            ),
-        );
-        $allert_danger = allert($config_alert_danger);
-        redirect('Data_packing/index');
-    }
+
 
     public function table_detail($id)
     {
+
         $no = 0;
         $where = array(
-            'reff_note'  => $id
+            'reff_note'  => @$id
         );
         $data_table = $this->M_blueprint->get_where($where, 'packing');
+
+        // var_dump($data_table);
+
+
         $data['t_head'] = array(
             array(
                 'NO',
                 'Nomor Packing',
+                'Detail SN',
+                'Hapus',
             )
         );
 
         foreach ($data_table as $key => $val) {
+            $config_button_delete = array(
+                array(
+                    'button' => array(
+                        'button_link'     => 'Data_packing/delete_data_packing/' . $val['ID'],
+                        'button_title'    => 'Hapus',
+                        'button_color'    => 'danger',
+                    ),
+                )
+            );
+            $button_delete = button_delete($config_button_delete);
             $config_button_detail = array(
                 array(
+                    'id'   => 'detail_sn' . $val['ID'],
                     'button' => array(
                         'button_link'   => '',
                         'button_title'  => 'Detail',
-                        'button_color'  => 'primary'
+                        'button_color'  => 'primary',
                     ),
                     'modal' => array(
                         'modal_title'   => 'Data Serial Number',
-                        'content'       => $this->table_detail($key['ID']),
+                        'content'       => $this->table_sn($val['ID']),
                     ),
                 )
             );
@@ -222,9 +241,38 @@ class Data_packing extends CI_Controller
             $data['t_body'][$key] = array(
                 ++$no,
                 $val['no_pack'],
+                $button_detail,
+                $button_delete,
             );
         }
 
+        return data_table($data);
+    }
+
+    public function table_sn($id)
+    {
+        $no = 0;
+        $where = array(
+            'reff'  => @$id
+        );
+        $data_table = $this->M_blueprint->get_where($where, 'serial-number');
+
+        // var_dump($data_table);
+
+
+        $data['t_head'] = array(
+            array(
+                'NO',
+                'Nomor Serial Number',
+            )
+        );
+
+        foreach ($data_table as $key => $val) {
+            $data['t_body'][$key] = array(
+                ++$no,
+                $val['sn'],
+            );
+        }
         return data_table($data);
     }
 
@@ -232,7 +280,7 @@ class Data_packing extends CI_Controller
     {
         $data_session = data_session();
         $config_card = $this->card_form($id);
-        $form = $this->form_input();
+        $form = $this->form_input($id);
 
 
         $content = array(
@@ -267,64 +315,197 @@ class Data_packing extends CI_Controller
                 'button_cancel' => array(
                     'button_title'    => 'Cancel',
                     'button_color'     => 'danger',
-                    'button_action'      => 'Penjualan',
+                    'button_action'      => 'Data_packing',
                 ),
             )
         );
         return $data;
     }
 
-    public function form_input()
+    public function form_input($id)
     {
-        $where_pack = array(
-            'reff_note' => ''
+        $default_data = $this->default_data();
+        $where = array(
+            'ID' =>  @$id
         );
-        $get_packing = $this->M_blueprint->get_where($where_pack, 'packing');
-        $data = array(
-            array(
-                'column'    => 'col-lg-6',
-                'form' => array(
-                    array(
-                        'form_title'    => '', // Judul Form
-                        'place_holder'  => '', // Isi PlaceHolder
-                        'note'          => '', // Note form
-                        'type'          => 'hidden',
-                        'id'            => 'id',
-                        'name'          => 'id',
-                        'validation'    =>  'false',
-                        'value'         =>  '',
-                        'input-type'    => 'form'
-                    ),
-                    array(
-                        'form_title'    => 'Note', // Judul Form
-                        'place_holder'  => '', // Isi PlaceHolder
-                        'note'          => '', // Note form
-                        'type'          => '',
-                        'id'            => 'id',
-                        'name'          => 'id',
-                        'validation'    =>  'false',
-                        'value'         =>  '',
-                        'input-type'    => 'text-area'
-                    ),
-                    array(
-                        'form_title'   => 'Select Packing',
-                        'place_holder'  => '',
-                        'note'          => '',
-                        'type'          => 'multiple-select',
-                        'id'            => 'employe_id',
-                        'name'          => 'employe_id',
-                        'validation'    =>  'false',
-                        'value'         =>  '',
-                        'content_id'    => 'ID',
-                        'content'       => 'no_pack',
-                        'data'          => $get_packing,
-                        'input-type'    => 'select'
+        $where_pack = array(
+            'reff_note' =>  $id
+        );
+
+        $where_packing = array(
+            'reff_note' => 0
+        );
+        $get_packing = $this->M_blueprint->get_where($where_packing, 'packing');
+        $data_value =  $this->M_blueprint->get_where($where, 'note_deliv');
+        $data_pack = $this->M_blueprint->get_where($where_pack, 'packing');
+
+        if (is_array($data_value) && isset($data_value) && empty($data_value)) {
+            $query = $default_data;
+        } else {
+            $query = $data_value;
+        }
+
+        foreach ($query as  $key) {
+            $data = array(
+                array(
+                    'column'    => 'col-lg-6',
+                    'form' => array(
+                        array(
+                            'form_title'    => '', // Judul Form
+                            'place_holder'  => '', // Isi PlaceHolder
+                            'note'          => '', // Note form
+                            'type'          => 'hidden',
+                            'id'            => 'id',
+                            'name'          => 'id',
+                            'validation'    =>  'false',
+                            'value'         =>  @$key['ID'],
+                            'input-type'    => 'form'
+                        ),
+                        array(
+                            'form_title'    => 'Note', // Judul Form
+                            'place_holder'  => '', // Isi PlaceHolder
+                            'note'          => '', // Note form
+                            'type'          => '',
+                            'id'            => 'note',
+                            'name'          => 'note',
+                            'validation'    =>  'false',
+                            'value'         =>  @$key['note'],
+                            'input-type'    => 'text-area'
+                        ),
+                        array(
+                            'form_title'   => 'Select Packing',
+                            'place_holder'  => 'Pilih Data Packing',
+                            'note'          => '',
+                            'type'          => 'multiple-select',
+                            'id'            => 'packing',
+                            'name'          => 'packing',
+                            'validation'    =>  'false',
+                            'value'         =>  $id !== '' ? $data_pack : '',
+                            'content_id'    => 'ID',
+                            'content'       => 'no_pack',
+                            'data'          => $get_packing,
+                            'input-type'    => 'multiple-select'
+                        ),
                     ),
                 ),
-            ),
-        );
+            );
+        }
         return form($data);
     }
+
+    public function add_data()
+    {
+        $packing = $this->input->post('packing');
+        $note   = $this->input->post('note');
+
+        $data_note = array(
+            'note'  => $note
+        );
+        $id = $this->M_blueprint->insert_lastId($data_note, 'note_deliv');
+
+        $data_pack = array(
+            'reff_note' => $id
+        );
+        foreach ($packing as $val) {
+            $where = array(
+                'ID'   => $val
+            );
+            $this->M_blueprint->update_data($where, $data_pack, 'packing');
+        }
+        redirect('Data_packing/index');
+    }
+
+    public function update_data()
+    {
+        $id = $this->input->post('id');
+        $packing = $this->input->post('packing');
+        $note   = $this->input->post('note');
+
+        $data_note = array(
+            'note'  => $note
+        );
+
+        $where_note = array(
+            'ID'    => $id
+        );
+
+        $this->M_blueprint->update_data($where_note, $data_note, 'note_deliv');
+
+        //  Remove Data Packing Terlebih Dahulu
+        $data_pack_remove = array(
+            'reff_note' => 0
+        );
+        $where_del = array(
+            'reff_note'   => $id
+        );
+
+        foreach ($packing as $val) {
+            $this->M_blueprint->update_data($where_del, $data_pack_remove, 'packing');
+        }
+
+        // ==============================
+
+        $data_pack = array(
+            'reff_note' => $id
+        );
+        foreach ($packing as $val) {
+            $where = array(
+                'ID'   => $val
+            );
+            $this->M_blueprint->update_data($where, $data_pack, 'packing');
+        }
+        redirect('Data_packing/index');
+    }
+
+    public function delete_data($id)
+    {
+        $where = array('ID' => $id);
+        $this->M_blueprint->delete_data($where, 'note_deliv');
+        $config_alert_danger = array(
+            array(
+                'title'     => 'Data Berhasil di Hapus ',
+                'alert_type' => 'alert-success'
+            ),
+        );
+
+        //  Remove Data Packing Terlebih Dahulu
+        $data_pack_remove = array(
+            'reff_note' => 0
+        );
+        $where_del = array(
+            'reff_note'   => $id
+        );
+
+        $this->M_blueprint->update_data($where_del, $data_pack_remove, 'packing');
+
+        $allert_danger = allert($config_alert_danger);
+
+        redirect('Data_packing/index');
+    }
+
+    public function delete_data_packing($id)
+    {
+        //  Remove Data Packing Terlebih Dahulu
+        $data_pack_remove = array(
+            'reff_note' => 0
+        );
+        $where_del = array(
+            'reff_note'   => $id
+        );
+
+        $this->M_blueprint->update_data($where_del, $data_pack_remove, 'packing');
+
+        $config_alert_danger = array(
+            array(
+                'title'     => 'Data Berhasil di Hapus ',
+                'alert_type' => 'alert-success'
+            ),
+        );
+        $allert_danger = allert($config_alert_danger);
+
+        redirect('Data_packing/index');
+    }
+
 
     public function export()
     {

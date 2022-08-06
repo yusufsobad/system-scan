@@ -1,5 +1,14 @@
 <?php $data_session = data_session(); ?>
 <?php $data_company = profile_company(); ?>
+<style>
+    .modal-backdrop {
+        display: none;
+    }
+
+    .modal {
+        background: rgba(0, 0, 0, 0.5);
+    }
+</style>
 
 <header id="page-topbar">
     <div id="allert-success" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-success bg-success text-white border-0" role="alert">

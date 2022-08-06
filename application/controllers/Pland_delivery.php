@@ -37,9 +37,8 @@ class Pland_delivery extends CI_Controller
         return $data;
     }
 
-    public function index($id)
+    public function index($id = '')
     {
-
 
         $data_session = data_session();
 
@@ -122,67 +121,21 @@ class Pland_delivery extends CI_Controller
         }
     }
 
-    public function edit_data($id)
+    public function edit_data()
     {
+        $id = $this->input->post('data');
         $data = array(
             'reff_note'      => $id
         );
         $data_table = $this->M_blueprint->get_where($data, 'packing');
         $data = array(
-            'allert' => '#allert-success',
+            'allert' => '',
             'id'    =>  '',
             'url'   => base_url('Pland_delivery/check_data'),
             'status' => 'true',
             'data'  => $data_table
         );
         echo json_encode($data);
-        $qrcode = $this->input->post('value');
-        $note_id = $this->input->post('lastid');
-        $qr = explode(".", $qrcode);
-        $qr = $qr[0];
-        if ($qr == 'PACK') {
-            $where = array(
-                'no_pack'    => $qrcode
-            );
-            $data = $this->M_blueprint->check_db($where, 'packing');
-            if ($data) {
-                $data = array(
-                    'reff_note'      => $note_id
-                );
-                $where = array(
-                    'no_pack' => $qrcode
-                );
-                $this->M_blueprint->update_data($where, $data, 'packing');
-
-                $data_table = $this->M_blueprint->get_where($data, 'packing');
-                $data = array(
-                    'allert' => '#allert-success',
-                    'id'    =>  '',
-                    'url'   => base_url('Pland_delivery/check_data'),
-                    'status' => 'true',
-                    'data'  => $data_table
-                );
-                echo json_encode($data);
-            } else {
-                $data = array(
-                    'allert' => '#allert-packing',
-                    'id'    => '0',
-                    'url'   => base_url('Pland_delivery/check_data'),
-                    'status' => 'false',
-                    'data'  => ''
-                );
-                echo json_encode($data);
-            }
-        } else {
-            $data = array(
-                'allert' => '#allert-qrpack',
-                'id'    => '0',
-                'url'   => base_url('Pland_delivery/check_data'),
-                'status' => 'false',
-                'data'  => ''
-            );
-            echo json_encode($data);
-        }
     }
 
     public function delete_data()

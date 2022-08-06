@@ -637,7 +637,7 @@ function delivery_pland_view($id)
         }
     </style>
     <div id="content" class="col text-center">
-        <div id="item" <?= $id !== '' ? 'style="display: none;"' : '' ?>>
+        <div id="item" <?= $id !== 'style="display: none;"' ?: '' ?>>
             <form id="form_note" method="POST">
                 <label class="mt-2" for="comment">Catatan</label>
                 <textarea class="form-control" id="note" name="note" value="" rows="5" placeholder=""></textarea>
@@ -677,7 +677,6 @@ function delivery_pland_scan($data)
     <!-- Instan-Scan -->
     <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", event => {
             var detik = 0;
@@ -715,21 +714,23 @@ function delivery_pland_scan($data)
                 }
                 var urlPack = "<?= base_url('Pland_delivery/check_data/') ?>";
                 var lastID = 0;
+                var note_ID = 0;
 
                 $("#form_note").submit(function(e) {
                     e.preventDefault();
                     $.ajax({
-                        url: 'Pland_delivery/save_note',
+                        url: '<?= base_url('Pland_delivery/save_note/') ?>',
                         type: 'post',
                         data: $(this).serialize(),
                         success: function(note_id) {
+                            note_ID = note_id;
                             $('#scan_proccess').fadeIn();
-                            scanAction(note_id);
+                            scanAction();
                         }
                     });
                 });
 
-                function scanAction(noteId) {
+                function scanAction() {
                     scanner.addListener('scan', content => {
                         if (content !== null) {
                             Stopinterval();
@@ -743,7 +744,7 @@ function delivery_pland_scan($data)
                             url: urlPack,
                             data: {
                                 value: content,
-                                lastid: noteId
+                                lastid: note_ID
                             },
                         }).done(function(data) {
                             var dataArgs = JSON.parse(data);
@@ -760,42 +761,72 @@ function delivery_pland_scan($data)
                             status = dataArgs['status'];
                             data = dataArgs['data'];
                             if (status == 'true') {
-                                $('#table_sn').fadeIn();
-                                var html = '';
-                                var no = 0
-                                var i;
-                                for (i = 0; i < data.length; i++) {
-                                    html += '<tr id="sn_' + data[i].ID + '">' +
-                                        '<td>' + ++no + '</td>' +
-                                        '<td>' + data[i].no_pack + '</td>' +
-                                        '<td>' + '<a hreff="" onclick="deleteAjax(' + data[i].ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
-                                        '</tr>';
-                                }
-                                $('#show_data').html(html);
-                                $('#save').fadeIn();
-
-                                window.deleteAjax = function(id) {
-                                    $.ajax({
-                                        type: "POST",
-                                        url: '<?= base_url('Pland_delivery/delete_data') ?>',
-                                        data: {
-                                            id: id,
-                                        },
-                                    }).done(function(data) {
-                                        var dataArgs = JSON.parse(data);
-                                        var allert_pack = $(dataArgs['allert']);
-                                        allert_pack.fadeIn();
-                                        allert_pack.queue(function() {
-                                            setTimeout(function() {
-                                                allert_pack.dequeue();
-                                            }, 2000);
-                                        });
-                                        $('#sn_' + id + '').remove();
-                                        allert_pack.fadeOut('fast');
-                                    });
-                                }
+                                viewData(data);
                             }
                         });
+                    });
+                }
+
+                function edit(data) {
+                    $.ajax({
+                        type: "POST",
+                        url: '<?= base_url('Pland_delivery/edit_data') ?>',
+                        data: {
+                            data: data
+                        },
+                    }).done(function(data) {
+                        var dataArgs = JSON.parse(data);
+                        urlPack = dataArgs['url'];
+                        lastID = dataArgs['id'];
+                        status = dataArgs['status'];
+                        data = dataArgs['data'];
+                        if (status == 'true') {
+                            viewData(data);
+                        }
+                    });
+                }
+
+                <?php if ($data !== '') {
+                ?>
+                    note_ID = <?= $data ?>;
+                    edit(note_ID);
+                    scanAction();
+                <?php } ?>
+
+                function viewData(data) {
+                    $('#table_sn').fadeIn();
+                    var html = '';
+                    var no = 0
+                    var i;
+                    for (i = 0; i < data.length; i++) {
+                        html += '<tr id="sn_' + data[i].ID + '">' +
+                            '<td>' + ++no + '</td>' +
+                            '<td>' + data[i].no_pack + '</td>' +
+                            '<td>' + '<a hreff="" onclick="deleteAjax(' + data[i].ID + ')" type="button" class="btn btn-danger waves-effect waves-light">Delete</a>' +
+                            '</tr>';
+                    }
+                    $('#show_data').html(html);
+                    $('#save').fadeIn();
+                }
+
+                window.deleteAjax = function(id) {
+                    $.ajax({
+                        type: "POST",
+                        url: '<?= base_url('Pland_delivery/delete_data') ?>',
+                        data: {
+                            id: id,
+                        },
+                    }).done(function(data) {
+                        var dataArgs = JSON.parse(data);
+                        var allert_pack = $(dataArgs['allert']);
+                        allert_pack.fadeIn();
+                        allert_pack.queue(function() {
+                            setTimeout(function() {
+                                allert_pack.dequeue();
+                            }, 2000);
+                        });
+                        $('#sn_' + id + '').remove();
+                        allert_pack.fadeOut('fast');
                     });
                 }
             });

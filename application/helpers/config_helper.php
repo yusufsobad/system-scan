@@ -104,9 +104,9 @@ function form($data)
             <div class="<?= $index['column'] ?>">
                 <div class="form-group">
                     <?php foreach ($index['form'] as $value) { ?>
-                        <?php if (isset($value) && $value['input-type'] == 'form' && isset($value['readonly'])) { ?>
+                        <?php if (isset($value) && $value['input-type'] == 'form') { ?>
                             <label class="mt-2"><?= $value['form_title'] ?></label>
-                            <input type="<?= $value['type'] ?>" <?= $value['readonly'] == 'yes' ? 'readonly' : '' ?> class="form-control" id="<?= $value['id'] ?>" name="<?= $value['name'] ?>" value="<?= $value['value'] ?>" placeholder="<?= $value['place_holder'] ?>">
+                            <input type="<?= $value['type'] ?>" class="form-control" id="<?= $value['id'] ?>" name="<?= $value['name'] ?>" value="<?= $value['value'] ?>" placeholder="<?= $value['place_holder'] ?>">
                             <small class="text-danger"><?= $value['validation'] == 'true' ?   form_error($value['name']) : '' ?></small>
                             <?php if ($value['type'] !== 'hidden') { ?>
                                 <small class="form-text text-muted"><?= $value['note'] ?></small>
@@ -163,10 +163,14 @@ function form($data)
                             <small id="emailHelp2" class="form-text text-muted"><?= $value['note'] ?></small>
                         <?php } ?>
                         <?php if (isset($value) && $value['input-type'] == 'multiple-select') { ?>
-                            <select id="choices-multiple-remove-button" placeholder="Select upto 5 tags" multiple>
+                            <label class="mt-2"><?= $value['form_title'] ?></label>
+                            <select id="choices-multiple-remove-button" placeholder="<?= $value['place_holder'] ?>" multiple id="<?= $value['id'] ?>" name="<?= $value['name'] ?>[]">
+                                <?php foreach ($value['value'] as $val) { ?>
+                                    <option value="<?= $val[$value['content_id']] ?>" selected><?= $val[$value['content']]  ?></option>
+                                <?php } ?>
                                 <?php foreach ($value['data'] as $val) { ?>
-                                    <?php if (@$val[$value['content_id']] == @$value['value']) { ?>
-                                        <option value="<?= @$val[$value['content_id']] ?>" selected><?= @$val[$value['content']]  ?></option>
+                                    <?php if ($val[$value['content_id']] == $value['value']) { ?>
+                                        <option value="<?= $val[$value['content_id']] ?>" selected><?= $val[$value['content']]  ?></option>
                                     <?php }  ?>
                                     <option value="<?= @$val[$value['content_id']] ?>"><?= @$val[$value['content']]   ?></option>
                                 <?php } ?>
@@ -258,12 +262,12 @@ function modal($data = array())
 ?>
     <?php foreach ($data as $value) { ?>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-<?= $value['button']['button_color'] ?> btn-sm" data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-<?= $value['button']['button_color'] ?> btn-sm" data-toggle="modal" data-target="#<?= $value['id'] ?>">
             <?= $value['button']['button_title'] ?>
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="<?= $value['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -282,8 +286,8 @@ function modal($data = array())
                         <?php  } ?>
                     </div>
                     <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button> -->
                     </div>
                 </div>
             </div>
