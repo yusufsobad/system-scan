@@ -178,7 +178,7 @@ class Data_packing extends CI_Controller
 
     public function config_pagination()
     {
-        $total_row = $this->M_blueprint->count_data('scan-admin');
+        $total_row = $this->M_blueprint->count_data('note_deliv');
         $data = array(
             array(
                 'base_url'   => base_url('Data_packing/index'),
@@ -188,8 +188,6 @@ class Data_packing extends CI_Controller
         );
         return $data;
     }
-
-
 
     public function table_detail($id)
     {
