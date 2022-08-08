@@ -91,8 +91,8 @@ class Scan_packing extends CI_Controller
 
                 $data = array(
                     'allert' => '#allert-warning',
-                    'id'    => '0',
-                    'url'   => base_url('Scan_packing/check_data'),
+                    'id'    => $data_qr[0]['ID'],
+                    'url'   => base_url('Scan_packing/check_data_sn'),
                     'status' => 'true',
                     'data'  => $data_sn
                 );
@@ -148,13 +148,17 @@ class Scan_packing extends CI_Controller
                 );
 
                 $data = $this->M_blueprint->check_db($where, 'serial-number');
+                $where_tbl = array(
+                    'reff'  => $last_id
+                );
+                $data_table = $this->M_blueprint->get_data($where_tbl, 'serial-number');
                 if ($data) {
                     $data = array(
                         'allert' => '#allert-warning',
                         'id'    => $last_id,
                         'url'   => base_url('Scan_packing/check_data_sn'),
                         'status' => 'true',
-                        'data'  => ''
+                        'data'  => $data_table
                     );
                     echo json_encode($data);
                 } else {
