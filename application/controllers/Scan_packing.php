@@ -72,6 +72,10 @@ class Scan_packing extends CI_Controller
     public function check_data()
     {
         $qrcode = $this->input->post('value');
+        $where = array(
+            'no_pack'   => $qrcode
+        );
+        $data_qr = $this->M_blueprint->get_where($where, 'packing');
         $qr = explode(".", $qrcode);
         $qr = $qr[0];
         if ($qr == 'PACK') {
@@ -80,12 +84,17 @@ class Scan_packing extends CI_Controller
             );
             $data = $this->M_blueprint->check_db($where, 'packing');
             if ($data) {
+                $where_sn = array(
+                    'reff'  => $data_qr[0]['ID']
+                );
+                $data_sn = $this->M_blueprint->get_where($where_sn, 'serial-number');
+
                 $data = array(
                     'allert' => '#allert-warning',
                     'id'    => '0',
                     'url'   => base_url('Scan_packing/check_data'),
-                    'status' => 'false',
-                    'data'  => ''
+                    'status' => 'true',
+                    'data'  => $data_sn
                 );
                 echo json_encode($data);
             } else {

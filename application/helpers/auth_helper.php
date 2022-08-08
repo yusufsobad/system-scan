@@ -17,7 +17,6 @@ function acces_page($data)
     }
 }
 
-
 function data_session()
 {
     $ci = get_instance();
