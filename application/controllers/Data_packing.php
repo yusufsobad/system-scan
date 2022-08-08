@@ -268,11 +268,23 @@ class Data_packing extends CI_Controller
         );
 
         foreach ($data_table as $key => $val) {
+            $config_button_delete = array(
+                array(
+                    'button' => array(
+                        'button_link'     => 'Data_packing/delete_data_sn/' . $val['ID'],
+                        'button_title'    => 'Hapus',
+                        'button_color'    => 'danger',
+                    ),
+                )
+            );
+            $button_delete = button_delete($config_button_delete);
             $data['t_body'][$key] = array(
                 ++$no,
                 $val['sn'],
+                $button_delete
             );
         }
+
         return data_table($data);
     }
 
@@ -494,6 +506,27 @@ class Data_packing extends CI_Controller
         );
 
         $this->M_blueprint->update_data($where_del, $data_pack_remove, 'packing');
+
+        $config_alert_danger = array(
+            array(
+                'title'     => 'Data Berhasil di Hapus ',
+                'alert_type' => 'alert-success'
+            ),
+        );
+        $allert_danger = allert($config_alert_danger);
+
+        redirect('Data_packing/index');
+    }
+
+    public function delete_data_sn($id)
+    {
+        //  Remove Data Packing Terlebih Dahulu
+
+        $where_del = array(
+            'ID'   => $id
+        );
+
+        $this->M_blueprint->delete_data($where_del, 'serial-number');
 
         $config_alert_danger = array(
             array(
