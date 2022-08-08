@@ -264,6 +264,7 @@ class Data_packing extends CI_Controller
             array(
                 'NO',
                 'Nomor Serial Number',
+                'Hapus'
             )
         );
 
