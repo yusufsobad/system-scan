@@ -43,7 +43,7 @@ class Login extends CI_Controller
             if ($data_user['ID'] == '10') {
                 redirect('Data_packing');
             } elseif ($data_user['ID'] == '15') {
-                redirect('Admin');
+                redirect('Data_pengiriman');
             }
         } else if (isset($data_user)) {
             $this->session->set_flashdata('message', '<div class="d-flex flex-row-reverse"><div class="alert alert-danger animated fadeInDown mr-5 position-absolute">
