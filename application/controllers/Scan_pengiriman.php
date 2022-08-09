@@ -152,7 +152,7 @@ class Scan_pengiriman extends CI_Controller
                     $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
                     $data = array(
                         'allert' => '#allert-lock',
-                        'id'    =>  '',
+                        'id'    =>  $last_id,
                         'url'   => base_url('Scan_pengiriman/check_data_pack'),
                         'status' => 'true',
                         'data'  => $data_table
