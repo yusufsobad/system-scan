@@ -19,6 +19,7 @@ class Scan_pengiriman extends CI_Controller
         $data = array(
             'key_id'   => array(
                 '15',
+                '10',
             ),
         );
         return $data;
@@ -139,17 +140,22 @@ class Scan_pengiriman extends CI_Controller
             $where_tbl = array(
                 'no_pack'  => $qrcode
             );
-            $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
+            $where_tbl = array(
+                'reff'  => $last_id
+            );
+
+
 
             if ($data) {
                 $check_pack = $this->M_blueprint->check_packing($where, 'packing');
                 if ($check_pack) {
+                    $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
                     $data = array(
                         'allert' => '#allert-lock',
                         'id'    =>  '',
                         'url'   => base_url('Scan_pengiriman/check_data_pack'),
                         'status' => 'true',
-                        'data'  => ''
+                        'data'  => $data_table
                     );
                     echo json_encode($data);
                 } else {
@@ -157,7 +163,7 @@ class Scan_pengiriman extends CI_Controller
                         'status'    => 1,
                         'reff'      => $last_id,
                     );
-                    $this->M_blueprint->update_data($where_tbl, $data_update, 'packing');
+                    $this->M_blueprint->update_data($where, $data_update, 'packing');
 
                     $data_update_do = array(
                         'status'    => 1,
@@ -166,9 +172,10 @@ class Scan_pengiriman extends CI_Controller
                         'ID'    => $last_id
                     );
                     $this->M_blueprint->update_data($where_do, $data_update_do, 'scan-user');
+                    $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
                     $data = array(
                         'allert' => '#allert-success',
-                        'id'    => '0',
+                        'id'    => $last_id,
                         'url'   => base_url('Scan_pengiriman/check_data_pack'),
                         'status' => 'true',
                         'data'  => $data_table,

@@ -32,8 +32,8 @@
     <div id="allert-packing" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
         <strong>Harus Scan Packing dahulu</strong>
     </div>
-    <div id="allert-lock" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-danger bg-danger text-white border-0" role="alert">
-        <strong>Packing sudah berada di do lain</strong>
+    <div id="allert-lock" style="position: absolute; right:0;top: 70px;display:none" class="alert alert-warning bg-warning text-white border-0" role="alert">
+        <strong>Packing sudah ada di DO</strong>
     </div>
     <div class="navbar-header">
         <div class="d-flex">

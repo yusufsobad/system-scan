@@ -118,7 +118,7 @@ class M_blueprint extends CI_Model
     {
         $this->db->where($key);
         $this->db->where('status', 1);
-        $this->db->where('reff', '');
+        $this->db->where('reff', 0);
         $query = $this->db->get($table);
         if ($query->num_rows() > 0) {
             return true;
@@ -131,6 +131,16 @@ class M_blueprint extends CI_Model
     {
         $this->db->select('*');
         $this->db->where($where);
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_data_packing($where, $table)
+    {
+        $this->db->select('*');
+        $this->db->where($where);
+        $this->db->where('status', 1);
         $this->db->from($table);
         $query = $this->db->get();
         return $query->result_array();
