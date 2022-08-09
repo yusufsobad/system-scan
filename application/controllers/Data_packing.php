@@ -71,9 +71,9 @@ class Data_packing extends CI_Controller
                 'action'    => 'Data_packing',
                 // Optional Button
                 'button' => array(
-                    'button_link'      => 'Data_packing/export',
-                    'button_title'    => 'Export Excel',
-                    'button_color'     => 'success'
+                    'button_link'      => 'Data_packing/print',
+                    'button_title'    => 'Export PDF',
+                    'button_color'     => 'danger'
                 ),
                 'button_secondary' => array(
                     'button_link'      => 'Pland_delivery/index',
@@ -536,5 +536,30 @@ class Data_packing extends CI_Controller
         $allert_danger = allert($config_alert_danger);
 
         redirect('Data_packing/index');
+    }
+
+    public function print()
+    {
+        $data_pdf = $this->M_blueprint->get_all('note_deliv');
+        $config_mpdf = array(
+            'format'        => 'a4',
+            'position'      => 'L',
+            'output_name'   => 'Data Packing',
+            'margin_left'   => 5,
+            'margin_right'  => 5,
+            'margin_top'    => 5,
+            'margin_bottom' => 5,
+            'margin_header' => 10,
+            'margin_footer' => 10,
+            'background_content' => '',
+            'content'     => array(
+                array(
+                    'location'     => 'page/custom/report-packing',
+                    'data'         => $data_pdf
+                ),
+            ),
+        );
+
+        mpdf_setting($config_mpdf);
     }
 }

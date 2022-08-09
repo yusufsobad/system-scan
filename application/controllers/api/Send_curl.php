@@ -20,6 +20,9 @@ class Send_curl extends RestController
             'delivery_code' => $data['DO_number'],
             'id_paket'      => $data['id_package']
         );
+        $data['update'] = array(
+            'id_paket'      => $data['id_package']
+        );
 
         $check =  $this->Api_blueprint->check_db($data['ID']);
         if ($check == 'false') {
@@ -35,7 +38,7 @@ class Send_curl extends RestController
                 ], RestController::HTTP_BAD_REQUEST);
             }
         } else if ($check == 'true') {
-            if ($this->Api_blueprint->update_data($data['scan_user'], $data['ID']) > 0) {
+            if ($this->Api_blueprint->update_data($data['update'], $data['ID']) > 0) {
                 $this->response([
                     'status' => 'Success',
                     'message' => 'Berhasil Update Data' //'Sending data Success'
