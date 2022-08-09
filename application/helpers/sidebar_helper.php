@@ -20,7 +20,7 @@ function config_sidebar()
             'link' => 'Scan_packing', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => menu_packing(), // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
             'id_collapse' => '',
-            'condition' => $uri_segments[2] == "Pland_delivery"  ||  $uri_segments[2] == "Scan_packing"  ||  $uri_segments[2] == "Scan_packing"  ? 'true' : 'false'
+            'condition' => $uri_segments[2] == "Pland_delivery"  ||  $uri_segments[2] == "Scan_packing"  ||  $uri_segments[2] == "Data_packing"  ? 'true' : 'false'
         ),
     );
 
