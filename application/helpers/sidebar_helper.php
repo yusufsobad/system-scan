@@ -7,7 +7,7 @@ function config_sidebar()
         array(
             'title-group' => 'Menu Pengiriman',
             'title' => 'Data Pengiriman',
-            'icon' => 'fas fa-desktop',
+            'icon' => 'fas fa-truck',
             'link' => '#', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => menu_pengiriman(), // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
             'id_collapse' => '',
@@ -16,7 +16,7 @@ function config_sidebar()
         array(
             'title-group' => 'Menu Packing',
             'title' => 'Packing',
-            'icon' => 'fas fa-qrcode',
+            'icon' => 'fas fa-box-open',
             'link' => 'Scan_packing', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
             'sub_menu' => menu_packing(), // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
             'id_collapse' => '',
