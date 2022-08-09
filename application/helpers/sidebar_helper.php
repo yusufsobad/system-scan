@@ -14,24 +14,6 @@ function config_sidebar()
             'condition' =>  $uri_segments[2] == "Admin"  ? 'true' : 'false'
         ),
         array(
-            'title-group' => '',
-            'title' => 'Admin Ppic',
-            'icon' => 'fas fa-desktop',
-            'link' => 'Admin_ppic', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
-            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
-            'id_collapse' => '',
-            'condition' =>  $uri_segments[2] == "Admin_ppic"  ? 'true' : 'false'
-        ),
-        array(
-            'title-group' => '',
-            'title' => 'Scan Admin',
-            'icon' => 'fas fa-qrcode',
-            'link' => 'Scan_admin', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
-            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
-            'id_collapse' => '',
-            'condition' =>  $uri_segments[2] == "Scan_admin"  ? 'true' : 'false'
-        ),
-        array(
             'title-group' => 'Menu Packing',
             'title' => 'Packing',
             'icon' => 'fas fa-qrcode',
@@ -48,7 +30,6 @@ function config_sidebar()
         unset($data[2]);
         unset($data[3]);
     } else if ($data_session['ID'] == 10) {
-        unset($data[0]);
         unset($data[4]);
     }
     return $data;

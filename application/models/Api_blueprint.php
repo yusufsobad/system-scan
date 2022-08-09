@@ -23,7 +23,7 @@ class Api_blueprint extends CI_Model
 
     public function update_data($data, $id)
     {
-        $this->db->update('scan-user', $data, ['id_temporary' => $id]);
+        $this->db->update('scan-user', $data, ['id_paket' => $id]);
         return $this->db->affected_rows();
     }
 

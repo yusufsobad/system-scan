@@ -72,6 +72,10 @@ class Scan_pengiriman extends CI_Controller
     public function check_data()
     {
         $qrcode = $this->input->post('value');
+        $where = array(
+            'delivery_code' => $qrcode
+        );
+        $data_scan = $this->M_blueprint->get_where($where, 'scan-user');
         $qr = explode("/", $qrcode);
         $qr_order = explode("ORDER#", $qrcode);
         $qr_order = $qr_order[0];
@@ -81,13 +85,18 @@ class Scan_pengiriman extends CI_Controller
                 'delivery_code'    => $qrcode
             );
             $data = $this->M_blueprint->check_db($where, 'scan-user');
+
             if ($data) {
+                $data_where = array(
+                    'reff' => $data_scan[0]['ID']
+                );
+                $data_packing = $this->M_blueprint->get_where($data_where, 'packing');
                 $data = array(
-                    'allert' => '#allert-warning',
-                    'id'    => '0',
-                    'url'   => base_url('Scan_pengiriman/check_data'),
-                    'status' => 'false',
-                    'data'  => ''
+                    'allert' => '',
+                    'id'    =>  $data_scan[0]['ID'],
+                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
+                    'status' => 'true',
+                    'data'  => $data_packing
                 );
                 echo json_encode($data);
             } else {
