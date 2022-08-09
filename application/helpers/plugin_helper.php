@@ -628,7 +628,7 @@ function scanner_do()
     return $contents;
 }
 
-function delivery_pland_view($id)
+function delivery_pland_view($id, $data)
 {
     ob_start(); ?>
     <style>
@@ -640,8 +640,8 @@ function delivery_pland_view($id)
         <div id="item" <?= $id !== 'style="display: none;"' ?: '' ?>>
             <form id="form_note" method="POST">
                 <label class="mt-2" for="comment">Catatan</label>
-                <textarea class="form-control" id="note" name="note" value="" rows="5" placeholder=""></textarea>
-                <button type="submit" class="btn btn-primary waves-effect waves-light">Save Data</button>
+                <textarea class="form-control" id="note" name="note" rows="5"><?= $data ?></textarea>
+                <button type="submit" class="btn btn-primary waves-effect waves-light mt-2 mb-2">Save Data</button>
             </form>
         </div>
         <div id="scan_proccess" <?= $id !== '' ? '' : 'style="display: none;"' ?>>
@@ -661,6 +661,7 @@ function delivery_pland_view($id)
 
                     </tbody>
                 </table>
+                <a href="<?= base_url('Data_packing/index/') ?>" style="display: none;" id="save" type="button" class="btn btn-primary waves-effect waves-light mt-3">Save Data</a>
             </div>
         </div>
     </div>
@@ -717,9 +718,14 @@ function delivery_pland_scan($data)
                 var note_ID = 0;
 
                 $("#form_note").submit(function(e) {
+                    <?php if ($data !== '') {
+                        $url = base_url('Pland_delivery/update_note/' . $data);
+                    } else {
+                        $url = base_url('Pland_delivery/save_note/');
+                    } ?>
                     e.preventDefault();
                     $.ajax({
-                        url: '<?= base_url('Pland_delivery/save_note/') ?>',
+                        url: '<?= $url ?>',
                         type: 'post',
                         data: $(this).serialize(),
                         success: function(note_id) {

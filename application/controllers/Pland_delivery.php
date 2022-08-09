@@ -43,7 +43,17 @@ class Pland_delivery extends CI_Controller
         $data_session = data_session();
 
         $config_card = $this->config_card();
-        $view_scan = delivery_pland_view($id);
+        $where = array(
+            'ID'    => $id
+        );
+        $data_note = $this->M_blueprint->get_where($where, 'note_deliv');
+        $note = $data_note[0]['note'];
+        if (isset($note)) {
+            $note = $note;
+        } else {
+            $note = '';
+        }
+        $view_scan = delivery_pland_view($id, $note);
         $content = array($view_scan);
         $data['title'] = 'Data Scaner';
         // Get Sidebar
@@ -180,6 +190,19 @@ class Pland_delivery extends CI_Controller
         );
 
         $data = $this->M_blueprint->insert_lastId($data, 'note_deliv');
+        echo json_encode($data);
+    }
+
+    public function update_note($id)
+    {
+        $note = $this->input->post('note');
+        $data = array(
+            'note'  => $note
+        );
+        $where = array(
+            'ID'    => $id
+        );
+        $data = $this->M_blueprint->update_data($where, $data, 'note_deliv');
         echo json_encode($data);
     }
 }

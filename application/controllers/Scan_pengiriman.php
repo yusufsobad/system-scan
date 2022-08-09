@@ -144,8 +144,6 @@ class Scan_pengiriman extends CI_Controller
                 'reff'  => $last_id
             );
 
-
-
             if ($data) {
                 $check_pack = $this->M_blueprint->check_packing($where, 'packing');
                 if ($check_pack) {

@@ -18,7 +18,8 @@ class Admin extends CI_Controller
     {
         $data = array(
             'key_id'   => array(
-                '15'
+                '15',
+                '10'
             ),
         );
         return $data;
