@@ -16,12 +16,17 @@ $no = 0;
     }
 
     .styled-table thead tr {
-        background-color: #009879;
+        background-color: #15499a;
         color: #ffffff;
         text-align: left;
     }
 
-    .styled-table th,
+    .styled-table th {
+        padding: 12px 15px;
+        color: #ffffff;
+        border: 1px solid #dddddd;
+    }
+
     .styled-table td {
         padding: 12px 15px;
         border: 1px solid #dddddd;
