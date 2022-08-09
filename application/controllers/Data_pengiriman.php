@@ -75,10 +75,10 @@ class Data_pengiriman extends CI_Controller
         $data = array(
             array(
                 'title'    => 'Data Scaner',
-                'action'    => 'Admin',
+                'action'    => 'Data_pengiriman',
                 // Optional Button
                 'button' => array(
-                    'button_link'      => 'Admin/export',
+                    'button_link'      => 'Data_pengiriman/export',
                     'button_title'    => 'Export Excel',
                     'button_color'     => 'success'
                 ),
@@ -136,7 +136,7 @@ class Data_pengiriman extends CI_Controller
                 $config_button_edit = array(
                     array(
                         'button' => array(
-                            'button_link'      => 'Admin/form/' . $key['ID'],
+                            'button_link'      => 'Data_pengiriman/form/' . $key['ID'],
                             'button_title'    => 'Edit',
                             'button_color'     => 'warning'
                         ),
@@ -169,7 +169,7 @@ class Data_pengiriman extends CI_Controller
         $total_row = $this->M_blueprint->count_data('scan-user');
         $data = array(
             array(
-                'base_url'   => base_url('Admin/index'),
+                'base_url'   => base_url('Data_pengiriman/index'),
                 'total_rows' => $total_row,
                 'per_page'  => 10,
             ),
@@ -201,8 +201,8 @@ class Data_pengiriman extends CI_Controller
     {
         $data = array(
             array(
-                'title'    => 'Form Admin',
-                'action'    =>  $id == '' ? 'Admin/add_data' : 'Admin/update_data',
+                'title'    => 'Form Data pengiriman',
+                'action'    =>  $id == '' ? 'Data_pengiriman/add_data' : 'Data_pengiriman/update_data',
                 'button_save' => array(
                     'button_title'    => 'Save',
                     'button_color'     => 'success',
@@ -211,7 +211,7 @@ class Data_pengiriman extends CI_Controller
                 'button_cancel' => array(
                     'button_title'    => 'Cancel',
                     'button_color'     => 'danger',
-                    'button_action'      => 'Admin',
+                    'button_action'      => 'Data_pengiriman',
                 ),
             )
         );
@@ -291,7 +291,7 @@ class Data_pengiriman extends CI_Controller
         );
         $allert_success = allert($config_alert_success);
         $this->session->set_flashdata('msg', $allert_success);
-        redirect('Admin/index');
+        redirect('Data_pengiriman/index');
     }
 
     public function export()
