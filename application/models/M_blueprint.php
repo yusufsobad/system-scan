@@ -136,6 +136,14 @@ class M_blueprint extends CI_Model
         return $query->result_array();
     }
 
+    public function get_data_table($table)
+    {
+        $this->db->select('*');
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     public function get_data_packing($where, $table)
     {
         $this->db->select('*');

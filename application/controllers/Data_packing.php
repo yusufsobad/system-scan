@@ -540,7 +540,7 @@ class Data_packing extends CI_Controller
 
     public function print()
     {
-        $data_pdf = $this->M_blueprint->get_all('note_deliv');
+        $data_pdf = $this->M_blueprint->get_data_table('note_deliv');
         $config_mpdf = array(
             'format'        => 'a4',
             'position'      => 'L',
