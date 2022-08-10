@@ -81,6 +81,18 @@ function dropzone_setting()
 <?php
 }
 
+function html2pdf_setting($data)
+{
+    $ci = get_instance();
+    $html2pdf = new \Spipu\Html2Pdf\Html2Pdf($data['position'], $data['format'], 'en');
+    foreach ($data['content'] as $val) {
+        $data_html = $ci->load->view($val['location'], ['data' => $val['data']], true);
+        $html2pdf->writeHTML($data_html);
+    }
+    $html2pdf->setTestTdInOnePage(false);
+    $html2pdf->output();
+}
+
 function mpdf_setting($data = array())
 {
     // ===================Documentation====================
@@ -132,10 +144,12 @@ function mpdf_setting($data = array())
         'margin_bottom' => $data['margin_bottom'],
         'margin_header' => $data['margin_header'],
         'margin_footer' => $data['margin_footer'],
-        'setAutoTopMargin' => '',
+        'setAutoTopMargin' => 'strech',
         'defaultheaderline' => 0,
         'defaultfooterline' => 0,
+
     ]);
+    $mpdf->shrink_tables_to_fit = 1;
 
     if (isset($data['background_content'])) {
         $mpdf->SetDefaultBodyCSS('background', "url('" . $data['background_content'] . "')");
