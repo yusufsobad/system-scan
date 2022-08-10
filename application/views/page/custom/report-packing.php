@@ -77,7 +77,7 @@ $no = 0;
                     <tr>
                         <td style="vertical-align: top;text-align: center;width:10%"><?= ++$no ?></td>
                         <td style="vertical-align: top;width:30%"><?= $value['note'] ?></td>
-                        <td style="padding: 0px;">
+                        <td style="padding: 0px;width:60%;">
                             <?php if (!empty($data_packing)) { ?>
                                 <table style="width: 100%;vertical-align: top;">
                                     <thead>
