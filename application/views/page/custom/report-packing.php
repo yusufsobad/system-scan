@@ -75,8 +75,8 @@ $no = 0;
                     $data_packing = $this->M_blueprint->get_where($where_pack, 'packing');
                 ?>
                     <tr>
-                        <td style="vertical-align: top;text-align: center;"><?= ++$no ?></td>
-                        <td style="vertical-align: top;"><?= $value['note'] ?></td>
+                        <td style="vertical-align: top;text-align: center;width:10%"><?= ++$no ?></td>
+                        <td style="vertical-align: top;width:30%"><?= $value['note'] ?></td>
                         <td style="padding: 0px;">
                             <?php if (!empty($data_packing)) { ?>
                                 <table style="width: 100%;vertical-align: top;">
