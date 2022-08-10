@@ -94,17 +94,9 @@ $no = 0;
                                                 <td style="padding: 0px;width:30%;">
                                                     <table style="width: 100%;">
                                                         <tbody>
-                                                            <?php
-                                                            $where_numb = array(
-                                                                'reff' => $value['ID']
-                                                            );
-                                                            $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
-                                                            foreach ($data_numb as $index) {
-                                                            ?>
-                                                                <tr>
-                                                                    <td style="margin: 0px;border:0px;vertical-align: top;"><?= $index['sn'] ?></td>
-                                                                </tr>
-                                                            <?php } ?>
+                                                            <tr>
+                                                                <td style="margin: 0px;border:0px;vertical-align: top;">No sn</td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </td>
@@ -121,3 +113,17 @@ $no = 0;
         </table>
     </div>
 </div>
+
+<!-- <tbody>
+    <?php
+    $where_numb = array(
+        'reff' => $value['ID']
+    );
+    $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
+    foreach ($data_numb as $index) {
+    ?>
+        <tr>
+            <td style="margin: 0px;border:0px;vertical-align: top;"><?= $index['sn'] ?></td>
+        </tr>
+    <?php } ?>
+</tbody> -->
