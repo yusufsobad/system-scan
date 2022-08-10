@@ -89,8 +89,8 @@ $no = 0;
                                     <tbody>
                                         <?php foreach ($data_packing as $val) { ?>
                                             <tr>
-                                                <td><?= $val['no_pack'] ?></td>
-                                                <td style="padding: 0px;">
+                                                <td style="width: 50%;"><?= $val['no_pack'] ?></td>
+                                                <td style="padding: 0px;width:50%;">
                                                     <table style="width: 100%;">
                                                         <tbody>
                                                             <?php
