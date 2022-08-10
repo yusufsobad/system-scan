@@ -14,7 +14,7 @@ $no = 0;
         font-family: sans-serif;
         min-width: 400px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-        overflow: wrap;
+        page-break-inside: avoid
     }
 
     .styled-table thead tr {
