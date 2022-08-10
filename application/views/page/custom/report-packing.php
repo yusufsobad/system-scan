@@ -61,7 +61,7 @@ $no = 0;
         <h1>Laporan Data Packing</h1>
     </div>
     <div style="width: 100%;">
-        <table class="styled-table" style="width: 100%;">
+        <table autosize="1" class="styled-table" style="width: 100%;">
             <thead>
                 <tr>
                     <th style="text-align: center;">No</th>
