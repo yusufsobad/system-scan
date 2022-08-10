@@ -190,4 +190,45 @@ class M_blueprint extends CI_Model
         }
         return false;
     }
+
+    // public function get_scan()
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('Album a');
+    //     $this->db->join('Category b', 'b.cat_id=a.cat_id', 'left');
+    //     $this->db->join('Soundtrack c', 'c.album_id=a.album_id', 'left');
+    //     // $this->db->where('c.album_id', $id);
+    //     $this->db->order_by('c.track_title', 'asc');
+    //     $query = $this->db->get();
+    //     if ($query->num_rows() != 0) {
+    //         return $query->result_array();
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    public function get_scan_join()
+    {
+        $this->db->select('note_deliv.ID,note,no_pack,sn');
+        $this->db->from('note_deliv');
+        $this->db->join('packing', 'packing.reff_note=note_deliv.ID', 'left');
+        $this->db->join('serial-number', 'serial-number.reff=packing.ID', 'left');
+        // $this->db->where('c.album_id', $id);
+        $this->db->order_by('serial-number.reff', 'packing.ID');
+        $query = $this->db->get();
+        if ($query->num_rows() != 0) {
+            $query =  $query->result_array();
+            $result = array();
+            foreach ($query as $arr) {
+                $result[$arr['ID']['ID']] = [
+                    'ID'        => $arr['ID'],
+                    'note'      => $arr['note'],
+                    'packing'   => [$arr['no_pack'] => ['serial-num' => [$arr['sn']]]],
+
+                ];
+            }
+            return $result;
+        } else {
+            return false;
+        }
+    }
 }

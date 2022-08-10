@@ -64,7 +64,7 @@ $no = 0;
                 <tr>
                     <th style="text-align: center;">No</th>
                     <th>Catatan</th>
-                    <th>No Packing</th>
+                    <th>Detail Data</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,16 +77,42 @@ $no = 0;
                     <tr>
                         <td style="vertical-align: top;text-align: center;"><?= ++$no ?></td>
                         <td style="vertical-align: top;"><?= $value['note'] ?></td>
-                        <td>
-                            <table class="borderles" style="width: 100%;">
-                                <tbody>
-                                    <?php foreach ($data_packing as $val) { ?>
+                        <td style="padding: 0px;">
+                            <?php if (!empty($data_packing)) { ?>
+                                <table style="width: 100%;vertical-align: top;">
+                                    <thead>
                                         <tr>
-                                            <td><?= $val['no_pack'] ?></td>
+                                            <th>Nomor Packing</th>
+                                            <th>Serial Number</th>
                                         </tr>
-                                    <?php } ?>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($data_packing as $val) { ?>
+                                            <tr>
+                                                <td><?= $val['no_pack'] ?></td>
+                                                <td style="padding: 0px;">
+                                                    <table style="width: 100%;">
+                                                        <tbody>
+                                                            <?php
+                                                            $where_numb = array(
+                                                                'reff' => $value['ID']
+                                                            );
+                                                            $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
+                                                            foreach ($data_numb as $index) {
+                                                            ?>
+                                                                <tr>
+                                                                    <td style="margin: 0px;border:0px;vertical-align: top;"><?= $index['sn'] ?></td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            <?php } else {
+                            } ?>
                         </td>
                     </tr>
                 <?php } ?>
