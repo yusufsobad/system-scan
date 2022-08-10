@@ -543,7 +543,7 @@ class Data_packing extends CI_Controller
         $data_pdf = $this->M_blueprint->get_data_table('note_deliv');
         $config_mpdf = array(
             'format'        => 'a4',
-            'position'      => 'L',
+            'position'      => 'P',
             'output_name'   => 'Data Packing',
             'margin_left'   => 5,
             'margin_right'  => 5,
