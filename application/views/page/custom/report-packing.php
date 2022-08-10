@@ -4,6 +4,7 @@ $no = 0;
 <style>
     body {
         font-family: sans-serif;
+        font-size: 15px;
     }
 
     .styled-table {
