@@ -4,14 +4,12 @@ $no = 0;
 <style>
     body {
         font-family: sans-serif;
-        font-size: 15px;
     }
 
     .styled-table {
         border-collapse: collapse;
-        font-size: 17px;
+        font-size: 2em;
         font-family: sans-serif;
-        /* min-width: 400px; */
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
     }
@@ -66,7 +64,7 @@ $no = 0;
         <h1>Laporan Data Packing</h1>
     </div>
     <div style="width: 100%;">
-        <table autosize="0" class="styled-table" style="width: 100%;">
+        <table class="styled-table" style="width: 100%;">
             <thead>
                 <tr>
                     <th style="text-align: center;">No</th>
@@ -86,7 +84,7 @@ $no = 0;
                         <td style="vertical-align: top;width:30%"><?= $value['note'] ?></td>
                         <td style="padding: 0px;width:60%;">
                             <div><?php if (!empty($data_packing)) { ?>
-                                    <table autosize="0" style="width: 100%;vertical-align: top;">
+                                    <table style="width: 100%;vertical-align: top;">
                                         <thead>
                                             <tr>
                                                 <th>Nomor Packing</th>
