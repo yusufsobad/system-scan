@@ -7,11 +7,6 @@ $no = 0;
         font-size: 15px;
     }
 
-    table {
-        overflow: wrap;
-        min-width: 100%;
-    }
-
     .styled-table {
         border-collapse: collapse;
         margin: 25px 0;
@@ -20,6 +15,10 @@ $no = 0;
         min-width: 400px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 
+    }
+
+    table {
+        page-break-after: always;
     }
 
     .styled-table thead tr {
@@ -97,22 +96,16 @@ $no = 0;
                                         <?php foreach ($data_packing as $val) { ?>
                                             <tr>
                                                 <td style="width: 30%;"><?= $val['no_pack'] ?></td>
-                                                <td style="padding: 0px;width:30%;">
-                                                    <table style="width: 100%;overflow: wrap;min-width: 33%">
-                                                        <tbody>
-                                                            <?php
-                                                            $where_numb = array(
-                                                                'reff' => $value['ID']
-                                                            );
-                                                            $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
-                                                            foreach ($data_numb as $index) {
-                                                            ?>
-                                                                <tr>
-                                                                    <td style="margin: 0px;border:0px;vertical-align: top;"><?= $index['sn'] ?></td>
-                                                                </tr>
-                                                            <?php } ?>
-                                                        </tbody>
-                                                    </table>
+                                                <td style="padding: 9px 15px;width:30%;">
+                                                    <?php
+                                                    $where_numb = array(
+                                                        'reff' => $value['ID']
+                                                    );
+                                                    $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
+                                                    foreach ($data_numb as $index) {
+                                                    ?>
+                                                        <div style="vertical-align: top;"><?= $index['sn'] ?></div>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                         <?php } ?>

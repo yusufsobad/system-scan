@@ -19,6 +19,8 @@ $no = 0;
 
     table {
         page-break-after: always;
+        overflow: wrap;
+        min-width: 33%
     }
 
     .styled-table thead tr {
@@ -65,7 +67,7 @@ $no = 0;
         <h1>Laporan Data Packing</h1>
     </div>
     <div style="width: 100%;">
-        <table class="styled-table" style="width: 100%;">
+        <table autosize="0" class="styled-table" style="width: 100%;">
             <thead>
                 <tr>
                     <th style="text-align: center;">No</th>
@@ -84,35 +86,36 @@ $no = 0;
                         <td style="vertical-align: top;text-align: center;width:10%"><?= ++$no ?></td>
                         <td style="vertical-align: top;width:30%"><?= $value['note'] ?></td>
                         <td style="padding: 0px;width:60%;">
-                            <?php if (!empty($data_packing)) { ?>
-                                <table style="width: 100%;vertical-align: top;">
-                                    <thead>
-                                        <tr>
-                                            <th>Nomor Packing</th>
-                                            <th>Serial Number</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($data_packing as $val) { ?>
+                            <div><?php if (!empty($data_packing)) { ?>
+                                    <table autosize="0" style="width: 100%;vertical-align: top;">
+                                        <thead>
                                             <tr>
-                                                <td style="width: 30%;"><?= $val['no_pack'] ?></td>
-                                                <td style="padding: 9px 15px;width:30%;">
-                                                    <?php
-                                                    $where_numb = array(
-                                                        'reff' => $value['ID']
-                                                    );
-                                                    $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
-                                                    foreach ($data_numb as $index) {
-                                                    ?>
-                                                        <div style="vertical-align: top;"><?= $index['sn'] ?></div>
-                                                    <?php } ?>
-                                                </td>
+                                                <th>Nomor Packing</th>
+                                                <th>Serial Number</th>
                                             </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            <?php } else {
-                            } ?>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($data_packing as $val) { ?>
+                                                <tr>
+                                                    <td style="width: 17%;text-align:center"><?= $val['no_pack'] ?></td>
+                                                    <td style="padding: 9px 15px;">
+                                                        <?php
+                                                        $where_numb = array(
+                                                            'reff' => $value['ID']
+                                                        );
+                                                        $data_numb = $this->M_blueprint->get_where($where_numb, 'serial-number');
+                                                        foreach ($data_numb as $index) {
+                                                        ?>
+                                                            <?= $index['sn'] ?>
+                                                        <?php } ?>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                <?php } else {
+                                    } ?>
+                            </div>
                         </td>
                     </tr>
                 <?php } ?>

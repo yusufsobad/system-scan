@@ -149,7 +149,7 @@ function mpdf_setting($data = array())
         'defaultfooterline' => 0,
 
     ]);
-    $mpdf->shrink_tables_to_fit = 1;
+    $mpdf->shrink_tables_to_fit = 0;
 
     if (isset($data['background_content'])) {
         $mpdf->SetDefaultBodyCSS('background', "url('" . $data['background_content'] . "')");
