@@ -69,6 +69,15 @@ function menu_packing()
     $data = array(
         array(
             'title-group' => '',
+            'title' => 'History Packing',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'History_packing', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "History_packing"  ? 'true' : 'false'
+        ),
+        array(
+            'title-group' => '',
             'title' => 'Data Packing',
             'icon' => 'fas fa-qrcode',
             'link' => 'Data_packing', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
