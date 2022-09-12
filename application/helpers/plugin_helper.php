@@ -977,7 +977,7 @@ function history_scanner_packing()
                             for (i = 0; i < data.length; i++) {
                                 html += '<tr id="sn_' + data[i].ID + '">' +
                                     '<td>' + ++no + '</td>' +
-                                    '<td>' + data[i].no_sn + '</td>' +
+                                    '<td>' + data[i].sn + '</td>' +
                                     '</tr>';
                             }
                             $('#show_data').html(html);

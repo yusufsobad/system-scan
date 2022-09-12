@@ -91,7 +91,7 @@ class History_packing extends CI_Controller
             $data = array(
                 'allert' => '#allert-success',
                 'id'    => $data_qr[0]['ID'],
-                'url'   => base_url('History_packing/view_history'),
+                'url'   => base_url('History_packing/check_data'),
                 'status' => 'true',
                 'id_pack' => $qrcode,
                 'note' => isset($note[0]) ? $note[0]['note'] : '',
