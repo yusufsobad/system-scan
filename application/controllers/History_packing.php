@@ -42,7 +42,7 @@ class History_packing extends CI_Controller
         $data_session = data_session();
 
         $config_card = $this->config_card();
-        $view_scan = scan_packing();
+        $view_scan = history_packing();
         $content = array($view_scan);
         $data['title'] = 'History Scaner';
         // Get Sidebar
