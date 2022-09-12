@@ -79,17 +79,22 @@ class History_packing extends CI_Controller
         $qr = explode(".", $qrcode);
         $qr = $qr[0];
         if ($qr == 'PACK') {
-            
+
             $where_sn = array(
                 'reff'  => $data_qr[0]['ID']
             );
             $data_sn = $this->M_blueprint->get_where($where_sn, 'serial-number');
+            $note = $this->M_blueprint->get_where(array(
+                'ID'    => $data_sn[0]['reff_note']
+            ), 'note_deliv');
 
             $data = array(
                 'allert' => '#allert-success',
                 'id'    => $data_qr[0]['ID'],
                 'url'   => base_url('History_packing/view_history'),
                 'status' => 'true',
+                'id_pack' => $qrcode,
+                'note' => isset($note[0]) ? $note[0]['note'] : '',
                 'data'  => $data_sn
             );
             echo json_encode($data);

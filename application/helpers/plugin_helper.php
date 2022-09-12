@@ -857,7 +857,7 @@ function delivery_pland_scan($data)
 }
 
 
-function history_packing($id_pack='', $data='')
+function history_packing()
 {
     ob_start(); ?>
     <style>
@@ -866,8 +866,7 @@ function history_packing($id_pack='', $data='')
         }
     </style>
     <div id="content" class="col text-center">
-        <h4 class="card-title mb-4">ID Packing : <?php print($id_pack) ;?></h4>
-        <h4 class="card-title mb-4">untuk <strong><?php print($data) ;?></strong></h4>
+        <h4 class="card-title mb-4">History ID Packing</h4>
         <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
         <h3 id="qr_pack"></h3>
         <div style="display: none;" id="table_sn" class="table-responsive mt-3">
@@ -971,6 +970,10 @@ function history_scanner_packing()
                             var html = '';
                             var no = 0
                             var i;
+
+                            html += '<h4 class="card-title mb-4">ID Packing : ' + data['id_pack'] + '</h4>';
+                            html += '<h4 class="card-title mb-4">untuk <strong>' + data['note'] + '</strong></h4>';
+
                             for (i = 0; i < data.length; i++) {
                                 html += '<tr id="sn_' + data[i].ID + '">' +
                                     '<td>' + ++no + '</td>' +
