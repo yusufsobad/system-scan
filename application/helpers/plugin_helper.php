@@ -971,8 +971,8 @@ function history_scanner_packing()
                             var no = 0
                             var i;
 
-                            html += '<h4 class="card-title mb-4">ID Packing : ' + data['id_pack'] + '</h4>';
-                            html += '<h4 class="card-title mb-4">untuk <strong>' + data['note'] + '</strong></h4>';
+                            html += '<h4 class="card-title mb-4">ID Packing : ' + dataArgs['id_pack'] + '</h4>';
+                            html += '<h4 class="card-title mb-4">untuk <strong>' + dataArgs['note'] + '</strong></h4>';
 
                             for (i = 0; i < data.length; i++) {
                                 html += '<tr id="sn_' + data[i].ID + '">' +

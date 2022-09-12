@@ -85,7 +85,7 @@ class History_packing extends CI_Controller
             );
             $data_sn = $this->M_blueprint->get_where($where_sn, 'serial-number');
             $note = $this->M_blueprint->get_where(array(
-                'ID'    => $data_sn[0]['reff_note']
+                'ID'    => $data_qr[0]['reff_note']
             ), 'note_deliv');
 
             $data = array(
