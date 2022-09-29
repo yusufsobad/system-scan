@@ -122,7 +122,7 @@ class Data_pengiriman extends CI_Controller
                 'Penerima',
                 'No Telp',
                 'Note',
-                'detail',
+                'Detail',
                 'Action'
             )
         );
