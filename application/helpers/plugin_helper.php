@@ -990,3 +990,153 @@ function history_scanner_packing()
 <?php $contents = ob_get_clean();
     return $contents;
 }
+
+function scan_do_group()
+{
+
+    $ci = get_instance();
+    $ci->load->model('M_blueprint');
+    $where = 'note_deliv';
+    $data = $ci->M_blueprint->get_table($where);
+    ob_start(); ?>
+    <style>
+        #preview {
+            transform: scaleX(1) !important;
+        }
+    </style>
+    <div id="content" class="col text-center">
+        <h4 class="card-title mb-4">Scan Qrcode</h4>
+        <video autoplay style="width:100%;height:200px;" class="rounded" id="preview"></video>
+        <h3 id="qr_pack"></h3>
+        <div style="display: none;" id="table_sn" class="table-responsive mt-3">
+            <div class="col">
+                <select class="form-control" name="id_note">
+                    <?php foreach ($data as $val) { ?>
+                        <option value="<?= $val['ID'] ?>"><?= $val['note'] ?></option>
+                    <?php }  ?>
+                </select>
+            </div>
+        </div>
+        <div class="mt-5"><button style="display: none;" id="save" type="button" class="btn btn-primary waves-effect waves-light">Save Data</button></div>
+
+    </div>
+    <?= scanner_do_group(); ?>
+
+
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
+function scanner_do_group()
+{
+    ob_start(); ?>
+    <!-- Instan-Scan -->
+    <script script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="<?= base_url('assets/plugin/') ?>instascan/js/instascan.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", event => {
+            var detik = 0;
+            let scanner = new Instascan.Scanner({
+                video: document.getElementById('preview')
+            });
+            Instascan.Camera.getCameras().then(cameras => {
+                scanner.camera = cameras[cameras.length - 1];
+                scanner.start();
+            }).catch(e => console.error(e));
+
+            function CameraOff() {
+                scanner.stop();
+            }
+
+            scanner.addListener('active', function() {
+                var timesRun = 0;
+                var interval = setInterval(IsActive, 1000);
+
+                function Stopinterval() {
+                    clearInterval(interval);
+                }
+
+                function Timer() {
+                    if (timesRun === 660) {
+                        Stopinterval();
+                        CameraOff();
+                        timesRun = 0;
+                    }
+                }
+
+                function IsActive() {
+                    timesRun++;
+                    // console.log(timesRun);
+                    Timer();
+                }
+                var urlPack = "<?= base_url('Scan_pengiriman_group/check_data') ?>";
+                var lastID = 0;
+
+                scanner.addListener('scan', content => {
+                    if (content !== null) {
+                        Stopinterval();
+                        setInterval(IsActive, 1000);
+                        timesRun = 0;
+                        Timer();
+                    }
+                    console.log(content);
+                    $.ajax({
+                        type: "POST",
+                        url: urlPack,
+                        data: {
+                            value: content,
+                            lastid: lastID
+                        },
+                    }).done(function(data) {
+                        var dataArgs = JSON.parse(data);
+                        var allert_pack = $(dataArgs['allert']);
+                        allert_pack.fadeIn();
+                        allert_pack.queue(function() {
+                            setTimeout(function() {
+                                allert_pack.dequeue();
+                            }, 2000);
+                        });
+                        allert_pack.fadeOut('fast');
+                        urlPack = dataArgs['url'];
+                        lastID = dataArgs['id'];
+                        status = dataArgs['status'];
+                        data = dataArgs['data'];
+                        if (status == 'true') {
+                            $('#table_sn').fadeIn();
+                            $('#save').fadeIn();
+                            $('#save').on('click', function() {
+                                idNote = $('select option').filter(':selected').val();
+                                $.ajax({
+                                    type: "POST",
+                                    url: urlPack,
+                                    data: {
+                                        idnote: idNote,
+                                        lastid: lastID
+                                    },
+                                }).done(function(data) {
+                                    var dataArgs = JSON.parse(data);
+                                    var allert_pack = $(dataArgs['allert']);
+                                    allert_pack.fadeIn();
+                                    allert_pack.queue(function() {
+                                        setTimeout(function() {
+                                            allert_pack.dequeue();
+                                        }, 2000);
+                                    });
+                                    allert_pack.fadeOut('fast');
+                                    urlPack = dataArgs['url'];
+                                    lastID = dataArgs['id'];
+                                    status = dataArgs['status'];
+                                    data = dataArgs['data'];
+                                });
+                            });
+                        }
+
+                    });
+                });
+            });
+        });
+    </script>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
