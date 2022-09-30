@@ -856,7 +856,6 @@ function delivery_pland_scan($data)
     return $contents;
 }
 
-
 function history_packing()
 {
     ob_start(); ?>
@@ -993,11 +992,13 @@ function history_scanner_packing()
 
 function scan_do_group()
 {
-
     $ci = get_instance();
     $ci->load->model('M_blueprint');
-    $where = 'note_deliv';
-    $data = $ci->M_blueprint->get_table($where);
+    $where = array(
+        'status' => 0
+    );
+    $table = 'note_deliv';
+    $data = $ci->M_blueprint->get_where($where, $table);
     ob_start(); ?>
     <style>
         #preview {
