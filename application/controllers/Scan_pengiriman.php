@@ -209,7 +209,8 @@ class Scan_pengiriman extends CI_Controller
             'ID' =>  $id
         );
         $data = array(
-            'reff' => ''
+            'reff' => '',
+            'status' => 0
         );
         $this->M_blueprint->update_data($where, $data, 'packing');
 
