@@ -132,6 +132,36 @@ class Scan_pengiriman_group extends CI_Controller
         $id_note = $this->input->post('idnote');
         $last_id = $this->input->post('lastid');
 
+        $where_get = array(
+            'reff' => $last_id
+        );
+
+        $get_packing = $this->M_blueprint->get_where($where_get, 'packing');
+
+        foreach ($get_packing as $val) {
+            $where_note = array(
+                'ID' => $val['reff_note']
+            );
+
+            $reset_note = array(
+                'status' => 0
+            );
+
+            $this->M_blueprint->update_data($where_note, $reset_note, 'note_deliv');
+        }
+
+
+        $where_reset = array(
+            'reff' => $last_id
+        );
+
+        $data_reset = array(
+            'reff' => 0,
+            'status' => 0
+        );
+
+        $this->M_blueprint->update_data($where_reset, $data_reset, 'packing');
+
         $where = array(
             'reff_note' => $id_note
         );
@@ -149,6 +179,15 @@ class Scan_pengiriman_group extends CI_Controller
             'status' => 1
         );
         $this->M_blueprint->update_data($where_do, $update_do, 'scan-user');
+
+        $where_note = array(
+            'ID' => $id_note
+        );
+
+        $data_note = array(
+            'status' => 1
+        );
+        $this->M_blueprint->update_data($where_note, $data_note, 'note_deliv');
 
         $data = array(
             'allert' => '#allert-save',

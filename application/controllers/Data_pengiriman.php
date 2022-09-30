@@ -196,10 +196,16 @@ class Data_pengiriman extends CI_Controller
             array(
                 'NO',
                 'Nomor Serial Number',
+                'Alamat'
             )
         );
 
         foreach ($data_table as $key => $val) {
+            $where_note = array(
+                'ID' => $val['reff_note']
+            );
+            $data_note = $this->M_blueprint->get_where($where_note, 'note_deliv');
+
             // $config_button_delete = array(
             //     array(
             //         'button' => array(
@@ -210,11 +216,14 @@ class Data_pengiriman extends CI_Controller
             //     )
             // );
             // $button_delete = button_delete($config_button_delete);
-            $data['t_body'][$key] = array(
-                ++$no,
-                $val['no_pack'],
-                // $button_delete
-            );
+            foreach ($data_note as $value) {
+                $data['t_body'][$key] = array(
+                    ++$no,
+                    $val['no_pack'],
+                    $value['note']
+                    // $button_delete
+                );
+            }
         }
 
         return data_table($data);
