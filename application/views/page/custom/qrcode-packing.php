@@ -15,6 +15,11 @@
         	$name = $this->M_blueprint->get_where($where_serial, 'code-setting');
         	$name = isset($name[0]) ? $name[0]['name'] : '';
 
+        	if(strlen($name)>25){
+        		$name = substr($name, 0,22);
+        		$name .= '...';
+        	}
+
         	$dt_qr[] = array(
         		'name'		=> $name,
         		'code'		=> $vl['sn'],
