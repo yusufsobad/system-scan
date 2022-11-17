@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Scan_pengiriman extends CI_Controller
+class Scan_pengiriman_group extends CI_Controller
 {
     public function __construct()
     {
@@ -43,7 +43,7 @@ class Scan_pengiriman extends CI_Controller
         $data_session = data_session();
 
         $config_card = $this->config_card();
-        $view_scan = Scan_do();
+        $view_scan = Scan_do_group();
         $content = array($view_scan);
         $data['title'] = 'Data Scaner';
         // Get Sidebar
@@ -95,7 +95,7 @@ class Scan_pengiriman extends CI_Controller
                 $data = array(
                     'allert' => '',
                     'id'    =>  $data_scan[0]['ID'],
-                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
+                    'url'   => base_url('Scan_pengiriman_group/check_data_pack'),
                     'status' => 'true',
                     'data'  => $data_packing
                 );
@@ -109,7 +109,7 @@ class Scan_pengiriman extends CI_Controller
                 $data = array(
                     'allert' => '#allert-success',
                     'id'    =>  $last_id,
-                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
+                    'url'   => base_url('Scan_pengiriman_group/check_data_pack'),
                     'status' => 'true',
                     'data'  => ''
                 );
@@ -119,7 +119,7 @@ class Scan_pengiriman extends CI_Controller
             $data = array(
                 'allert' => '#allert-do',
                 'id'    => '0',
-                'url'   => base_url('Scan_pengiriman/check_data'),
+                'url'   => base_url('Scan_pengiriman_group/check_data'),
                 'status' => 'false',
                 'data'  => ''
             );
@@ -129,77 +129,75 @@ class Scan_pengiriman extends CI_Controller
 
     public function check_data_pack()
     {
-        $qrcode = $this->input->post('value');
+        $id_note = $this->input->post('idnote');
         $last_id = $this->input->post('lastid');
-        $qr = explode(".", $qrcode);
-        if ($qr[0] == 'PACK') {
-            $where = array(
-                'no_pack'    => $qrcode
-            );
-            $data = $this->M_blueprint->check_db($where, 'packing');
-            $where_tbl = array(
-                'no_pack'  => $qrcode
-            );
-            $where_tbl = array(
-                'reff'  => $last_id
+
+        $where_get = array(
+            'reff' => $last_id
+        );
+
+        $get_packing = $this->M_blueprint->get_where($where_get, 'packing');
+
+        foreach ($get_packing as $val) {
+            $where_note = array(
+                'ID' => $val['reff_note']
             );
 
-            if ($data) {
-                $check_pack = $this->M_blueprint->check_packing($where, 'packing');
-                if ($check_pack) {
-                    $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
-                    $data = array(
-                        'allert' => '#allert-lock',
-                        'id'    =>  $last_id,
-                        'url'   => base_url('Scan_pengiriman/check_data_pack'),
-                        'status' => 'true',
-                        'data'  => $data_table
-                    );
-                    echo json_encode($data);
-                } else {
-                    $data_update = array(
-                        'status'    => 1,
-                        'reff'      => $last_id,
-                    );
-                    $this->M_blueprint->update_data($where, $data_update, 'packing');
-
-                    $data_update_do = array(
-                        'status'    => 1,
-                    );
-                    $where_do = array(
-                        'ID'    => $last_id
-                    );
-                    $this->M_blueprint->update_data($where_do, $data_update_do, 'scan-user');
-                    $data_table = $this->M_blueprint->get_data($where_tbl, 'packing');
-                    $data = array(
-                        'allert' => '#allert-success',
-                        'id'    => $last_id,
-                        'url'   => base_url('Scan_pengiriman/check_data_pack'),
-                        'status' => 'true',
-                        'data'  => $data_table,
-                    );
-                    echo json_encode($data);
-                }
-            } else {
-                $data = array(
-                    'allert' => '#allert-packing',
-                    'id'    =>  $last_id,
-                    'url'   => base_url('Scan_pengiriman/check_data_pack'),
-                    'status' => '',
-                    'data'  => ''
-                );
-                echo json_encode($data);
-            }
-        } else {
-            $data = array(
-                'allert' => '#allert-qrpack',
-                'id'    =>  $last_id,
-                'url'   => base_url('Scan_pengiriman/check_data_pack'),
-                'status' => 'true',
-                'data'  => ''
+            $reset_note = array(
+                'status' => 0
             );
-            echo json_encode($data);
+
+            $this->M_blueprint->update_data($where_note, $reset_note, 'note_deliv');
         }
+
+
+        $where_reset = array(
+            'reff' => $last_id
+        );
+
+        $data_reset = array(
+            'reff' => 0,
+            'status' => 0
+        );
+
+        $this->M_blueprint->update_data($where_reset, $data_reset, 'packing');
+
+        $where = array(
+            'reff_note' => $id_note
+        );
+        $data_update = array(
+            'reff' => $last_id,
+            'status' => 1
+        );
+
+        $this->M_blueprint->update_data($where, $data_update, 'packing');
+
+        $where_do = array(
+            'ID' => $last_id
+        );
+        $update_do = array(
+            'status' => 1
+        );
+        $this->M_blueprint->update_data($where_do, $update_do, 'scan-user');
+
+        $where_note = array(
+            'ID' => $id_note
+        );
+
+        $data_note = array(
+            'status' => 1
+        );
+        $this->M_blueprint->update_data($where_note, $data_note, 'note_deliv');
+
+        $data = array(
+            'allert' => '#allert-save',
+            'id'    => '0',
+            'url'   => base_url('Scan_pengiriman_group/check_data'),
+            'status' => 'false',
+            'data'  => ''
+        );
+        echo json_encode($data);
+        exit();
     }
 
     public function delete_sn()
@@ -209,8 +207,7 @@ class Scan_pengiriman extends CI_Controller
             'ID' =>  $id
         );
         $data = array(
-            'reff' => '',
-            'status' => 0
+            'reff' => ''
         );
         $this->M_blueprint->update_data($where, $data, 'packing');
 

@@ -58,6 +58,15 @@ function menu_pengiriman()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Scan_pengiriman"  ? 'true' : 'false'
         ),
+        array(
+            'title-group' => '',
+            'title' => 'Scan Pengiriman Group',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Scan_pengiriman_group', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Scan_pengiriman_group"  ? 'true' : 'false'
+        ),
     );
     return $data;
 }

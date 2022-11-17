@@ -161,6 +161,13 @@ class M_blueprint extends CI_Model
 
     }
 
+    public function get_table($table)
+    {
+
+        return $this->db->get($table)->result_array(); // Tampilkan semua data yang ada di tabel siswa
+
+    }
+
     public function update_data($where, $data, $table)
     {
         $this->db->where($where);

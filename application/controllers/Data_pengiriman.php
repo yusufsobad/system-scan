@@ -122,6 +122,7 @@ class Data_pengiriman extends CI_Controller
                 'Penerima',
                 'No Telp',
                 'Note',
+                'Detail',
                 'Action'
             )
         );
@@ -142,6 +143,21 @@ class Data_pengiriman extends CI_Controller
                         ),
                     )
                 );
+                $config_button_detail = array(
+                    array(
+                        'id'   => 'detail_sn' . $key['ID'],
+                        'button' => array(
+                            'button_link'   => '',
+                            'button_title'  => 'Detail',
+                            'button_color'  => 'primary',
+                        ),
+                        'modal' => array(
+                            'modal_title'   => 'Data Serial Number',
+                            'content'       => $this->table_detail($key['ID']),
+                        ),
+                    )
+                );
+                $button_detail = modal($config_button_detail);
                 $button_edit = button_edit($config_button_edit);
                 $data['t_body'][$index] = array(
                     ++$start,
@@ -151,6 +167,7 @@ class Data_pengiriman extends CI_Controller
                     $key['penerima'],
                     $key['no_telp'],
                     $key['note'],
+                    $button_detail,
                     $button_edit
                 );
             }
@@ -162,6 +179,54 @@ class Data_pengiriman extends CI_Controller
         // }
 
         return $data;
+    }
+
+    public function table_detail($id)
+    {
+        $no = 0;
+        $where = array(
+            'reff'  => @$id
+        );
+        $data_table = $this->M_blueprint->get_where($where, 'packing');
+
+        // var_dump($data_table);
+
+
+        $data['t_head'] = array(
+            array(
+                'NO',
+                'Nomor Serial Number',
+                'Alamat'
+            )
+        );
+
+        foreach ($data_table as $key => $val) {
+            $where_note = array(
+                'ID' => $val['reff_note']
+            );
+            $data_note = $this->M_blueprint->get_where($where_note, 'note_deliv');
+
+            // $config_button_delete = array(
+            //     array(
+            //         'button' => array(
+            //             'button_link'     => 'Data_packing/delete_data_sn/' . $val['ID'],
+            //             'button_title'    => 'Hapus',
+            //             'button_color'    => 'danger',
+            //         ),
+            //     )
+            // );
+            // $button_delete = button_delete($config_button_delete);
+            foreach ($data_note as $value) {
+                $data['t_body'][$key] = array(
+                    ++$no,
+                    $val['no_pack'],
+                    $value['note']
+                    // $button_delete
+                );
+            }
+        }
+
+        return data_table($data);
     }
 
     public function config_pagination()
