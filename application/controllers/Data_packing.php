@@ -117,6 +117,7 @@ class Data_packing extends CI_Controller
                 'NO',
                 'Catatan',
                 'Detail Packing',
+                'Print',
                 'Edit',
                 'Hapus',
             )
@@ -147,6 +148,15 @@ class Data_packing extends CI_Controller
                         ),
                     )
                 );
+                $config_button_print = array(
+                    array(
+                        'button' => array(
+                            'button_link'     => 'Data_packing/print_qrcode/' . $key['ID'],
+                            'button_title'    => 'QRcode',
+                            'button_color'    => 'primary',
+                        ),
+                    )
+                );
                 $config_button_detail = array(
                     array(
                         'id'   => 'detail_pack' . $key['ID'],
@@ -163,11 +173,13 @@ class Data_packing extends CI_Controller
                 );
                 $button_edit = button_edit($config_button_edit);
                 $button_delete = button_delete($config_button_delete);
+                $button_print = button_print($config_button_print);
                 $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['note'],
                     $button_detail,
+                    $button_print,
                     $button_edit,
                     $button_delete,
                 );
@@ -555,6 +567,35 @@ class Data_packing extends CI_Controller
             'content'     => array(
                 array(
                     'location'     => 'page/custom/report-packing',
+                    'data'         => $data_pdf
+                ),
+            ),
+        );
+
+        mpdf_setting($config_mpdf);
+    }
+
+    public function print_qrcode($id)
+    {
+        $where = array(
+            'reff_note' =>  @$id
+        );
+
+        $data_pdf = $this->M_blueprint->get_data($where,'packing');
+        $config_mpdf = array(
+            'format'        => array(25, 33),
+            'position'      => 'P',
+            'output_name'   => 'qrcode',
+            'margin_left'   => 4,
+            'margin_right'  => 4,
+            'margin_top'    => 3,
+            'margin_bottom' => 2,
+            'margin_header' => 10,
+            'margin_footer' => 10,
+            'background_content' => '',
+            'content'     => array(
+                array(
+                    'location'     => 'page/custom/qrcode-packing',
                     'data'         => $data_pdf
                 ),
             ),

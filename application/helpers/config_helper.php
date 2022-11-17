@@ -210,6 +210,17 @@ function button_edit($data)
     return $contents;
 }
 
+function button_print($data)
+{
+    ob_start();
+?>
+    <?php foreach ($data as $val) { ?>
+        <a target="_blank" class="btn btn-warning btn-sm" href="<?= site_url($val['button']['button_link']) ?>"><?= $val['button']['button_title'] ?></a>
+    <?php } ?>
+<?php $contents = ob_get_clean();
+    return $contents;
+}
+
 function button_delete($data)
 {
     ob_start();
