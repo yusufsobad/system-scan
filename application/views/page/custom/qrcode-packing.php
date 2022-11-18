@@ -42,9 +42,9 @@
 
 foreach ($data_qr as $key => $val) {
 	foreach ($val as $ky => $vl) {
-		$top = 49 + ($ky * 125);
+		$top = 49 + ($ky * 132.5);
 		?>
-			<div style="width: 25mm;height: 33mm;position: relative;font-family: 'inter-regular'">
+			<div style="width: 100%;height: 32mm;position: relative;font-family: 'inter-regular';">
 				<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
 				<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
 				<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
@@ -57,9 +57,14 @@ foreach ($data_qr as $key => $val) {
 					<?= $vl['code'] ;?>
 				</div>
 			</div>
-			<div style="position: absolute;top:<?= $top ;?>;right:15;width:12.5mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;background: #000;color:#fff;">
+			
+			<?php if($ky < 2) : ?>
+				<div style="height: 3mm;font-size:6px;">&nbsp;</div>
+			<?php endif; ?>
+
+			<div style="position: absolute;top:<?= $top ;?>;right:15;width:12mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;border: 1px solid #000;">
 				MFY : <?= $vl['year'] ;?>
-			</div>    								
+			</div>
 		<?php
 	}
 }
