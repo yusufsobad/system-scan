@@ -54,6 +54,8 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
+ini_set("pcre.backtrack_limit", "5000000");
+
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
