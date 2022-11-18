@@ -42,9 +42,9 @@
 
 foreach ($data_qr as $key => $val) {
 	foreach ($val as $ky => $vl) {
-		$top = 49 + ($ky * 132.5);
+		$top = 49 + ($ky * 136);
 		?>
-			<div style="width: 100%;height: 32mm;position: relative;font-family: 'inter-regular';">
+			<div style="width: 100%;height: 33mm;position: relative;font-family: 'inter-regular';">
 				<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
 				<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
 				<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
