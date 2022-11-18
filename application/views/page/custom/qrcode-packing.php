@@ -26,25 +26,40 @@
         		'year'		=> '20' . substr($vl['no_sn'], 0,2)
         	);
         }
+
+        $brs = -1;$col = 2;
+        $data_qr = array();
+        foreach ($dt_qr as $key => $val) {
+        	$col += 1;
+        	if($col % 3 == 0){
+        		$col = 0;$brs += 1;
+        		$data_qr[$brs] = array();
+        	}
+
+        	$data_qr[$brs][] = $val;
+        }
 	}
 
-foreach ($dt_qr as $ky => $vl) {
-	?>
-		<div style="width: 25mm;height: 33mm;position: relative;font-family: 'inter-regular'">
-			<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
-			<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
-			<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
-				<?= $vl['name'] ;?>
+foreach ($data_qr as $key => $val) {
+	foreach ($val as $ky => $vl) {
+		$top = 49 + ($ky * 125);
+		?>
+			<div style="width: 25mm;height: 33mm;position: relative;font-family: 'inter-regular'">
+				<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
+				<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
+				<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
+					<?= $vl['name'] ;?>
+				</div>
+				<div style="text-align: left;padding-top: 5px;">
+					<barcode disableborder="1" code="<?= $vl['code'] ?>" class="barcode pb-lg pt-sm" type="QR" size="0.5" />
+				</div>
+				<div style="text-align: left;font-size: 8px;font-weight: Bold;padding-top: 4px;">
+					<?= $vl['code'] ;?>
+				</div>
 			</div>
-			<div style="text-align: left;padding-top: 5px;">
-				<barcode disableborder="1" code="<?= $vl['code'] ?>" class="barcode pb-lg pt-sm" type="QR" size="0.5" />
-			</div>
-			<div style="text-align: left;font-size: 8px;font-weight: Bold;padding-top: 4px;">
-				<?= $vl['code'] ;?>
-			</div>
-		</div>
-		<div style="position: absolute;bottom:28;right:15;width:12.5mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;background: #000;color:#fff;">
-			MFY : <?= $vl['year'] ;?>
-		</div>    								
-	<?php
+			<div style="position: absolute;top:<?= $top ;?>;right:15;width:12.5mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;background: #000;color:#fff;">
+				MFY : <?= $vl['year'] ;?>
+			</div>    								
+		<?php
+	}
 }

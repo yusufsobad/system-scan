@@ -583,7 +583,7 @@ class Data_packing extends CI_Controller
 
         $data_pdf = $this->M_blueprint->get_data($where,'packing');
         $config_mpdf = array(
-            'format'        => array(25, 33),
+            'format'        => array(25, 107),
             'position'      => 'P',
             'output_name'   => 'qrcode',
             'margin_left'   => 4,
