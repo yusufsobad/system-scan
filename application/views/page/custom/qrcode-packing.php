@@ -6,6 +6,11 @@
             'reff' => $val['ID']
         );
 
+        $dt_qr[] = array(
+    		'type'		=> false,
+    		'name'		=> $val['no_pack'],
+    	);
+
         $s_num = $this->M_blueprint->get_where($where_numb, 'serial-number');
         foreach ($s_num as $ky => $vl) {
         	$where_serial = array(
@@ -21,6 +26,7 @@
         	}
 
         	$dt_qr[] = array(
+        		'type'		=> true,
         		'name'		=> $name,
         		'code'		=> $vl['sn'],
         		'year'		=> '20' . substr($vl['no_sn'], 0,2)
@@ -43,28 +49,40 @@
 foreach ($data_qr as $key => $val) {
 	foreach ($val as $ky => $vl) {
 		$top = 49 + ($ky * 136);
-		?>
-			<div style="width: 100%;height: 33mm;position: relative;font-family: 'inter-regular';">
-				<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
-				<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
-				<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
-					<?= $vl['name'] ;?>
+
+		if($vl['type']){
+			?>
+				<div style="width: 100%;height: 33mm;position: relative;font-family: 'inter-regular';">
+					<img src="assets/data/solo-abadi/Logo Metrisis.png" style="text-align: center;">
+					<hr style="margin-top: 4px;margin-bottom: 4px;color: #000;">
+					<div style="word-wrap: break-word;text-align: left;font-size: 8px;line-height: 1;height:4.6mm;">
+						<?= $vl['name'] ;?>
+					</div>
+					<div style="text-align: left;padding-top: 5px;">
+						<barcode disableborder="1" code="<?= $vl['code'] ?>" class="barcode pb-lg pt-sm" type="QR" size="0.5" />
+					</div>
+					<div style="text-align: left;font-size: 8px;font-weight: Bold;padding-top: 4px;">
+						<?= $vl['code'] ;?>
+					</div>
 				</div>
-				<div style="text-align: left;padding-top: 5px;">
-					<barcode disableborder="1" code="<?= $vl['code'] ?>" class="barcode pb-lg pt-sm" type="QR" size="0.5" />
+				
+				<?php if($ky < 2) : ?>
+					<div style="height: 3mm;font-size:6px;">&nbsp;</div>
+				<?php endif; ?>
+
+				<div style="position: absolute;top:<?= $top ;?>;right:15;width:12mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;border: 1px solid #000;font-family: 'inter-regular';">
+					MFY : <?= $vl['year'] ;?>
 				</div>
-				<div style="text-align: left;font-size: 8px;font-weight: Bold;padding-top: 4px;">
-					<?= $vl['code'] ;?>
+			<?php
+		}else{
+			?>
+				<div style="width: 100%;height: 33mm;position: relative;font-family: 'inter-regular';font-size:12px;font-weight:bold;">
+					<?= $vl['name'] ?>
 				</div>
-			</div>
-			
+
 			<?php if($ky < 2) : ?>
 				<div style="height: 3mm;font-size:6px;">&nbsp;</div>
-			<?php endif; ?>
-
-			<div style="position: absolute;top:<?= $top ;?>;right:15;width:12mm;height:2.5mm;rotate:-90;text-align: center;font-size: 7px;border: 1px solid #000;">
-				MFY : <?= $vl['year'] ;?>
-			</div>
-		<?php
+			<?php endif;
+		}
 	}
 }
