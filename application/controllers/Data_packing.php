@@ -190,10 +190,10 @@ class Data_packing extends CI_Controller
                     ++$start,
                     $key['note'],
                     $button_detail,
-                    $button_print,
-                    $button_excel,
                     $button_edit,
                     $button_delete,
+                    $button_print,
+                    $button_excel,
                 );
             }
         }
