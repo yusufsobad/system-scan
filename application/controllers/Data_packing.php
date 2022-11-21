@@ -118,6 +118,7 @@ class Data_packing extends CI_Controller
                 'Catatan',
                 'Detail Packing',
                 'Print',
+                'Excel',
                 'Edit',
                 'Hapus',
             )
@@ -157,6 +158,15 @@ class Data_packing extends CI_Controller
                         ),
                     )
                 );
+                $config_button_excel = array(
+                    array(
+                        'button' => array(
+                            'button_link'     => 'Data_packing/excel_qrcode/' . $key['ID'],
+                            'button_title'    => 'Excel',
+                            'button_color'    => 'primary',
+                        ),
+                    )
+                );
                 $config_button_detail = array(
                     array(
                         'id'   => 'detail_pack' . $key['ID'],
@@ -174,12 +184,14 @@ class Data_packing extends CI_Controller
                 $button_edit = button_edit($config_button_edit);
                 $button_delete = button_delete($config_button_delete);
                 $button_print = button_print($config_button_print);
+                $button_excel = button_print($config_button_excel);
                 $button_detail = modal($config_button_detail);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['note'],
                     $button_detail,
                     $button_print,
+                    $button_excel,
                     $button_edit,
                     $button_delete,
                 );
@@ -602,5 +614,152 @@ class Data_packing extends CI_Controller
         );
 
         mpdf_setting($config_mpdf);
+    }
+
+    public function excel_qrcode($id){
+        $where = array(
+            'reff_note' =>  @$id
+        );
+
+        $data = $this->M_blueprint->get_data($where,'packing');
+
+        $dt_pack = array();
+        foreach ($data as $key => $val) {
+            $where_numb = array(
+                'reff' => $val['ID']
+            );
+
+            $dt_pack[$key] = array(
+                'name'      => $val['no_pack'],
+                'serial'    => array()
+            );
+
+            $dt_sn = array();
+            $s_num = $this->M_blueprint->get_where($where_numb, 'serial-number');
+            foreach ($s_num as $ky => $vl) {
+                $where_serial = array(
+                    'code' => $vl['sku']
+                );
+
+                $name = $this->M_blueprint->get_where($where_serial, 'code-setting');
+                $name = isset($name[0]) ? $name[0]['name'] : '';
+
+                if(strlen($name)>25){
+                    $name = substr($name, 0,22);
+                    $name .= '...';
+                }
+
+                $dt_sn[] = array(
+                    'name'      => $name,
+                    'code'      => $vl['sn'],
+                );
+            }
+
+            $dt_pack[$key]['serial'] = $dt_sn;
+        }
+
+        $this->excel_export($dt_pack);
+    }
+
+    public function excel_export($all_data)
+    {
+        // Load plugin PHPExcel nya
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+
+        // Panggil class PHPExcel nya
+        $excel = new PHPExcel();
+        // Settingan awal fil excel
+        $excel->getProperties()->setCreator('My Notes Code')
+            ->setLastModifiedBy('My Notes Code')
+            ->setTitle("Data Scan Package")
+            ->setSubject("Scan")
+            ->setDescription("Laporan Scan Package")
+            ->setKeywords("Data Scan");
+        // Buat sebuah variabel untuk menampung pengaturan style dari header tabel
+        $style_col = array(
+            'font' => array('bold' => true), // Set font nya jadi bold
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+            ),
+            'borders' => array(
+                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+            )
+        );
+        // Buat sebuah variabel untuk menampung pengaturan style dari isi tabel
+        $style_row = array(
+            'alignment' => array(
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+            ),
+            'borders' => array(
+                'top' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border top dengan garis tipis
+                'right' => array('style'  => PHPExcel_Style_Border::BORDER_THIN),  // Set border right dengan garis tipis
+                'bottom' => array('style'  => PHPExcel_Style_Border::BORDER_THIN), // Set border bottom dengan garis tipis
+                'left' => array('style'  => PHPExcel_Style_Border::BORDER_THIN) // Set border left dengan garis tipis
+            )
+        );
+        $excel->setActiveSheetIndex(0)->setCellValue('A1', "DATA SCAN PACKAGE"); // Set kolom A1 dengan tulisan "DATA SISWA"
+        $excel->getActiveSheet()->mergeCells('A1:D1'); // Set Merge Cell pada kolom A1 sampai E1
+        $excel->getActiveSheet()->getStyle('A1')->getFont()->setBold(TRUE); // Set bold kolom A1
+        $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(15); // Set font size 15 untuk kolom A1
+        $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER); // Set text center untuk kolom A1
+        
+        // Buat header tabel nya pada baris ke 3
+        $excel->setActiveSheetIndex(0)->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"
+        $excel->setActiveSheetIndex(0)->setCellValue('B3', "ID PAKET"); // Set kolom B3 dengan tulisan "ID PAKET"
+        $excel->setActiveSheetIndex(0)->setCellValue('C3', "SERIAL NUMBER"); // Set kolom C3 dengan tulisan "SERIAL NUMBER"
+        $excel->setActiveSheetIndex(0)->setCellValue('D3', "PRODUCT"); // Set kolom D3 dengan tulisan "NAMA PRODUCT"
+
+        // Apply style header yang telah kita buat tadi ke masing-masing kolom header
+        $excel->getActiveSheet()->getStyle('A3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('B3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('C3')->applyFromArray($style_col);
+        $excel->getActiveSheet()->getStyle('D3')->applyFromArray($style_col);
+        // Panggil function view yang ada di SiswaModel untuk menampilkan semua data siswanya
+        
+        $no = 1; // Untuk penomoran tabel, di awal set dengan 1
+        $numrow = 4; // Set baris pertama untuk isi tabel adalah baris ke 4
+        foreach ($all_data as $key => $val) { // Lakukan looping pada variabel siswa
+            foreach ($val['serial'] as $ky => $vl) {
+                $paket = $ky==0 ? $val['name'] : '';
+
+                $excel->setActiveSheetIndex(0)->setCellValue('A' . $numrow, $no);
+                $excel->setActiveSheetIndex(0)->setCellValue('B' . $numrow, $paket);
+                $excel->setActiveSheetIndex(0)->setCellValue('C' . $numrow, $vl['code']);
+                $excel->setActiveSheetIndex(0)->setCellValue('D' . $numrow, $vl['name']);
+
+                // Apply style row yang telah kita buat tadi ke masing-masing baris (isi tabel)
+                $excel->getActiveSheet()->getStyle('A' . $numrow)->applyFromArray($style_row);
+                $excel->getActiveSheet()->getStyle('B' . $numrow)->applyFromArray($style_row);
+                $excel->getActiveSheet()->getStyle('C' . $numrow)->applyFromArray($style_row);
+                $excel->getActiveSheet()->getStyle('D' . $numrow)->applyFromArray($style_row);
+
+                $no++; // Tambah 1 setiap kali looping
+                $numrow++; // Tambah 1 setiap kali looping
+            }
+            $numrow++;
+        }
+        // Set width kolom
+        $excel->getActiveSheet()->getColumnDimension('A')->setWidth(5); // Set width kolom A
+        $excel->getActiveSheet()->getColumnDimension('B')->setWidth(30); // Set width kolom B
+        $excel->getActiveSheet()->getColumnDimension('C')->setWidth(20); // Set width kolom C
+        $excel->getActiveSheet()->getColumnDimension('D')->setWidth(40); // Set width kolom D
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)
+        $excel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE
+        $excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya
+        $excel->getActiveSheet(0)->setTitle("Data Serial Number");
+        $excel->setActiveSheetIndex(0);
+        // Proses file excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Serial Number.xlsx"'); // Set nama file excel nya
+        header('Cache-Control: max-age=0');
+        $write = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+        $write->save('php://output');
     }
 }
