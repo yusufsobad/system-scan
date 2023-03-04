@@ -25,11 +25,12 @@ class Send_curl extends RestController
         );
 
         $check =  $this->Api_blueprint->check_db($data['ID']);
+
         if ($check == 'false') {
             if ($this->Api_blueprint->insert_data($data['scan_user'], $data['detail']) > 0) {
                 $this->response([
                     'status' => 'Success',
-                    'message' => 'Berhasil Menfirim Data' //'Sending data Success'
+                    'message' => 'Berhasil Mengirim Data' //'Sending data Success'
                 ], RestController::HTTP_CREATED);
             } else {
                 $this->response([
@@ -38,17 +39,22 @@ class Send_curl extends RestController
                 ], RestController::HTTP_BAD_REQUEST);
             }
         } else if ($check == 'true') {
-            if ($this->Api_blueprint->update_data($data['update'], $data['ID']) > 0) {
-                $this->response([
-                    'status' => 'Success',
-                    'message' => 'Berhasil Update Data' //'Sending data Success'
-                ], RestController::HTTP_OK);
-            } else {
-                $this->response([
-                    'status' => 'Failed',
-                    'message' => 'Gagal Update Data'
-                ], RestController::HTTP_BAD_REQUEST);
-            }
+            // if ($this->Api_blueprint->update_data($data['update'], $data['ID']) > 0) {
+            //     $this->response([
+            //         'status' => 'Success',
+            //         'message' => 'Berhasil Update Data' //'Sending data Success'
+            //     ], RestController::HTTP_OK);
+            // } else {
+            //     $this->response([
+            //         'status' => 'Failed',
+            //         'message' => 'Gagal Update Data'
+            //     ], RestController::HTTP_BAD_REQUEST);
+            // }
+
+            $this->response([
+                'status' => 'Success',
+                'message' => 'Berhasil Update Data' //'Sending data Success'
+            ], RestController::HTTP_OK);
         }
     }
 }
