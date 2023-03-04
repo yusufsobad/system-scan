@@ -51,10 +51,17 @@ class Send_curl extends RestController
             //     ], RestController::HTTP_BAD_REQUEST);
             // }
 
-            $this->response([
-                'status' => 'Success',
-                'message' => 'Berhasil Update Data' //'Sending data Success'
-            ], RestController::HTTP_OK);
+            if ($this->Api_blueprint->update_data($data['update'], $data['ID']) > 0) {
+                $this->response([
+                    'status' => 'Success',
+                    'message' => 'Berhasil Update Data' //'Sending data Success'
+                ], RestController::HTTP_OK);
+            } else {
+                $this->response([
+                    'status' => 'Success',
+                    'message' => 'Berhasil Update Data' //'Sending data Success'
+                ], RestController::HTTP_OK);
+            }
         }
     }
 }
