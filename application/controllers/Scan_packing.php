@@ -141,7 +141,18 @@ class Scan_packing extends CI_Controller
             );
             echo json_encode($data);
         } else {
-            $lib_qrcode = $this->M_blueprint->get_qrcode('code-setting', $qr[0]);
+            $cnt = count($qr);
+            $code = $qr[0];
+            $no_sn = $qr[1];
+
+            if($cnt > 2 ){
+                $no_sn = $qr[$cnt - 1];
+
+                unset($qr[$cnt - 1]);
+                $code = implode('-', $qr);
+            }
+
+            $lib_qrcode = $this->M_blueprint->get_qrcode('code-setting', $code);
             if ($lib_qrcode) {
                 $where = array(
                     'sn'    => $qrcode
@@ -165,8 +176,8 @@ class Scan_packing extends CI_Controller
                     $data = array(
                         'sn'    => $qrcode,
                         'reff'  => $last_id,
-                        'no_sn' => $qr[1],
-                        'sku'   => $qr[0]
+                        'no_sn' => $no_sn,
+                        'sku'   => $code
                     );
                     $this->M_blueprint->insert_data($data, 'serial-number');
                     $where_tbl = array(
