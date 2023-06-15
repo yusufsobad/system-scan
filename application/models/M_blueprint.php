@@ -74,9 +74,14 @@ class M_blueprint extends CI_Model
         return $insert_id;
     }
 
-    public function count_data($table)
+    public function count_data($table,$like='')
     {
         $this->db->from($table);
+
+        if(!empty($like)){
+            $this->db->like('sn', $like);
+        }
+
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -221,6 +226,7 @@ class M_blueprint extends CI_Model
         $this->db->join('serial-number', 'serial-number.reff=packing.ID', 'left');
         // $this->db->where('c.album_id', $id);
         $this->db->order_by('serial-number.reff', 'packing.ID');
+
         $query = $this->db->get();
         if ($query->num_rows() != 0) {
             $query =  $query->result_array();
@@ -237,5 +243,22 @@ class M_blueprint extends CI_Model
         } else {
             return false;
         }
+    }
+
+    public function get_qrcode_join($perpage=10, $start=1, $where='')
+    {
+        $this->db->select('serial-number.ID,note,no_pack,sn');
+        $this->db->from('serial-number');
+        $this->db->join('packing', 'serial-number.reff=packing.ID', 'left');
+        $this->db->join('note_deliv', 'packing.reff_note=note_deliv.ID', 'left');
+        
+        if(!empty($where)){
+            $this->db->like('sn', $where);
+        }
+        
+        $this->db->limit($perpage, $start);
+        $this->db->order_by('serial-number.reff', 'packing.ID');
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }

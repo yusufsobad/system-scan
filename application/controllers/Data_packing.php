@@ -37,12 +37,14 @@ class Data_packing extends CI_Controller
 
     public function index()
     {
+        $keyword = $this->input->post('search');
+
         $data_session = data_session();
         $config_search = $this->config_search();
         $config_card = $this->config_card();
         $config_table = $this->config_table();
         $table = data_table($config_table);
-        $search = search($config_search);
+        $search = search($config_search,$keyword);
         $pagination =  $this->pagination->create_links();
         $content = array(
             $search,
@@ -202,7 +204,9 @@ class Data_packing extends CI_Controller
 
     public function config_pagination()
     {
-        $total_row = $this->M_blueprint->count_data('note_deliv');
+        $keyword = $this->input->post('search');
+
+        $total_row = $this->M_blueprint->count_data('note_deliv', $keyword);
         $data = array(
             array(
                 'base_url'   => base_url('Data_packing/index'),

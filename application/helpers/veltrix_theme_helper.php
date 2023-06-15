@@ -98,14 +98,14 @@ function card($data, $content)
     }
 
 
-    function search($data)
+    function search($data,$search='')
     {
         ob_start(); ?>
             <?php foreach ($data as $val) { ?>
                 <div class="col-md-3 my-1 my-md-0">
                     <div class="app-search">
                         <div class="position-relative">
-                            <input type="text" name="<?= $val['name'] ?>" id="<? $val['id'] ?>" class="form-control" placeholder="Search...">
+                            <input type="text" name="<?= $val['name'] ?>" id="<?= $val['id'] ?>" class="form-control" placeholder="Search..." value="<?= $search ;?>">
                             <span class="fa fa-search"></span>
                         </div>
                     </div>

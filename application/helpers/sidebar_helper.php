@@ -103,6 +103,15 @@ function menu_packing()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Scan_packing"  ? 'true' : 'false'
         ),
+        array(
+            'title-group' => '',
+            'title' => 'Search QRcode',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Search_qrcode', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Search_qrcode"  ? 'true' : 'false'
+        ),
     );
     return $data;
 }
