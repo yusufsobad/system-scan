@@ -261,4 +261,38 @@ class M_blueprint extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function search_qrcode_sn($where='')
+    {
+        $this->db->select('serial-number.ID,note,no_pack,sn');
+        $this->db->from('serial-number');
+        $this->db->join('packing', 'serial-number.reff=packing.ID', 'left');
+        $this->db->join('note_deliv', 'packing.reff_note=note_deliv.ID', 'left');
+        
+        if(!empty($where)){
+            $this->db->where('sn', $where);
+        }
+        
+        $this->db->limit($perpage, $start);
+        $this->db->order_by('serial-number.reff', 'packing.ID');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function search_qrcode_packing($where='')
+    {
+        $this->db->select('serial-number.ID,note,no_pack,sn');
+        $this->db->from('serial-number');
+        $this->db->join('packing', 'serial-number.reff=packing.ID', 'left');
+        $this->db->join('note_deliv', 'packing.reff_note=note_deliv.ID', 'left');
+        
+        if(!empty($where)){
+            $this->db->where('no_pack', $where);
+        }
+        
+        $this->db->limit($perpage, $start);
+        $this->db->order_by('serial-number.reff', 'packing.ID');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }

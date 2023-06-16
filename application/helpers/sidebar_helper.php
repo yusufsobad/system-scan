@@ -112,6 +112,15 @@ function menu_packing()
             'id_collapse' => '',
             'condition' =>  $uri_segments[2] == "Search_qrcode"  ? 'true' : 'false'
         ),
+        array(
+            'title-group' => '',
+            'title' => 'Search lokasi',
+            'icon' => 'fas fa-qrcode',
+            'link' => 'Search_location', //Jika tidak menggunakan submenu Isi dengan Link , Jika memakai submenu isi dengan #
+            'sub_menu' => '', // Jika tidak ada sub menu dikosongkan saja  , Jika pakai submenu isi dengan function 
+            'id_collapse' => '',
+            'condition' =>  $uri_segments[2] == "Search_location"  ? 'true' : 'false'
+        ),
     );
     return $data;
 }
