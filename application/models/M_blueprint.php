@@ -74,6 +74,18 @@ class M_blueprint extends CI_Model
         return $insert_id;
     }
 
+    public function count_data_pack($table,$like='')
+    {
+        $this->db->from($table);
+
+        if(!empty($like)){
+            $this->db->like('note', $like);
+        }
+
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+
     public function count_data($table,$like='')
     {
         $this->db->from($table);

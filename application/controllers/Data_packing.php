@@ -206,7 +206,7 @@ class Data_packing extends CI_Controller
     {
         $keyword = $this->input->post('search');
 
-        $total_row = $this->M_blueprint->count_data('note_deliv', $keyword);
+        $total_row = $this->M_blueprint->count_data_pack('note_deliv', $keyword);
         $data = array(
             array(
                 'base_url'   => base_url('Data_packing/index'),
