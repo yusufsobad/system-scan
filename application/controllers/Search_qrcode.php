@@ -111,16 +111,29 @@ class Search_qrcode extends CI_Controller
                 'QRcode',
                 'ID Packing',
                 'Lokasi',
+                'Hapus'
             )
         );
 
         if (isset($data_table)) {
             foreach ($data_table as $index => $key) {
+                $config_button_delete = array(
+                    array(
+                        'button' => array(
+                            'button_link'     => 'Search_qrcode/delete_data/' . $key['ID'],
+                            'button_title'    => 'Hapus',
+                            'button_color'    => 'danger',
+                        ),
+                    )
+                );
+
+                $button_delete = button_delete($config_button_delete);
                 $data['t_body'][$index] = array(
                     ++$start,
                     $key['sn'],
                     $key['no_pack'],
-                    $key['note']
+                    $key['note'],
+                    $button_delete
                 );
             }
         }
@@ -140,5 +153,26 @@ class Search_qrcode extends CI_Controller
             ),
         );
         return $data;
+    }
+
+    public function delete_data($id)
+    {
+        //  Remove Data Packing Terlebih Dahulu
+
+        $where_del = array(
+            'ID'   => $id
+        );
+
+        $this->M_blueprint->update_data($where_del,array('reff' => 0), 'serial-number');
+
+        $config_alert_danger = array(
+            array(
+                'title'     => 'Data Berhasil di Hapus ',
+                'alert_type' => 'alert-success'
+            ),
+        );
+        $allert_danger = allert($config_alert_danger);
+
+        redirect('Search_qrcode/index');
     }
 }
