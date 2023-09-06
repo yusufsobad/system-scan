@@ -144,6 +144,18 @@ class M_blueprint extends CI_Model
         }
     }
 
+    function check_sn_reff($key)
+    {
+        $this->db->where('sn',$key);
+        $this->db->where('reff',0);
+        $query = $this->db->get('serial-number');
+        if ($query->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function get_data($where, $table)
     {
         $this->db->select('*');
