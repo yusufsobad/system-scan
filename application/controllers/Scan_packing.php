@@ -164,13 +164,38 @@ class Scan_packing extends CI_Controller
                 );
                 $data_table = $this->M_blueprint->get_data($where_tbl, 'serial-number');
                 if ($data) {
-                    $data = array(
-                        'allert' => '#allert-warning',
-                        'id'    => $last_id,
-                        'url'   => base_url('Scan_packing/check_data_sn'),
-                        'status' => 'true',
-                        'data'  => $data_table
-                    );
+                    // Check sn ada atau tidak
+                    $check = $this->M_blueprint->check_sn_reff($qrcode);
+    
+                    if($check){
+                        // Update data
+                        $where = array(
+                            'sn'    => $qrcode,
+                        );
+
+                        $dt = array(
+                            'reff'  => $last_id
+                        );
+
+                        $this->M_blueprint->update_data($where,$dt, 'serial-number');
+
+                        $data = array(
+                            'allert' => '#allert-success',
+                            'id'    =>  $last_id,
+                            'url'   => base_url('Scan_packing/check_data_sn'),
+                            'status' => 'true',
+                            'data'  => $data_table
+                        );
+                    }else{
+                        $data = array(
+                            'allert' => '#allert-warning',
+                            'id'    => $last_id,
+                            'url'   => base_url('Scan_packing/check_data_sn'),
+                            'status' => 'true',
+                            'data'  => $data_table
+                        );
+                    }
+
                     echo json_encode($data);
                 } else {
                     $data = array(
@@ -194,38 +219,14 @@ class Scan_packing extends CI_Controller
                     echo json_encode($data);
                 }
             } else {
-                // Check sn ada atau tidak
-                $check = $this->M_blueprint->check_sn_reff($qrcode);
+                $data = array(
+                    'allert' => '#allert-qrsn',
+                    'id'    => $last_id,
+                    'url'   => base_url('Scan_packing/check_data_sn'),
+                    'status' => 'true',
+                    'data'  => ''
+                );
 
-                if($check){
-                    // Update data
-                    $where = array(
-                        'sn'    => $qrcode,
-                    );
-
-                    $dt = array(
-                        'reff'  => $last_id
-                    );
-
-                    $this->M_blueprint->update_data($where,$dt, 'serial-number');
-
-                    $data = array(
-                        'allert' => '#allert-success',
-                        'id'    =>  $last_id,
-                        'url'   => base_url('Scan_packing/check_data_sn'),
-                        'status' => 'true',
-                        'data'  => $data_table
-                    );
-                }else{
-                    $data = array(
-                        'allert' => '#allert-qrsn',
-                        'id'    => $last_id,
-                        'url'   => base_url('Scan_packing/check_data_sn'),
-                        'status' => 'true',
-                        'data'  => ''
-                    );
-                }
-                
                 echo json_encode($data);
             }
         }
