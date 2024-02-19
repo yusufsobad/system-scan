@@ -1220,7 +1220,7 @@ function search_location_scanner()
                     // console.log(timesRun);
                     Timer();
                 }
-                var urlPack = "<?= base_url('History_packing/check_data') ?>";
+                var urlPack = "<?= base_url('search_location/check_data') ?>";
                 var lastID = 0;
 
                 scanner.addListener('scan', content => {
