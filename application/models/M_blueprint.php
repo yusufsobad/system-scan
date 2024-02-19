@@ -297,7 +297,7 @@ class M_blueprint extends CI_Model
             $this->db->where('sn', $where);
         }
         
-        $this->db->limit($perpage, $start);
+        //$this->db->limit($perpage, $start);
         $this->db->order_by('serial-number.reff', 'packing.ID');
         $query = $this->db->get();
         return $query->result_array();
@@ -314,7 +314,7 @@ class M_blueprint extends CI_Model
             $this->db->where('no_pack', $where);
         }
         
-        $this->db->limit($perpage, $start);
+        //$this->db->limit($perpage, $start);
         $this->db->order_by('serial-number.reff', 'packing.ID');
         $query = $this->db->get();
         return $query->result_array();
