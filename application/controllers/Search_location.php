@@ -72,6 +72,10 @@ class Search_location extends CI_Controller
     public function check_data()
     {
         $qrcode = $this->input->post('value');
+
+        $qrcode = explode("\r\n", $qrcode);
+        $qrcode = $qrcode[0];
+
         $qr = explode("-", $qrcode);
 
         if ($qr[0] == 'PACK') {

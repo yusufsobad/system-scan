@@ -130,6 +130,9 @@ class Scan_packing extends CI_Controller
         $qrcode = $this->input->post('value');
         $last_id = $this->input->post('lastid');
 
+        $qrcode = explode("\r\n", $qrcode);
+        $qrcode = $qrcode[0];
+
         $qr = explode("-", $qrcode);
         if ($qr[0] == 'PACK') {
             $data = array(
