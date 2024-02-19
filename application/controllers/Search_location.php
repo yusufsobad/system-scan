@@ -85,7 +85,8 @@ class Search_location extends CI_Controller
                 'allert' => '#allert-success',
                 'url'   => base_url('Search_location/check_data'),
                 'status' => 'true',
-                'data'  => $data_sn
+                'data'  => $data_sn,
+                'scan'  => $qrcode
             );
             echo json_encode($data);
         } else {
@@ -95,7 +96,8 @@ class Search_location extends CI_Controller
                 'allert' => '#allert-success',
                 'url'   => base_url('Search_location/check_data'),
                 'status' => 'true',
-                'data'  => $data_sn
+                'data'  => $data_sn,
+                'scan'  => $qrcode
             );
             echo json_encode($data);
         }

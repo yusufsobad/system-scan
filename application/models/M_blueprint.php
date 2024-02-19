@@ -271,10 +271,11 @@ class M_blueprint extends CI_Model
 
     public function get_qrcode_join($perpage=10, $start=1, $where='')
     {
-        $this->db->select('serial-number.ID,note,no_pack,sn');
+        $this->db->select('serial-number.ID,note,no_pack,sn','id_paket','id_temporary','delivery_order');
         $this->db->from('serial-number');
         $this->db->join('packing', 'serial-number.reff=packing.ID', 'left');
         $this->db->join('note_deliv', 'packing.reff_note=note_deliv.ID', 'left');
+        $this->db->join('scan-user', 'packing.reff=scan-user.ID', 'left');
         
         if(!empty($where)){
             $this->db->like('sn', $where);
@@ -288,10 +289,11 @@ class M_blueprint extends CI_Model
 
     public function search_qrcode_sn($where='')
     {
-        $this->db->select('serial-number.ID,note,no_pack,sn');
+        $this->db->select('serial-number.ID,note,no_pack,sn','id_paket','id_temporary','delivery_order');
         $this->db->from('serial-number');
         $this->db->join('packing', 'serial-number.reff=packing.ID', 'left');
         $this->db->join('note_deliv', 'packing.reff_note=note_deliv.ID', 'left');
+        $this->db->join('scan-user', 'packing.reff=scan-user.ID', 'left');
         
         if(!empty($where)){
             $this->db->where('sn', $where);
